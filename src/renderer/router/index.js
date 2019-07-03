@@ -24,50 +24,59 @@ import Layout from '../views/layout/Layout'
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
-
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
-    name: 'Dashboard',
-    hidden: true,
+    redirect: '/home'
+  },
+  {
+    path: '/home',
+    component: Layout,
+    redirect: '/home/index',
     children: [{
-      path: 'dashboard',
+      path: 'index',
+      name: 'index',
+      meta: { title: '首页', icon: 'icon_index_line' },
       component: () => import('@/views/dashboard/index')
     }]
   },
-
   {
-    path: '/example',
+    path: '/gongwen',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    redirect: '/gongwen/table',
+    name: 'gongwen',
+    children: [
+      {
+        path: 'table1',
+        name: 'Table1',
+        component: () => import('@/views/table1/index'),
+        meta: { title: '公文管理', icon: 'icon_invite' }
+      }
+    ]
+  },
+  {
+    path: '/ciku',
+    component: Layout,
+    redirect: '/ciku/table',
+    name: 'ciku',
     children: [
       {
         path: 'table',
         name: 'Table',
         component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        meta: { title: '词库管理', icon: 'icon_calendar' }
       }
     ]
   },
-
   {
-    path: '/form',
+    path: '/account',
     component: Layout,
     children: [
       {
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        meta: { title: '账号管理', icon: 'user' }
       }
     ]
   },
