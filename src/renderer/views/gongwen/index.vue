@@ -49,13 +49,13 @@
       </el-table-column>
       <el-table-column label="操作"  width="200" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="text" size="mini" @click="handleUpdate(row)">
+          <el-button type="text" size="mini" @click="handleModifyStatus(row,'格式化公文')">
             格式化公文
           </el-button>
-          <el-button  size="mini" type="text" @click="handleModifyStatus(row,'published')">
+          <el-button  size="mini" type="text" @click="handleModifyStatus(row,'下载公文')">
             下载公文
           </el-button>
-          <el-button size="mini" type="text" @click="handleModifyStatus(row,'draft')">
+          <el-button size="mini" type="text" @click="handleUpdate(row,'draft')">
             详情
           </el-button>
         </template>
@@ -211,11 +211,8 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
+    handleModifyStatus(row, txt) {
+      this.$confirm(`确认${txt}？`, '确认框')
       row.status = status
     },
     sortChange(data) {
@@ -270,13 +267,7 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+      this.$router.push('/gongwen/detail')
     },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {

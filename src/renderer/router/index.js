@@ -44,13 +44,21 @@ export const constantRouterMap = [
     path: '/gongwen',
     component: Layout,
     redirect: '/gongwen/gongwen',
+    meta: { title: '公文管理', icon: 'icon_invite' },
     name: 'gongwen',
     children: [
       {
         path: 'gongwen',
         name: 'Table1',
         component: () => import('@/views/gongwen/index'),
-        meta: { title: '公文管理', icon: 'icon_invite' }
+        meta: { title: '公文列表', icon: 'icon_invite' }
+      },
+      {
+        path: 'detail',
+        name: 'detail',
+        hidden: true,
+        component: () => import('@/views/gongwen/detail'),
+        meta: { title: '错别字提示', icon: 'icon_invite' }
       }
     ]
   },
