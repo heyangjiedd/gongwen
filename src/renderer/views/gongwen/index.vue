@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input size="mini" v-model="listQuery.title" placeholder="单词名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input size="mini" v-model="listQuery.title" placeholder="公文名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button size="mini"  class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button size="mini"  class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">
-        新增词库
+      <el-button size="mini"  class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-upload2" @click="handleCreate">
+        上传公文
       </el-button>
     </div>
 
@@ -26,23 +26,18 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="名称" prop="id" align="center" min-width="180">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="总字数" align="center" min-width="95">
         <template slot-scope="{row}">
           <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
           <span v-else>0</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" min-width="150px" align="center">
+      <el-table-column label="上传时间" min-width="150px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.display_time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建人" min-width="110px" align="center">
+      <el-table-column label="上传人员" min-width="110px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.author }}</span>
         </template>
@@ -52,13 +47,16 @@
             {{ row.status | statusFilter}}
         </template>
       </el-table-column>
-      <el-table-column label="操作"  width="100" class-name="small-padding fixed-width">
+      <el-table-column label="操作"  width="200" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="text" size="mini" @click="handleUpdate(row)">
-            编辑
+            格式化公文
+          </el-button>
+          <el-button  size="mini" type="text" @click="handleModifyStatus(row,'published')">
+            下载公文
           </el-button>
           <el-button size="mini" type="text" @click="handleModifyStatus(row,'draft')">
-            删除
+            详情
           </el-button>
         </template>
       </el-table-column>
@@ -67,22 +65,48 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules"  size="mini":model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="名称" prop="type">
-          <el-input v-model="temp.type"  placeholder="请输入名称" />
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="Type" prop="type">
+          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="备注">
-          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注" />
+        <el-form-item label="Date" prop="timestamp">
+          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
+        </el-form-item>
+        <el-form-item label="Title" prop="title">
+          <el-input v-model="temp.title" />
+        </el-form-item>
+        <el-form-item label="Status">
+          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="Imp">
+          <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3" style="margin-top:8px;" />
+        </el-form-item>
+        <el-form-item label="Remark">
+          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
-          取消
+          Cancel
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          确认
+          Confirm
         </el-button>
       </div>
+    </el-dialog>
+
+    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
+      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
+        <el-table-column prop="key" label="Channel" />
+        <el-table-column prop="pv" label="Pv" />
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -114,9 +138,9 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        published: '已使用',
+        published: '已校正',
         draft: '正常',
-        deleted: '已废弃'
+        deleted: '已删除'
       }
       return statusMap[status]
     },
@@ -155,8 +179,8 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: '编辑',
-        create: '新增'
+        update: 'Edit',
+        create: 'Create'
       },
       dialogPvVisible: false,
       pvData: [],

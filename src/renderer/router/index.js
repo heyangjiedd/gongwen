@@ -43,13 +43,13 @@ export const constantRouterMap = [
   {
     path: '/gongwen',
     component: Layout,
-    redirect: '/gongwen/table',
+    redirect: '/gongwen/gongwen',
     name: 'gongwen',
     children: [
       {
-        path: 'table1',
+        path: 'gongwen',
         name: 'Table1',
-        component: () => import('@/views/table1/index'),
+        component: () => import('@/views/gongwen/index'),
         meta: { title: '公文管理', icon: 'icon_invite' }
       }
     ]
