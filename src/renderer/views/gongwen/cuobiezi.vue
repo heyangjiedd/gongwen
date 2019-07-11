@@ -1,9 +1,9 @@
 <template>
     <div class="components-container-editor" ref="container">
-        <Tooltip v-for="(item,index) in list" :left="item.left" :top="item.top"></Tooltip>
-        <el-row style="padding: 100px">
+        <Tooltip v-for="(item,index) in list" v-if="item.show" :key="index" :index="item.index" :left="item.left" :top="item.top" @sure="sure"></Tooltip>
+        <el-row style="padding: 10px">
             <el-col :span="24" :style="{padding:'10px'}">
-                <div class="editor-content" @click="show" v-html="content"/>
+                <div class="editor-content" v-html="content"/>
             </el-col>
         </el-row>
     </div>
@@ -11,7 +11,7 @@
 
 <script>
   import Tooltip from './tooltip'
-
+  import { mapGetters } from 'vuex'
   export default {
     name: 'TinymceDemo',
     components: { Tooltip },
@@ -24,28 +24,49 @@
         list: []
       }
     },
+    computed: {
+      ...mapGetters([
+        'sidebar'
+      ]),
+    },
+    watch:{
+      'sidebar.opened'(newVal,oldVal){
+        this.setItemTips();
+      }
+    },
     mounted() {
       this.content = this.content.replace(/列会/g, `<span class="th">列会</span>`)
       this.$nextTick(() => {
-        let s = window.document.getElementsByClassName('th')
-        console.log([...s])
-        this.list = [...s].map(item => ({
-          left: item.offsetLeft +100+'px',
-          top: item.offsetTop - 90+'px'
-        }))
-        console.log(this.list)
+            this.setItemTips()
       })
     },
     methods: {
+      setItemTips(){
+        let s = window.document.getElementsByClassName('th');
+        this.list = [...s].map((item,index) => ({
+          left: item.offsetLeft-100 + 'px',
+          top: item.offsetTop-104 + 'px',
+          el:item,
+          index:index,
+          show:true,
+        }))
+      },
+      sure(index){
+        this.list[index].el.outerHTML = '例会'
+        this.list[index].show = false
+      },
       show(e) {
         if (e.target.className == 'th') {
-          console.log(243)
+
         }
       }
     }
   }
 </script>
 <style rel="stylesheet/scss" lang="scss">
+    .components-container-editor{
+        position: relative;
+    }
     .editor-content {
         .th {
             color: red;

@@ -1,28 +1,30 @@
 <template>
-    <div class="el-popover"  :style="{top:top,left:left}">
-        <div class="el-popover__title">提醒</div>
+    <div class="el-popover" :style="{top:top,left:left}">
         '列会'应该改成'例会'，是否立即纠正？
         <div class="popper__arrow"></div>
         <div style="text-align: right; margin: 0">
-            <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="visible2 = false">确定</el-button>
+            <el-button type="primary" size="text" @click="$emit('sure',index)">确定</el-button>
         </div>
     </div>
 </template>
 
 <script>
+
   export default {
     name: 'tooltip',
     props:{
       top: {
         type: String,
-        default: '236px'
+        default: '0px'
       },
       left: {
         type: String,
-        default: '483px'
+        default: '0px'
       },
-    }
+      index:{
+        type: Number,
+      }
+    },
   }
 </script>
 
@@ -30,18 +32,17 @@
     .el-popover {
         width: 200px;
         position: absolute;
-        top: 236px;
-        left: 483px;
         transform-origin: center bottom;
         z-index: 2118;
         margin-bottom: 12px;
-        padding: 18px 20px;
+        padding: 9px 10px;
         background: #fff;
         min-width: 150px;
         border-radius: 4px;
         border: 1px solid #ebeef5;
         color: #606266;
         line-height: 1.4;
+        opacity: 0.9;
         text-align: justify;
         font-size: 14px;
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
