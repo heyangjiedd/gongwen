@@ -49,7 +49,7 @@
       </el-table-column>
       <el-table-column label="操作"  width="200" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="text" size="mini" @click="handleModifyStatus(row,'格式化公文')">
+          <el-button type="text" size="mini" @click="handleModify(row,'格式化公文')">
             格式化公文
           </el-button>
           <el-button  size="mini" type="text" @click="handleModifyStatus(row,'下载公文')">
@@ -210,6 +210,9 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    handleModify(){
+      this.$router.push('/gongwen/cuobiezi')
     },
     handleModifyStatus(row, txt) {
       this.$confirm(`确认${txt}？`, '确认框')

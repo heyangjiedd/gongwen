@@ -1,5 +1,5 @@
 {
-  "name": "gongwen-admin",
+  "name": "gongwen",
   "version": "3.0.0",
   "author": "Pan <panfree23@gmail.com>",
   "description": "An electron-vue project",
@@ -19,7 +19,7 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "gongwen-admin",
+    "productName": "gongwen",
     "appId": "org.simulatedgreg.electron-vue",
     "directories": {
       "output": "build"

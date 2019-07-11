@@ -58,6 +58,13 @@ export const constantRouterMap = [
         name: 'detail',
         hidden: true,
         component: () => import('@/views/gongwen/detail'),
+        meta: { title: '模板编辑', icon: 'icon_invite' }
+      },
+      {
+        path: 'cuobiezi',
+        name: 'cuobiezi',
+        hidden: true,
+        component: () => import('@/views/gongwen/cuobiezi'),
         meta: { title: '错别字提示', icon: 'icon_invite' }
       }
     ]
