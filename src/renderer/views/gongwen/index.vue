@@ -46,6 +46,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <pagination v-show="paging.total>0" :total="paging.total" :page.sync="paging.start" :limit.sync="paging.pagesize" @pagination="getList" />
     <el-dialog :title="title" :visible.sync="dialogVisible" @close="()=>restForm('form','form')">
       <el-form ref="form" :rules="rules" :model="form" label-position="left" label-width="100px">
         <el-row>
@@ -125,9 +126,11 @@
   import {get, add, update, remove} from '@/api/doc'
   import {get as getTemplate} from '@/api/doctemplate'
   import {parseTime} from '@/utils'
+  import Pagination from '@/components/Pagination'
 
   export default {
     name: 'index',
+      components: { Pagination },
     data() {
       return {
         list: [],
@@ -224,7 +227,7 @@
       getList() {
         get({...this.listQuery, ...this.paging, Role: 'manager'}).then(res => {
           this.list = res.Data;
-          this.paging.total = res.Recordstotal;
+          this.paging.total = res.Recordsfiltered;
         })
       },
       handleFilter() {
