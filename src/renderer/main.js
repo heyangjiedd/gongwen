@@ -11,11 +11,15 @@ import router from './router'
 import store from './store'
 
 import '@/icons' // icon
+
+import format from './utils/format'
 import '@/permission' // permission control
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 
 Vue.use(ElementUI, { locale })
+
+Vue.mixin(format)
 
 Vue.config.productionTip = false
 

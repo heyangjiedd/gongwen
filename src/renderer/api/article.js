@@ -1,7 +1,6 @@
 import request from '@/utils/request'
 
 export function fetchList(query) {
-  debugger
   return request({
     url: '/article/list',
     method: 'get',
