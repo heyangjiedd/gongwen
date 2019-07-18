@@ -19,7 +19,7 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "蓉易公文",
+    "productName": "蓉易公文™",
     "appId": "org.simulatedgreg.electron-vue",
     "directories": {
       "output": "build"

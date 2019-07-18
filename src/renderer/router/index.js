@@ -36,7 +36,7 @@ export const constantRouterMap = [
     children: [{
       path: 'index',
       name: 'index',
-      meta: { title: '首页', icon: 'icon_index_line' },
+      meta: { title: '上传公文', icon: 'icon_calendar' },
       component: () => import('@/views/dashboard/index')
     }]
   },
@@ -44,21 +44,20 @@ export const constantRouterMap = [
     path: '/gongwen',
     component: Layout,
     redirect: '/gongwen/gongwen',
-    meta: { title: '公文管理', icon: 'icon_invite' },
     name: 'gongwen',
     children: [
       {
         path: 'gongwen',
         name: 'Table1',
         component: () => import('@/views/gongwen/index'),
-        meta: { title: '公文列表', icon: 'icon_invite' }
+        meta: { title: '导出公文', icon: 'icon_invite' }
       },
       {
         path: 'detail',
         name: 'detail',
         hidden: true,
         component: () => import('@/views/gongwen/detail'),
-        meta: { title: '模板编辑', icon: 'icon_invite' }
+        meta: { title: '模板编辑', icon: 'icon_index_line' }
       },
       {
         path: 'cuobiezi',
@@ -79,7 +78,7 @@ export const constantRouterMap = [
         path: 'table',
         name: 'Table',
         component: () => import('@/views/table/private'),
-        meta: { title: '词库管理', icon: 'icon_calendar' }
+        meta: { title: '自定义词库', icon: 'user' }
       }
     ]
   },
@@ -91,17 +90,19 @@ export const constantRouterMap = [
                 path: 'index',
                 name: 'user',
                 component: () => import('@/views/user/index'),
-                meta: { title: '用户管理', icon: 'user' }
+                meta: { title: '历史查询', icon: 'icon_index_line' }
             }
         ]
     },
   {
     path: '/account',
     component: Layout,
+      hidden: true,
     children: [
       {
         path: 'index',
         name: 'account',
+          hidden: true,
         component: () => import('@/views/form/index'),
         meta: { title: '账号管理', icon: 'user' }
       }

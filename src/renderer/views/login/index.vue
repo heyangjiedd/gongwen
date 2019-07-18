@@ -1,7 +1,9 @@
 <template>
   <div class="login-container">
     <el-form class="login-form" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
-      <h3 class="title">蓉易公文</h3>
+      <div class="title-container">
+        <img class="pic-404__child left" :src="img_404_cloud" alt="蓉易公文™-党政机关公文处理平台">
+      </div>
       <el-form-item prop="username">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
@@ -17,19 +19,25 @@
           <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
+        <el-button type="primary" style="width:100%;background:#e60012 ;border-color: #e60012" :loading="loading" @click.native.prevent="handleLogin">
           登 录
         </el-button>
       </el-form-item>
     </el-form>
+    <Footer1></Footer1>
   </div>
 </template>
 
 <script>
 import { isvalidUsername } from '@/utils/validate'
+import img_404_cloud from '@/assets/title.jpg'
+import Footer1 from '@/components/Footer'
 
 export default {
   name: 'login',
+    components: {
+        Footer1
+    },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!isvalidUsername(value)) {
@@ -46,6 +54,7 @@ export default {
       }
     }
     return {
+        img_404_cloud,
       loginForm: {
         username: 'admin',
         password: 'admin'
@@ -87,11 +96,15 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-$bg:#2d3a4b;
+$bg:#231815;
 $light_gray:#eee;
 
 /* reset element-ui css */
 .login-container {
+  .title-container{
+    text-align: center;
+    padding-bottom: 20px;
+  }
   .el-input {
     display: inline-block;
     height: 47px;
@@ -121,7 +134,7 @@ $light_gray:#eee;
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-$bg:#2d3a4b;
+$bg:#231815;
 $dark_gray:#889aa4;
 $light_gray:#eee;
 .login-container {

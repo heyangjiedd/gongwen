@@ -57,3 +57,20 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  /deep/.scroll-wrapper {
+    background: #231815 !important;
+    .el-submenu {
+      background: #231815 !important;
+    }
+    .el-submenu__title {
+      background: #231815 !important;
+    }
+    .el-menu {
+      background: #231815 !important;
+    }
+    .el-menu-item {
+      background: #231815 !important;
+    }
+  }
+</style>

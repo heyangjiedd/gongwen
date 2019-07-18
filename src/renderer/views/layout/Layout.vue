@@ -4,6 +4,7 @@
     <div class="main-container">
       <navbar></navbar>
       <app-main></app-main>
+      <Footer1></Footer1>
     </div>
   </div>
 </template>
@@ -11,14 +12,18 @@
 <script>
 import { Navbar, Sidebar, AppMain } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
+import img_404_cloud from '@/assets/title.jpg'
+import Footer1 from '@/components/Footer'
 
 export default {
   name: 'layout',
   components: {
     Navbar,
     Sidebar,
-    AppMain
+    AppMain,
+      Footer1
   },
+
   mixins: [ResizeMixin],
   computed: {
     sidebar() {
