@@ -40,22 +40,22 @@ function createWindow() {
             path.join(os.homedir(), '/AppData/Local/Google/Chrome/User Data/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/4.1.4_0')
         )
     }
-    // const trayMenuTemplate = [
-    //
-    // ]
+    const trayMenuTemplate = [
+
+    ]
     // // 系统托盘图标
     const appTray = new Tray(path.join(__dirname, '/static/icon.ico'))
-    let win = new BrowserWindow({ icon:path.join(__dirname, '/static/icon.ico') })
-    // // 图标的上上下文
-    // const contextMenu = Menu.buildFromTemplate(trayMenuTemplate)
-    // // 设置此托盘图标的悬停提示内容
-    // appTray.setToolTip('蓉易')
-    // // 设置此图标的上下文菜单
-    // appTray.setContextMenu(contextMenu)
-    // // 主窗口显示隐藏切换
-    // appTray.on('click', () => {
-    //   mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
-    // })
+    // let win = new BrowserWindow({ icon:path.join(__dirname, '/static/icon.ico') })
+    // 图标的上上下文
+    const contextMenu = Menu.buildFromTemplate(trayMenuTemplate)
+    // 设置此托盘图标的悬停提示内容
+    appTray.setToolTip('蓉易公文')
+    // 设置此图标的上下文菜单
+    appTray.setContextMenu(contextMenu)
+    // 主窗口显示隐藏切换
+    appTray.on('click', () => {
+      mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+    })
 }
 
 app.on('ready', createWindow)
