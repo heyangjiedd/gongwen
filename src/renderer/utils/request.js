@@ -4,7 +4,7 @@ import store from '../store'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://120.77.155.17:8020/v1/', // api的base_url
+  baseURL: 'http://www.easyod.cn/v1/', // api的base_url
     withCredentials: true, // send cookies when cross-domain requests
   timeout: 15000 // 请求超时时间
 })
