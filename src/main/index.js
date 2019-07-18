@@ -44,8 +44,8 @@ function createWindow() {
     //
     // ]
     // // 系统托盘图标
-    // const appTray = new Tray(path.join(__dirname, '/static/icon.ico'))
-    // let win = new BrowserWindow({ icon:path.join(__dirname, '/static/icon.ico') })
+    const appTray = new Tray(path.join(__dirname, '/static/icon.ico'))
+    let win = new BrowserWindow({ icon:path.join(__dirname, '/static/icon.ico') })
     // // 图标的上上下文
     // const contextMenu = Menu.buildFromTemplate(trayMenuTemplate)
     // // 设置此托盘图标的悬停提示内容
