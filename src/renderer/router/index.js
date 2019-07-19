@@ -37,7 +37,7 @@ export const constantRouterMap = [
       path: 'index',
       name: 'index',
       meta: { title: '上传公文', icon: 'icon_calendar' },
-      component: () => import('@/views/dashboard/index')
+      component: () => import('@/views/upload/index')
     }]
   },
   {
