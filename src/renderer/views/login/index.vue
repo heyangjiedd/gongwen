@@ -57,7 +57,7 @@ export default {
         img_404_cloud,
       loginForm: {
         username: 'admin',
-        password: 'admin'
+        password: 'password'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
