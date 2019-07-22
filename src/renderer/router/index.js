@@ -78,33 +78,43 @@ export const constantRouterMap = [
         path: 'table',
         name: 'Table',
         component: () => import('@/views/table/private'),
-        meta: { title: '自定义词库', icon: 'user' }
+        meta: { title: '自定义词库', icon: 'table' }
       }
     ]
   },
     {
-        path: '/user',
+        path: '/history',
         component: Layout,
         children: [
             {
                 path: 'index',
-                name: 'user',
+                name: 'history',
                 component: () => import('@/views/user/index'),
                 meta: { title: '历史查询', icon: 'icon_index_line' }
             }
         ]
     },
   {
+    path: '/user',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'user',
+        component: () => import('@/views/user/index'),
+        meta: { title: '用户管理', icon: 'user' }
+      }
+    ]
+  },
+  {
     path: '/account',
     component: Layout,
-      hidden: true,
     children: [
       {
         path: 'index',
         name: 'account',
-          hidden: true,
         component: () => import('@/views/form/index'),
-        meta: { title: '账号管理', icon: 'user' }
+        meta: { title: '账号管理', icon: 'tree' }
       }
     ]
   },
