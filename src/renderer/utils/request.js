@@ -49,7 +49,7 @@ service.interceptors.response.use(
       }
       return Promise.reject('error')
     } else {
-      return res.Data
+      return res.data&&{...res.data,Data:res.data.data,Recordsfiltered:Number(res.data.recordsFiltered)}
     }
   },
   error => {
