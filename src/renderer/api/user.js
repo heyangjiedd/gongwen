@@ -1,13 +1,13 @@
 import request from '@/utils/request'
 
-export function login(params) {
+export function login(data) {
   // return new Promise((resolve, reject) => {
   //   resolve({code:20000,data:{token:'admin-token'}})
   // })
   return request({
-    url: '/login/',
-    method: 'get',
-      params
+    url: '/user/login/',
+    method: 'posy',
+    data
   })
 }
 

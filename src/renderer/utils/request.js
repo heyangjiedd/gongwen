@@ -1,10 +1,11 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
+import {objToLocaleLowerCaseKey} from '@/utils'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://www.easyod.cn/v1/', // api的base_url
+  baseURL: 'http://47.108.65.129:8020/v1/', // api的base_url
     withCredentials: true, // send cookies when cross-domain requests
   timeout: 15000 // 请求超时时间
 })
@@ -13,6 +14,12 @@ const service = axios.create({
 service.interceptors.request.use(config => {
   if (store.getters.token) {
     // config.headers['X-Token'] = store.getters.token// 让每个请求携带自定义token 请根据实际情况自行修改
+  }
+  if(config.method ==='post'||config.method ==='put'){
+    config.data = objToLocaleLowerCaseKey(config.data)
+  }
+  if(config.method ==='get'){
+    config.params = objToLocaleLowerCaseKey(config.params)
   }
   return config
 }, error => {
@@ -28,9 +35,9 @@ service.interceptors.response.use(
   * code为非20000是抛错 可结合自己业务进行修改
   */
     const res = response.data
-    if (res.Code !== 0) {
+    if (res.code !== 0) {
       Message({
-        message: res.message,
+        message: res.msg,
         type: 'error',
         duration: 5 * 1000
       })

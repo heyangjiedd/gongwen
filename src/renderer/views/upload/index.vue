@@ -3,9 +3,9 @@
         <el-upload
                 :limit="1"
                 :file-list="fileList"
-                name="filename"
+                name="files"
                 :on-success="success"
-                action="http://www.easyod.cn/v1/file/">
+                action="http://47.108.65.129:8020/v1/upload/">
             <el-button size="small" type="primary">上传公文</el-button>
         </el-upload>
     </div>

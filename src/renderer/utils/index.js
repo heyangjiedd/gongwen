@@ -1,6 +1,14 @@
 /**
  * Created by jiachenpan on 16/11/18.
  */
+
+export function objToLocaleLowerCaseKey(obj={}) {
+  let result = {}
+  for (let i in obj){
+    result[i.toLocaleLowerCase()] = obj[i]
+  }
+  return result
+}
 /**
  * @param {Function} func
  * @param {number} wait
