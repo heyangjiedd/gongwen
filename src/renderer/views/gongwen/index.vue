@@ -34,12 +34,16 @@
       <el-table-column label="版本" prop="Version" min-width="80"/>
       <el-table-column label="文件格式" prop="Ext" min-width="80"/>
       <el-table-column label="文件路径" prop="Path" min-width="80"/>
-
-      <el-table-column label="操作" align="center" width="230">
+      <el-table-column label="操作时间" align="Createtime" min-width="80">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleEdit(row)">
-            编辑
-          </el-button>
+          {{row.Createtime&&row.Createtime.time | parseTime}}
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="80">
+        <template slot-scope="{row}">
+          <!--<el-button type="primary" size="mini" @click="handleEdit(row)">-->
+            <!--编辑-->
+          <!--</el-button>-->
           <el-button size="mini" type="danger" @click="handleRemove(row)">
             删除
           </el-button>
@@ -92,6 +96,7 @@
               <el-upload
                 class="upload-demo"
                 :on-success="success"
+                action="1"
                 :fileList="fileList">
                 <el-button size="small" type="primary">点击上传</el-button>
               </el-upload>

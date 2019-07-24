@@ -32,8 +32,7 @@
         },
         methods: {
             success(data){
-                debugger
-                this.$message('')
+                this.$message.success(data.msg)
             },
             onSubmit() {
                 this.$message('submit!')
