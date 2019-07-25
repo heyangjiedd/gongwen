@@ -16,9 +16,9 @@
           <el-form-item>
             <el-button type="primary" icon="el-icon-refresh" @click="handleFilter">刷新</el-button>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="el-icon-plus" @click="handleAdd">添加</el-button>
-          </el-form-item>
+          <!--<el-form-item>-->
+            <!--<el-button type="primary" icon="el-icon-plus" @click="handleAdd">添加</el-button>-->
+          <!--</el-form-item>-->
         </el-row>
       </el-form>
 
@@ -130,7 +130,6 @@
 <script>
   import {get, add, update, remove} from '@/api/doc'
   import {get as getTemplate} from '@/api/doctemplate'
-  import {parseTime} from '@/utils'
   import Pagination from '@/components/Pagination'
 
   export default {

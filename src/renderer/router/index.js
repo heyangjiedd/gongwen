@@ -89,7 +89,7 @@ export const constantRouterMap = [
             {
                 path: 'index',
                 name: 'history',
-                component: () => import('@/views/user/index'),
+                component: () => import('@/views/doc/index'),
                 meta: { title: '历史查询', icon: 'icon_index_line' }
             }
         ]

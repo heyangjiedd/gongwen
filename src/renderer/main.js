@@ -15,6 +15,12 @@ import '@/icons' // icon
 import format from './utils/format'
 import '@/permission' // permission control
 
+import * as filters from './filters' // global filters
+
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
+
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 
 Vue.use(ElementUI, { locale })
