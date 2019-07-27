@@ -36,19 +36,21 @@ export const constantRouterMap = [
     children: [{
       path: 'index',
       name: 'index',
-      meta: { title: '上传公文', icon: 'icon_calendar' },
+      meta: { title: '上传公文', icon: 'upload' },
       component: () => import('@/views/upload/index')
     }]
   },
   {
     path: '/gongwen',
     component: Layout,
+      hidden: true,
     redirect: '/gongwen/gongwen',
     name: 'gongwen',
     children: [
       {
         path: 'gongwen',
         name: 'Table1',
+          hidden: true,
         component: () => import('@/views/gongwen/index'),
         meta: { title: '导出公文', icon: 'icon_invite' }
       },
@@ -78,7 +80,7 @@ export const constantRouterMap = [
         path: 'table',
         name: 'Table',
         component: () => import('@/views/table/private'),
-        meta: { title: '自定义词库', icon: 'table' }
+        meta: { title: '自定义词库', icon: 'ciku' }
       }
     ]
   },
@@ -90,7 +92,7 @@ export const constantRouterMap = [
                 path: 'index',
                 name: 'history',
                 component: () => import('@/views/doc/index'),
-                meta: { title: '历史查询', icon: 'icon_index_line' }
+                meta: { title: '历史查询', icon: 'search' }
             }
         ]
     },
@@ -102,7 +104,7 @@ export const constantRouterMap = [
         path: 'index',
         name: 'user',
         component: () => import('@/views/user/index'),
-        meta: { title: '用户管理', icon: 'user' }
+        meta: { title: '用户管理', icon: 'people' }
       }
     ]
   },
@@ -114,11 +116,22 @@ export const constantRouterMap = [
         path: 'index',
         name: 'account',
         component: () => import('@/views/form/index'),
-        meta: { title: '账号管理', icon: 'tree' }
+        meta: { title: '账号设置', icon: 'set' }
       }
     ]
   },
-
+    {
+        path: '/notice',
+        component: Layout,
+        children: [
+            {
+                path: 'index',
+                name: 'notice',
+                component: () => import('@/views/notice/index'),
+                meta: { title: '操作说明', icon: 'education' }
+            }
+        ]
+    },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

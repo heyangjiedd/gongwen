@@ -2,7 +2,7 @@
   <div class="login-container">
     <el-form class="login-form" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
       <div class="title-container">
-        <img class="pic-404__child left" :src="img_404_cloud" alt="蓉易公文™-党政机关公文处理平台">
+        <img class="pic-404__child left" width="256" :src="img_404_cloud" alt="蓉易公文™-党政机关公文处理平台">
       </div>
       <el-form-item prop="username">
         <span class="svg-container svg-container_login">
@@ -30,7 +30,7 @@
 
 <script>
 import { isvalidUsername } from '@/utils/validate'
-import img_404_cloud from '@/assets/title.jpg'
+import img_404_cloud from '@/assets/logintitle.jpg'
 import Footer1 from '@/components/Footer'
 
 export default {

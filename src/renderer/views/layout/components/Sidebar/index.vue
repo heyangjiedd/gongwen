@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="title-container">
+        <div class="title-container"style="padding: 20px 20px 10px 20px;background: #231815 ">
             <img :style="{width: '100%'}" :src="img_404_cloud" alt="蓉易公文™-党政机关公文处理平台">
         </div>
 
@@ -25,7 +25,7 @@
     import {mapGetters} from 'vuex'
     import SidebarItem from './SidebarItem'
     import ScrollBar from '@/components/ScrollBar'
-    import img_404_cloud from '@/assets/title.jpg'
+    import img_404_cloud from '@/assets/logov2.jpg'
 
     export default {
         data() {
