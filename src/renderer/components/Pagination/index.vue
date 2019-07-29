@@ -75,6 +75,7 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
+      this.$emit('update:limit', val)
       this.$emit('pagination', { page: this.currentPage, limit: val })
       if (this.autoScroll) {
         scrollTo(0, 800)
@@ -93,7 +94,10 @@ export default {
 <style scoped>
 .pagination-container {
   background: #fff;
-  padding: 32px 16px;
+  padding: 16px;
+}
+.el-pagination{
+  text-align: center;
 }
 .pagination-container.hidden {
   display: none;

@@ -32,12 +32,18 @@ export const constantRouterMap = [
   {
     path: '/home',
     component: Layout,
-    redirect: '/home/index',
+    redirect: '/home/document',
     children: [{
-      path: 'index',
-      name: 'index',
-      meta: { title: '上传公文', icon: 'upload' },
-      component: () => import('@/views/upload/index')
+      path: 'document',
+      name: 'document',
+      meta: { title: '公文管理', icon: 'upload' },
+      component: () => import('@/views/document/index')
+    },{
+      path: 'detail',
+      name: 'detail',
+      hidden: true,
+      meta: { title: '公文详情', icon: 'upload' },
+      component: () => import('@/views/document/detail')
     }]
   },
   {
@@ -87,10 +93,12 @@ export const constantRouterMap = [
     {
         path: '/history',
         component: Layout,
+      hidden: true,
         children: [
             {
                 path: 'index',
                 name: 'history',
+              hidden: true,
                 component: () => import('@/views/doc/index'),
                 meta: { title: '历史查询', icon: 'search' }
             }

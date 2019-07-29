@@ -54,8 +54,15 @@ a:hover {
   min-height: 100%;
   min-height: calc(100vh - 50px);
   padding-bottom: 60px;
+  background: #F6F8F9;
 }
 
 .app-container {
   padding: 20px;
+}
+.color-btn-red{
+  color: #c00000;
+}
+.el-button--danger{
+  background: #c00000;
 }
