@@ -77,16 +77,30 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/ciku',
+    path: '/thesaurus',
     component: Layout,
-    redirect: '/ciku/table',
-    name: 'ciku',
+    redirect: '/thesaurus/index',
+    name: 'thesaurus',
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/private'),
+        path: 'index',
+        name: 'index',
+        component: () => import('@/views/thesaurus/index'),
         meta: { title: '自定义词库', icon: 'ciku' }
+      },
+      {
+        path: 'list',
+        name: 'list',
+        hidden: true,
+        component: () => import('@/views/thesaurus/list'),
+        meta: { title: '词库列表', icon: 'ciku' }
+      },
+      {
+        path: 'search',
+        name: 'search',
+        hidden: true,
+        component: () => import('@/views/thesaurus/search'),
+        meta: { title: '词库搜索', icon: 'ciku' }
       }
     ]
   },
@@ -136,7 +150,7 @@ export const constantRouterMap = [
                 path: 'index',
                 name: 'notice',
                 component: () => import('@/views/notice/index'),
-                meta: { title: '操作说明', icon: 'education' }
+                meta: { title: '公文工具', icon: 'education' }
             }
         ]
     },

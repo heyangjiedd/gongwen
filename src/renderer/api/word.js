@@ -17,7 +17,7 @@ export function getById(id) {
 
 export function add(data) {
   return request({
-    url: '/word',
+    url: '/word/',
     method: 'post',
     data
   })
@@ -25,7 +25,7 @@ export function add(data) {
 
 export function update(data) {
   return request({
-    url: `/word/${data.id}`,
+    url: `/word/${data.id||data.Id}`,
     method: 'put',
     data
   })

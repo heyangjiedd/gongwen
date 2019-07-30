@@ -17,7 +17,7 @@ export function getById(id) {
 
 export function add(data) {
   return request({
-    url: '/category',
+    url: '/category/',
     method: 'post',
     data
   })
@@ -25,7 +25,7 @@ export function add(data) {
 
 export function update( data) {
   return request({
-    url: `/category/${data.id}`,
+    url: `/category/${data.id||data.Id}`,
     method: 'put',
     data
   })

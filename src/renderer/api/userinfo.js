@@ -17,7 +17,7 @@ export function getById(id) {
 
 export function add(data) {
   return request({
-    url: '/user',
+    url: '/user/',
     method: 'post',
     data
   })

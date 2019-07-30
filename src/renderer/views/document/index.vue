@@ -13,9 +13,9 @@
                     <el-button size="small" type="danger">上传公文</el-button>
                 </el-upload>
             </div>
-            <div class="list-item">
-                <span>{{last.text}}</span>
-                <span style="margin-left: 10px">{{last.time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+            <div class="list-item" v-if="list.length > 0" @click="handleDetail(list[0])">
+                <span>{{list[0].Name}}</span>
+                <span style="margin-left: 10px">{{list[0].Createtime&&list[0].Createtime.time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
             </div>
         </el-card>
         <el-card shadow="hover" style="margin-top: 20px">
@@ -86,10 +86,6 @@
     data() {
       return {
         listQuery: {},
-        last: {
-          text: '便民服务中心巡查情况通报',
-          time: new Date()
-        },
         fileList: [],
         list: [],
         paging: {
@@ -169,6 +165,10 @@
     .list-item {
         font-size: 12px;
         color: #808080;
+        &:hover{
+            cursor: pointer;
+            color: #c00000;
+        }
     }
 
     /deep/ .el-card__header {
