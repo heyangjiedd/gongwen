@@ -17,11 +17,24 @@
                     <div slot="header" @click="goList(item)" class="clearfix">
                         <span class="title-hover">{{item.Name}}</span>
                     </div>
-                    <ul style="height: 300px" >
-                        <li v-if="item.children&&item.children.length>0" @click="goList(item)" v-for="(r,n) in item.children">
-                            {{r.Name}}
-                        </li>
-                    </ul>
+                    <el-row>
+                        <el-col :span="11">
+                            <ul class="index-ul">
+                                <li class="index-li" v-if="item.children&&item.children.length>0" @click="goList(item)" v-for="(r,n) in item.children.slice(0,6)">
+                                    {{r.Name}}
+                                </li>
+                            </ul>
+                        </el-col>
+                        <el-col :span="11" :offset="1">
+                            <ul class="index-ul">
+                                <li class="index-li" v-if="item.children&&item.children.length>0" @click="goList(item)" v-for="(r,n) in item.children.slice(6,12)">
+                                   {{r.Name}}
+                                </li>
+                            </ul>
+                        </el-col>
+                    </el-row>
+
+                    <div style="text-align: right;font-size: 12px">更新于 {{new Date() | parseTime('{y}-{m}-{d} {h}:{i}')}}</div>
                 </el-card>
             </el-col>
         </el-row>
@@ -126,6 +139,21 @@
         cursor: pointer;
     }
     .card-hover{
+        .index-ul{
+            height: 230px;
+            margin:0;
+            padding:0;
+            color: #3A3A3A;
+            padding-left:18px;
+            font-size: 14px;
+            word-break: break-all;
+            overflow: hidden;
+            .index-li{
+                padding: 10px 0;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+        }
         &:hover{
             cursor: pointer;
             .title-hover{

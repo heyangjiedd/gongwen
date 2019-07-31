@@ -43,12 +43,12 @@
                 </el-table-column>
                 <el-table-column label="储存路径" prop="Cateid" min-width="40">
                     <template slot-scope="{row}">
-                        {{row.Cateid}}
+                        {{row.Scope===1?'公共词库':row.Cateid+'/私有词库'}}
                     </template>
                 </el-table-column>
             </el-table>
             <pagination :background="false" v-show="paging.total>0" :total="paging.total" :page.sync="paging.start"
-                        :pageSizes="[5, 10, 20, 50]" :limit.sync="paging.pagesize" @pagination="getList"/>
+                        :pageSizes="[5, 10, 20, 50]" :limit.sync="paging.pagesize" @pagination="getWords"/>
         </el-card>
         <el-dialog :title="title" :visible.sync="dialogVisible" @close="()=>restForm('form','form')">
             <el-form ref="form" :rules="rules" :model="form" label-position="left" label-width="100px">
@@ -127,6 +127,7 @@
         this.$router.push({path:'/thesaurus/search',query:{keyWords:this.listQuery.keyWords}})
       },
       handleClick(){
+        this.paging.start = 1;
         this.getWords()
       },
       handleAddWord() {
@@ -192,8 +193,9 @@
         })
       },
       getWords() {
-        wordGet({...this.listQuery}).then(res => {
+        wordGet({...this.listQuery,...this.paging,}).then(res => {
           this.listWords = res.Data
+          this.paging.total = res.Recordsfiltered;
         })
       },
       getList() {
