@@ -10,6 +10,7 @@
                         name="files"
                         :show-file-list="false"
                         :on-success="success"
+                        :on-progress="progress"
                         :before-upload="before"
                         accept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                         :action="baseUrl+'/upload/'">
@@ -31,6 +32,7 @@
                         :file-list="fileList"
                         name="files"
                         :on-success="success"
+                        :on-progress="progress"
                         :action="baseUrl+'/upload/'">
                     <el-button size="small" type="danger">一键导入</el-button>
                 </el-upload>
@@ -83,6 +85,7 @@
     import {get, add, update, remove} from '@/api/doc'
     import {get as getTemplate} from '@/api/doctemplate'
     import Pagination from '@/components/Pagination'
+    import { Loading} from 'element-ui'
 
     export default {
         components: {Pagination},
@@ -117,7 +120,11 @@
                     this.getList()
                 })
             },
+            progress(event, file, fileList){
+                this.loadingInstance = this.loadingInstance||Loading.service({text: '请求中', background: 'rgba(0, 0, 0, 0.28)'});
+            },
             success(data) {
+                this.loadingInstance.close();
                 this.$message.success(data.msg);
                 let path = `${data.filesurl[0].split('.')[0]}`
                 this.$router.push({path: '/home/detail', query: {path:path}})
