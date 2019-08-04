@@ -8,8 +8,11 @@
                         :limit="1"
                         :file-list="fileList"
                         name="files"
+                        :show-file-list="false"
                         :on-success="success"
-                        action="http://47.108.65.129:8020/v1/upload/">
+                        :before-upload="before"
+                        accept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        :action="baseUrl+'/upload/'">
                     <el-button size="small" type="danger">上传公文</el-button>
                 </el-upload>
             </div>
@@ -28,7 +31,7 @@
                         :file-list="fileList"
                         name="files"
                         :on-success="success"
-                        action="http://47.108.65.129:8020/v1/upload/">
+                        :action="baseUrl+'/upload/'">
                     <el-button size="small" type="danger">一键导入</el-button>
                 </el-upload>
                 <el-input
@@ -77,67 +80,76 @@
 </template>
 
 <script>
-  import { get, add, update, remove } from '@/api/doc'
-  import { get as getTemplate } from '@/api/doctemplate'
-  import Pagination from '@/components/Pagination'
+    import {get, add, update, remove} from '@/api/doc'
+    import {get as getTemplate} from '@/api/doctemplate'
+    import Pagination from '@/components/Pagination'
 
-  export default {
-    components: { Pagination },
-    data() {
-      return {
-        listQuery: {},
-        fileList: [],
-        list: [],
-        paging: {
-          total: 0,
-          start: 1,
-          pagesize: 5
+    export default {
+        components: {Pagination},
+        data() {
+            return {
+                listQuery: {},
+                fileList: [],
+                list: [],
+                paging: {
+                    total: 0,
+                    start: 1,
+                    pagesize: 5
+                }
+            }
+        },
+        created() {
+            this.getList()
+        },
+        mounted() {
+
+        },
+        methods: {
+            handleDetail(scope) {
+                this.$router.push({path: '/home/detail', query: {id: scope.Id,path:scope.Path}})
+            },
+            handleEdit(scope) {
+                this.$router.push({path: '/home/detail', query: {id: scope.Id,path:scope.Path}})
+            },
+            handleRemove(data) {
+                remove(data.Id).then(() => {
+                    this.$message.success('操作成功')
+                    this.getList()
+                })
+            },
+            success(data) {
+                this.$message.success(data.msg);
+                let path = `${data.filesurl[0].split('.')[0]}`
+                this.$router.push({path: '/home/detail', query: {path:path}})
+            },
+            before(file) {
+                const isJPG = /.(docx|doc)$/.test(file.name)
+                if (!isJPG) {
+                    this.$message.error('上传word文档!')
+                }
+                return isJPG
+            },
+            onSubmit() {
+                this.$message('submit!')
+            },
+            onCancel() {
+                this.$message({
+                    message: 'cancel!',
+                    type: 'warning'
+                })
+            },
+            getList() {
+                get({...this.listQuery, ...this.paging}).then(res => {
+                    this.list = res.Data
+                    this.paging.total = res.Recordsfiltered
+                })
+            },
+            handleFilter() {
+                this.listQuery = {}
+                this.getList()
+            }
         }
-      }
-    },
-    created() {
-      this.getList()
-    },
-    mounted() {
-
-    },
-    methods: {
-      handleDetail(scope) {
-        this.$router.push({path:'/home/detail',query:{id:scope.id}})
-      },
-      handleEdit(scope) {
-        this.$router.push({path:'/home/detail',query:{id:scope.id}})
-      },
-      handleRemove(data) {
-        remove(data.Id).then(() => {
-          this.$message.success('操作成功')
-          this.getList()
-        })
-      },
-      success(data) {
-        this.$message.success(data.msg)
-      },
-      onSubmit() {
-        this.$message('submit!')
-      },
-      onCancel() {
-        this.$message({
-          message: 'cancel!',
-          type: 'warning'
-        })
-      },
-      getList() {
-        get({ ...this.listQuery, ...this.paging }).then(res => {
-          this.list = res.Data
-          this.paging.total = res.Recordsfiltered
-        })
-      },
-      handleFilter() {
-        this.listQuery = {}
-        this.getList()
-      }
     }
-  }
 </script>
 <style lang="scss" scoped>
     /deep/ .table-item {
@@ -165,7 +177,7 @@
     .list-item {
         font-size: 12px;
         color: #808080;
-        &:hover{
+        &:hover {
             cursor: pointer;
             color: #c00000;
         }

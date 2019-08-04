@@ -1,4 +1,13 @@
+import {baseUrl,base} from "@/api/fileupload";
+
+
 export default {
+  data(){
+    return {
+        baseUrl:baseUrl,
+        base:base
+    }
+  },
   methods: {
     _getAuth(id){
       return  this.$store.getters.roles.find(item=>{return item===id})

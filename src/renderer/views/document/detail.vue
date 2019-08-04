@@ -1,68 +1,92 @@
 <template>
-  <div class="components-container-editor" ref="container">
-    <el-row>
-      <el-col :xs="14" :lg="15" :style="{padding:'10px'}">
-        <div class="editor-content" v-html="content" />
-      </el-col>
-      <el-col :xs="7" :lg="7" :style="{padding:'10px'}">
+    <div class="components-container-editor" ref="container">
+        <el-row>
+            <el-col :xs="14" :lg="15" :style="{padding:'10px'}">
+                <div class="editor-content" v-html="content"/>
+            </el-col>
+            <el-col :xs="7" :lg="7" :style="{padding:'10px'}">
 
-      </el-col>
-      <el-col :xs="3" :lg="2" :style="{padding:'10px'}">
-        <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="$router.go(-1)">返回首页</el-button>
-        <br/>
-        <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="visible = false">保存公文</el-button>
-        <br/>
-        <el-popover
-                width="200"
-                v-model="visible">
-          <p>请选择您要导出的公文版本</p>
-          <div style="text-align: right; margin: 0">
-            <el-button size="mini" type="danger" @click.stop="visible = false">正式版</el-button>
-            <el-popover
-                    width="200"
-                    v-model="visiblePZ">
-              <p>请选择您要导出的批注公文版本</p>
-              <div style="text-align: right; margin: 0">
-                <el-button size="mini" type="danger" @click.stop="visiblePZ = false">Word版</el-button>
-                <el-button size="mini" type="danger" @click.stop="visiblePZ = false">PDF版</el-button>
-              </div>
-              <el-button type="danger" size="mini" slot="reference"  @click.stop>批注版</el-button>
-            </el-popover>
-          </div>
-          <el-button type="danger" size="mini" slot="reference" @click.stop>导出公文</el-button>
-        </el-popover>
-      </el-col>
-    </el-row>
-  </div>
+            </el-col>
+            <el-col :xs="3" :lg="2" :style="{padding:'10px'}">
+                <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="$router.go(-1)">返回首页
+                </el-button>
+                <br/>
+                <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="visible = false">保存公文
+                </el-button>
+                <br/>
+                <el-popover
+                        width="200"
+                        v-model="visible">
+                    <p>请选择您要导出的公文版本</p>
+                    <div style="text-align: right; margin: 0">
+                        <el-popover
+                                width="200"
+                                v-model="visiblePZ">
+                            <p>请选择您要导出的批注公文版本</p>
+                            <div style="text-align: right; margin: 0">
+                                <el-button size="mini" type="danger" @click.stop="downloadWord" >Word版</el-button>
+                                <el-button size="mini" type="danger" @click.stop="downloadPDF">PDF版</el-button>
+                            </div>
+                            <el-button type="danger" size="mini" slot="reference" @click.stop>正式版</el-button>
+                        </el-popover>
+                        <el-button size="mini" type="danger"  @click.stop="download">批注版</el-button>
+                    </div>
+                    <el-button type="danger" size="mini" slot="reference" @click.stop>导出公文</el-button>
+                </el-popover>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 
 <script>
-  export default {
-    name: 'TinymceDemo',
-    data() {
-      return {
-        height:500,
-        visible:false,
-        visiblePZ:false,
-        show:false,
-        content:
-          `<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="generator" content="Aspose.Words for .NET 15.1.0.0" /><title>1</title></head><body><div><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; widows:0"><span style="font-family:'Times New Roman'; font-size:16pt">&#xa0;</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; widows:0"><span style="font-family:'Times New Roman'; font-size:16pt">&#xa0;</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; widows:0"><span style="font-family:'Times New Roman'; font-size:16pt">&#xa0;</span></p><p style="font-size:26pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:center; widows:0"><span style="color:#ff0000; font-family:方正小标宋简体; font-size:26pt">中核放射医疗投资有限公司会议纪要</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">&#xa0;</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">&#xa0;</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:center; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">中核放射〔2019〕</span><span style="font-family:仿宋_GB2312; font-size:16pt">4</span><span style="font-family:仿宋_GB2312; font-size:16pt">号</span></p><img src="24dab5ea-0ebf-492d-9405-ab284f5d598e.001.png" width="541" height="4" alt="" style="-aw-left-pos:24.55pt; -aw-rel-hpos:column; -aw-rel-vpos:paragraph; -aw-top-pos:2.35pt; -aw-wrap-type:none; margin-left:24.18pt; margin-top:1.98pt; position:absolute; z-index:0" /><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">&#xa0;</span></p><p style="font-size:22pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:center; widows:0"><span style="font-family:方正小标宋简体; font-size:22pt">公司例会会议纪要</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:center; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">（</span><span style="font-family:仿宋_GB2312; font-size:16pt">2019年</span><span style="font-family:仿宋_GB2312; font-size:16pt">6</span><span style="font-family:仿宋_GB2312; font-size:16pt">月</span><span style="font-family:仿宋_GB2312; font-size:16pt">25</span><span style="font-family:仿宋_GB2312; font-size:16pt">日</span><span style="font-family:仿宋_GB2312; font-size:16pt">）</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:center; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">&#xa0;</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">    </span><span style="font-family:仿宋_GB2312; font-size:16pt">2019年</span><span style="font-family:仿宋_GB2312; font-size:16pt">6</span><span style="font-family:仿宋_GB2312; font-size:16pt">月</span><span style="font-family:仿宋_GB2312; font-size:16pt">25</span><span style="font-family:仿宋_GB2312; font-size:16pt">日下午4</span><span style="font-family:仿宋_GB2312; font-size:16pt">点</span><span style="font-family:仿宋_GB2312; font-size:16pt">30，中核放射在416体检中心</span><span style="font-family:仿宋_GB2312; font-size:16pt">6</span><span style="font-family:仿宋_GB2312; font-size:16pt">楼会议室召开公司例会，会议由</span><span style="font-family:仿宋_GB2312; font-size:16pt">刘琦</span><span style="font-family:仿宋_GB2312; font-size:16pt">主持，公司全体员工均出席了会议，现将本次会议主要决议事项纪要如下：</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; text-indent:32pt; widows:0"><span style="font-family:黑体; font-size:16pt">1、</span><span style="font-family:黑体; font-size:16pt">中核放射—利尼科医用直线加速器及其附属设备采购合同会审</span></p><ol type="1" style="margin:0pt; padding-left:0pt"><li style="font-family:仿宋_GB2312; font-size:16pt; line-height:115%; list-style-position:inside; margin:0pt 0pt 10pt 0.25pt; orphans:0; text-align:justify; text-indent:31.75pt; widows:0"><span style="font:7.0pt 'Times New Roman'">&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; </span><span style="font-family:仿宋_GB2312; font-size:16pt">会议研究了合同总金额及付款方式和付款条件问题；</span></li><li style="font-family:仿宋_GB2312; font-size:16pt; line-height:115%; list-style-position:inside; margin:0pt 0pt 10pt 0.25pt; orphans:0; text-align:justify; text-indent:31.75pt; widows:0"><span style="font:7.0pt 'Times New Roman'">&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; </span><span style="font-family:仿宋_GB2312; font-size:16pt">会议研究了降低预付款资金风险的方案。</span></li></ol><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt 32pt; orphans:0; text-align:justify; widows:0"><span style="font-family:黑体; font-size:16pt">&#xa0;</span></p></div><br style="clear:both; mso-break-type:section-break; page-break-before:always" /><div><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; text-indent:32pt; widows:0"><span style="font-family:黑体; font-size:16pt">2、</span><span style="font-family:黑体; font-size:16pt">中核放射—416医用直线加速器及其附属设备采购合同会审</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt 32pt; orphans:0; text-align:justify; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">会议研究了合同总金额及付款方式和付款条件问题。</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; text-indent:32pt; widows:0"><span style="font-family:黑体; font-size:16pt">3、</span><span style="font-family:黑体; font-size:16pt">2019市场运营部市场重点项目梳理</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; text-indent:32.3pt; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">会议</span><span style="font-family:仿宋_GB2312; font-size:16pt">研究了2019年市场运营部重点项目跟进的工作思路和方向。</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; text-indent:32pt; widows:0"><span style="font-family:黑体; font-size:16pt">4、</span><span style="font-family:黑体; font-size:16pt">公司十四五规划报送材料审议</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; text-indent:32.3pt; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">会议重点研究</span><span style="font-family:仿宋_GB2312; font-size:16pt">讨论</span><span style="font-family:仿宋_GB2312; font-size:16pt">了</span><span style="font-family:仿宋_GB2312; font-size:16pt">公司十四五规划的发展目标和实现途径，通过自身精准的产业定位，以投资并购的方式逐步实现战略目标、运营目标等。</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; text-indent:32pt; widows:0"><span style="font-family:黑体; font-size:16pt">5、</span><span style="font-family:黑体; font-size:16pt">公司各项管理制度审议</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">     </span><span style="font-family:仿宋_GB2312; font-size:16pt">经审议，同意由综合部拟定的</span><span style="font-family:仿宋_GB2312; font-size:16pt">包括财务制度、行政制度、人事制度等共计24项管理制度；并且通过办公OA系统进一步规范和制度化各项审批流程。</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">&#xa0;</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">&#xa0;</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; text-indent:32.3pt; widows:0"><span style="font-family:黑体; font-size:16pt">出席：</span><span style="font-family:仿宋_GB2312; font-size:16pt">刘 琦、杨华麟、王周波、熊若飞、李照国、黄浩、赵茂清</span><span style="font-family:仿宋_GB2312; font-size:16pt">、袁航、</span><span style="font-family:仿宋_GB2312; font-size:16pt">武昱彤</span><span style="font-family:仿宋_GB2312; font-size:16pt">、</span><span style="font-family:仿宋_GB2312; font-size:16pt">刘淑敏</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; text-indent:32.3pt; widows:0"><span style="font-family:黑体; font-size:16pt">整理：</span><span style="font-family:仿宋_GB2312; font-size:16pt">刘淑敏</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; text-indent:32.3pt; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">&#xa0;</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; text-indent:32.3pt; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">&#xa0;</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; text-indent:32.3pt; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">&#xa0;</span></p><p style="font-size:16pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; text-align:justify; text-indent:32.3pt; widows:0"><span style="font-family:仿宋_GB2312; font-size:16pt">&#xa0;</span></p><img src="24dab5ea-0ebf-492d-9405-ab284f5d598e.002.png" width="591" height="2" alt="" style="-aw-left-pos:-1.75pt; -aw-rel-hpos:column; -aw-rel-vpos:paragraph; -aw-top-pos:2.05pt; -aw-wrap-type:none; margin-left:-2.12pt; margin-top:1.67pt; position:absolute; z-index:4" /><img src="24dab5ea-0ebf-492d-9405-ab284f5d598e.003.png" width="591" height="2" alt="" style="-aw-left-pos:-1pt; -aw-rel-hpos:column; -aw-rel-vpos:paragraph; -aw-top-pos:25.3pt; -aw-wrap-type:none; margin-left:-1.38pt; margin-top:24.92pt; position:absolute; z-index:2" /><p style="margin:0pt; orphans:0; text-align:justify; widows:0"><span style="font-family:仿宋_GB2312; font-size:14pt"> </span><span style="font-family:仿宋_GB2312; font-size:14pt">中核放射医疗投资有限公司</span><span style="font-family:仿宋_GB2312; font-size:14pt">                    </span><span style="font-family:仿宋_GB2312; font-size:14pt">2019年</span><span style="font-family:仿宋_GB2312; font-size:14pt">6</span><span style="font-family:仿宋_GB2312; font-size:14pt">月</span><span style="font-family:仿宋_GB2312; font-size:14pt">25</span><span style="font-family:仿宋_GB2312; font-size:14pt">日印发</span></p></div><div class="cnzz" style="display: none;">
-            </body></html>`
-      }
-    },
-    mounted(){
-      this.height = this.$refs.container.clientHeight;
-      this.show = true;
+    import {getByPath} from '@/api/fileupload'
+
+    export default {
+        name: 'TinymceDemo',
+        data() {
+            return {
+                height: 500,
+                visible: false,
+                visiblePZ: false,
+                content:'',
+            }
+        },
+        mounted() {
+            this.height = this.$refs.container.clientHeight;
+            getByPath({filepath:this.$route.query.path+'.html'}).then(res => {
+                this.content = res.wordHtml
+            }).catch(res=>{
+                this.$router.go(-1)
+            })
+        },
+        methods:{
+            download(){
+                this.visible = false;
+                this.downloadCommon('.docx')
+            },
+            downloadWord(){
+                this.visiblePZ = false;
+                this.downloadCommon('.docx')
+            },
+            downloadPDF(){
+                this.visiblePZ = false;
+                this.downloadCommon('.pdf')
+            },
+            downloadCommon(url){
+                const ele = document.createElement('a');
+                ele.setAttribute('href',`${this.base}doc/${this.$route.query.path}${url}`); //设置下载文件的url地址
+                ele.click();
+            }
+        }
     }
-  }
 </script>
-<style rel="stylesheet/scss" lang="scss" >
-  .components-container-editor{
-    background: #ffffff;
-    padding: 20px;
-    span{
-      /*color:red !important;*/
+<style rel="stylesheet/scss" lang="scss">
+    .components-container-editor {
+        background: #ffffff;
+        padding: 20px;
+        span {
+            /*color:red !important;*/
+        }
     }
-  }
 
 </style>

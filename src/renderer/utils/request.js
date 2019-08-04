@@ -2,10 +2,11 @@ import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
 import {objToLocaleLowerCaseKey} from '@/utils'
+import {baseUrl} from "@/api/fileupload";
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://47.108.65.129:8020/v1/', // api的base_url
+  baseURL: baseUrl, // api的base_url
     withCredentials: true, // send cookies when cross-domain requests
   timeout: 15000 // 请求超时时间
 })
@@ -56,6 +57,9 @@ service.interceptors.response.use(
       }
       return Promise.reject('error')
     } else {
+      if(res.extend){
+        return res.extend
+      }
       return res.data&&{...res.data,Data:res.data.data,Recordsfiltered:Number(res.data.recordsFiltered)}
     }
   },
