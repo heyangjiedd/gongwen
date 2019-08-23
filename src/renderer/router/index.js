@@ -104,20 +104,20 @@ export const constantRouterMap = [
       }
     ]
   },
-    {
-        path: '/history',
-        component: Layout,
-      hidden: true,
-        children: [
-            {
-                path: 'index',
-                name: 'history',
-              hidden: true,
-                component: () => import('@/views/doc/index'),
-                meta: { title: '历史查询', icon: 'search' }
-            }
-        ]
-    },
+    // {
+    //   path: '/history',
+    //   component: Layout,
+    //   hidden: true,
+    //     children: [
+    //         {
+    //             path: 'index',
+    //             name: 'history',
+    //           hidden: true,
+    //             component: () => import('@/views/doc/index'),
+    //             meta: { title: '历史查询', icon: 'search' }
+    //         }
+    //     ]
+    // },
   {
     path: '/user',
     component: Layout,
@@ -130,31 +130,42 @@ export const constantRouterMap = [
       }
     ]
   },
-  {
-    path: '/account',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'account',
-        component: () => import('@/views/form/index'),
-        meta: { title: '账号设置', icon: 'set' }
-      }
-    ]
-  },
+  // {
+  //   path: '/account',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'account',
+  //       component: () => import('@/views/form/index'),
+  //       meta: { title: '账号设置', icon: 'set' }
+  //     }
+  //   ]
+  // },
+    // {
+    //     path: '/notice',
+    //     component: Layout,
+    //     children: [
+    //         {
+    //             path: 'index',
+    //             name: 'notice',
+    //             component: () => import('@/views/notice/index'),
+    //             meta: { title: '公文工具', icon: 'education' }
+    //         }
+    //     ]
+    // },
     {
-        path: '/notice',
+        path: '/history',
         component: Layout,
         children: [
             {
                 path: 'index',
-                name: 'notice',
-                component: () => import('@/views/notice/index'),
-                meta: { title: '公文工具', icon: 'education' }
+                name: 'history',
+                component: () => import('@/views/history/index'),
+                meta: { title: '操作记录', icon: 'tree' }
             }
         ]
     },
-
   { path: '*', redirect: '/404', hidden: true }
 ]
 

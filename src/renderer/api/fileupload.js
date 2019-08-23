@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export const base = 'http://192.168.1.5:8020/'//全局baseUrl
+export const base = 'http://192.168.1.3/'//全局baseUrl
 export const baseUrl = base + 'v1/'//全局baseUrl
 
 export function getByPath(params) {

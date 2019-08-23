@@ -57,7 +57,7 @@ export default {
         img_404_cloud,
       loginForm: {
         username: 'admin',
-        password: 'admin'
+        password: 'password'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -79,7 +79,8 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
+          this.$store.dispatch('Login', this.loginForm).then(res => {
+              debugger;
             this.loading = false
             this.$router.push({ path: '/home' })
           }).catch(() => {

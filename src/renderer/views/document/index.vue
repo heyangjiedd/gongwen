@@ -13,7 +13,7 @@
                         :on-progress="progress"
                         :before-upload="before"
                         accept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                        :action="baseUrl+'/upload/'">
+                        :action="baseUrl+'upload/'">
                     <el-button size="small" type="danger">上传公文</el-button>
                 </el-upload>
             </div>

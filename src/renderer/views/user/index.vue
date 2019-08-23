@@ -6,18 +6,18 @@
         :model="listQuery"
         style="margin-bottom: -18px;">
         <el-row>
-          <el-form-item label="用户姓名：" label-width="100px">
-            <el-input v-model="listQuery.Name" placeholder="请输入" clearable
+          <el-form-item label="关键字：" label-width="100px">
+            <el-input size="small" v-model="listQuery.Name" placeholder="请输入" clearable
                       @keyup.enter.native="handleFilter"/>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search" @click="getList">查询</el-button>
+            <el-button type="danger" size="small" icon="el-icon-search" @click="getList">查询</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-refresh" @click="handleFilter">刷新</el-button>
+            <el-button type="danger" size="small" icon="el-icon-refresh" @click="handleFilter">刷新</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-plus" @click="handleAdd">添加</el-button>
+            <el-button type="danger" size="small" icon="el-icon-plus" @click="handleAdd">添加</el-button>
           </el-form-item>
         </el-row>
       </el-form>
@@ -32,21 +32,21 @@
       <el-table-column label="账号" prop="Account" min-width="80"/>
       <el-table-column label="单位" prop="Cid" min-width="80"/>
 
-      <el-table-column label="操作" align="center" width="230">
+      <el-table-column label="操作" align="center" width="160">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleEdit(row)">
+          <el-button type="text" size="mini" @click="handleEdit(row)">
             编辑
           </el-button>
-          <el-button size="mini" @click="handleDetail(row)">
+          <el-button type="text" size="mini" @click="handleDetail(row)">
             详情
           </el-button>
-          <el-button size="mini" type="danger" @click="handleRemove(row)">
+          <el-button size="mini" type="text" @click="handleRemove(row)">
             删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="paging.total>0" :total="paging.total" :page.sync="paging.start" :limit.sync="paging.pagesize" @pagination="getList" />
+    <pagination :background="false" v-show="paging.total>0" :total="paging.total" :page.sync="paging.start" :limit.sync="paging.pagesize" @pagination="getList" />
 
     <el-dialog :title="title" :visible.sync="dialogVisible" @close="()=>restForm('form','form')">
       <el-form ref="form" :rules="rules" :model="form" label-position="left" label-width="70px">
@@ -75,24 +75,24 @@
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :md="24" :lg="24">
-            <el-form-item label="单位" prop="cid">
-              <el-select
-                v-model="form.Cid"
-                filterable
-                clearable
-                :style="{width:'100%'}"
-                placeholder="请选择"
-              >
-                <el-option v-for="item in dict.company" :key="item.Id" :value="item.Id" :label="item.Name" />
-              </el-select>
-            </el-form-item>
-          </el-col>
+          <!--<el-col :md="24" :lg="24">-->
+            <!--<el-form-item label="单位" prop="cid">-->
+              <!--<el-select-->
+                <!--v-model="form.Cid"-->
+                <!--filterable-->
+                <!--clearable-->
+                <!--:style="{width:'100%'}"-->
+                <!--placeholder="请选择"-->
+              <!--&gt;-->
+                <!--<el-option v-for="item in dict.company" :key="item.Id" :value="item.Id" :label="item.Name" />-->
+              <!--</el-select>-->
+            <!--</el-form-item>-->
+          <!--</el-col>-->
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="sure">确定</el-button>
+        <el-button type="danger" size="small"  @click="dialogVisible = false">取消</el-button>
+        <el-button type="danger" size="small"  @click="sure">确定</el-button>
       </div>
     </el-dialog>
     <el-dialog
@@ -175,13 +175,13 @@
         this.$refs['form'].validate((valid) => {
           if (valid) {
             if (this.title == '用户新增'){
-              add({ ...this.form,Role:'user'}).then(res => {
+              add({ ...this.form,Role:'cuser'}).then(res => {
                 this.$message.success('操作成功')
                 this.dialogVisible = false
                 this.getList()
               })
             }else{
-              update({ ...this.form,Role:'user' }).then(res => {
+              update({ ...this.form,Role:'cuser' }).then(res => {
                 this.$message.success('操作成功')
                 this.dialogVisible = false
                 this.getList()
@@ -226,7 +226,7 @@
         })
       },
       getList() {
-        get({ ...this.listQuery,...this.paging,Role:'user' }).then(res => {
+        get({ ...this.listQuery,...this.paging,Role:'cuser' }).then(res => {
           this.list = res.Data;
           this.paging.total = res.Recordsfiltered;
         })

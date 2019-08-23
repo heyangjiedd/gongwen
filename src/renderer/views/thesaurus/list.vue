@@ -52,7 +52,7 @@
                 </el-table-column>
                 <el-table-column label="保存时间" prop="time" min-width="40">
                     <template slot-scope="{row}">
-                        {{row.Createtime&&row.Createtime.time | parseTime('{y}-{m}-{d} {h}:{i}')}}
+                        {{row.Updatetime&&row.Updatetime.time | parseTime('{y}-{m}-{d} {h}:{i}')}}
                     </template>
                 </el-table-column>
             </el-table>

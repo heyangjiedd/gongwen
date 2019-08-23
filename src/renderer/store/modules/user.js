@@ -32,8 +32,8 @@ const user = {
         login(username, userInfo.password).then(response => {
           // const data = response.data
           const  data  = {token:'admin-token'}
-          setToken(data.token)
-          commit('SET_TOKEN', data.token)
+          setToken(data.token);
+          commit('SET_TOKEN', data.token);
           resolve()
         }).catch(error => {
           reject(error)
