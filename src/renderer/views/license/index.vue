@@ -161,7 +161,7 @@
 <script>
     import {get, add, update, remove, CreateLicense} from '@/api/license'
     import {get as getCompany} from '@/api/company'
-    import {get as getUser} from '@/api/userInfo'
+    import {get as getUser} from '@/api/userinfo'
     import {parseTime} from '@/utils'
     import Pagination from '@/components/Pagination'
 

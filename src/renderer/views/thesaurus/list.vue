@@ -155,13 +155,13 @@
         this.$router.push({path:'/home/detail',query:{id:scope.id}})
       },
       handleEdit(data) {
-        wordUpdate({...data,Name:data.NameCopy}).then(() => {
+        wordUpdate({...data,Name:data.NameCopy,updatetime:undefined}).then(() => {
           this.$message.success('操作成功')
           this.getWords()
         })
       },
       handleMove(row,item){
-        wordUpdate({...row,Cateid:item.Id}).then(() => {
+        wordUpdate({...row,Cateid:item.Id,updatetime:undefined}).then(() => {
           this.$message.success('操作成功')
           this.getWords()
         })
@@ -228,7 +228,7 @@
         },
         uploadCommon(){
             updateDataBaser().then(res=>{
-                this.$message.success('导出成功')
+                this.$message.success('导入成功')
             })
         }
     }

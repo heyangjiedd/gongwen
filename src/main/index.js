@@ -1,5 +1,4 @@
-import {app, BrowserWindow, Tray, Menu} from 'electron'
-
+import {app, BrowserWindow, Tray, Menu,session} from 'electron'
 const path = require('path')
 const os = require('os')
 /**
@@ -21,6 +20,13 @@ function createWindow() {
     /**
      * Initial window options
      */
+    // const filter = {
+    //     urls: ['https://localhost/*']
+    // }
+    // session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
+    //     details.requestHeaders['Cookie'] = 'MyAgent'
+    //     callback({ requestHeaders: details.requestHeaders })
+    // })
     mainWindow = new BrowserWindow({
         height: 563,
         useContentSize: true,
@@ -37,9 +43,9 @@ function createWindow() {
         mainWindow = null
     })
     if (process.env.NODE_ENV === 'development') {
-        // BrowserWindow.addDevToolsExtension(
-        //     path.join(os.homedir(), '/AppData/Local/Google/Chrome/User Data/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/4.1.4_0')
-        // )
+        BrowserWindow.addDevToolsExtension(
+            path.join(os.homedir(), '/AppData/Local/Google/Chrome/User Data/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/5.1.1_0')
+        )
     }
     // const trayMenuTemplate = [
     //

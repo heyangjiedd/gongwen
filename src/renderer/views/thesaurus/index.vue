@@ -144,7 +144,7 @@
                 })
             },
             getList() {
-                wordGet().then(res => {
+                wordGet({Scope: 0}).then(res => {
                     get({...this.paging, Scope: 0}).then(resp => {
                         this.list = resp.Data.map(item => {
                             let data = res.Data.filter(r => r.Cateid == item.Id)
