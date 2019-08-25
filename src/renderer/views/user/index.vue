@@ -32,17 +32,17 @@
       <el-table-column label="账号" prop="Account" min-width="80"/>
       <el-table-column label="单位" prop="Cid" min-width="80"/>
 
-      <el-table-column label="操作" align="center" width="160">
+      <el-table-column label="操作" align="center" width="120">
         <template slot-scope="{row}">
           <el-button type="text" size="mini" @click="handleEdit(row)">
             编辑
           </el-button>
-          <el-button type="text" size="mini" @click="handleDetail(row)">
-            详情
-          </el-button>
           <el-button size="mini" type="text" @click="handleRemove(row)">
             删除
           </el-button>
+            <!--<el-button type="text" size="mini" @click="handleDetail(row)">-->
+                <!--详情-->
+            <!--</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -181,7 +181,7 @@
                 this.getList()
               })
             }else{
-              update({ ...this.form,Role:'cuser' }).then(res => {
+              update({ ...this.form,Role:'cuser',createtime:undefined }).then(res => {
                 this.$message.success('操作成功')
                 this.dialogVisible = false
                 this.getList()

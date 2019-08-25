@@ -1,9 +1,10 @@
 <template>
     <div class="app-container">
         <el-row>
-            <el-button style="float: left;" size="small" type="danger" @click.stop="$router.go(-1)"><i class="el-icon-arrow-left el-icon--left"/>返回</el-button>
-            <el-button style="float: right;margin-right: 10px" size="small" type="danger" @click="downloadCommon">一键导出词库</el-button>
-            <el-button style="float: right;margin-right: 10px" size="small" type="danger" @click="handleAdd">新建关键词库</el-button>
+            <el-button style="float: left;" size="small" type="danger" @click.stop="$router.push('/thesaurus/index')"><i class="el-icon-arrow-left el-icon--left"/>返回</el-button>
+            <el-button style="float: right;" size="small" type="danger" @click="downloadCommon">一键导出词库</el-button>
+            <el-button style="float: right;" size="small" type="danger" @click="uploadCommon">一键导入词库</el-button>
+            <el-button style="float: right;" size="small" type="danger" @click="handleAdd">新建关键词库</el-button>
             <el-input
                     style="float: right;width: 200px"
                     placeholder="请输入搜索关键字"
@@ -87,7 +88,7 @@
   import {get, add, update, remove} from '@/api/category'
   import {get as wordGet, add as wordAdd , update as wordUpdate , remove as wordRemove} from '@/api/word'
   import Pagination from '@/components/Pagination'
-  import {exportDataBaser} from '@/api/fileupload'
+  import {exportDataBaser,updateDataBaser} from '@/api/fileupload'
 
   export default {
     components: { Pagination },
@@ -211,11 +212,15 @@
       },
         downloadCommon(){
             exportDataBaser().then(res=>{
+                const ele = document.createElement('a');
+                ele.setAttribute('href',`${this.baseUrl}doc/database/yilongowen_database_back.sql`); //设置下载文件的url地址
+                ele.click();
+            })
+        },
+        uploadCommon(){
+            updateDataBaser().then(res=>{
                 this.$message.success('导出成功')
             })
-            // const ele = document.createElement('a');
-            // ele.setAttribute('href',`${this.baseUrl}/exportDataBaser`); //设置下载文件的url地址
-            // ele.click();
         }
     }
   }

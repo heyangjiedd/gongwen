@@ -130,6 +130,18 @@ export const constantRouterMap = [
       }
     ]
   },
+    {
+        path: '/license',
+        component: Layout,
+        children: [
+            {
+                path: 'index',
+                name: 'license',
+                component: () => import('@/views/license/index'),
+                meta: { title: '许可证管理', icon: 'tree' }
+            }
+        ]
+    },
   // {
   //   path: '/account',
   //   component: Layout,
@@ -154,18 +166,18 @@ export const constantRouterMap = [
     //         }
     //     ]
     // },
-    {
-        path: '/history',
-        component: Layout,
-        children: [
-            {
-                path: 'index',
-                name: 'history',
-                component: () => import('@/views/history/index'),
-                meta: { title: '操作记录', icon: 'tree' }
-            }
-        ]
-    },
+    // {
+    //     path: '/history',
+    //     component: Layout,
+    //     children: [
+    //         {
+    //             path: 'index',
+    //             name: 'history',
+    //             component: () => import('@/views/history/index'),
+    //             meta: { title: '操作记录', icon: 'tree' }
+    //         }
+    //     ]
+    // },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

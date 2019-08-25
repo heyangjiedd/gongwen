@@ -15,6 +15,13 @@ export function getById(id) {
   })
 }
 
+export function CreateLicense(id) {
+    return request({
+        url: `/license/CreateLicense/${id}`,
+        method: 'get'
+    })
+}
+
 export function add(data) {
   return request({
     url: '/license/',
@@ -23,9 +30,9 @@ export function add(data) {
   })
 }
 
-export function update(id, data) {
+export function update(data) {
   return request({
-    url: `/license/${id}`,
+    url: `/license/${data.id||data.Id}`,
     method: 'put',
     data
   })

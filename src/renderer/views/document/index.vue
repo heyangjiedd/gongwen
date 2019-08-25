@@ -4,7 +4,7 @@
             <div slot="header" class="clearfix">
                 <span>最近编辑</span>
                 <el-upload
-                        style="float: right;"
+                        style="float: right;margin-left: 20px"
                         :limit="1"
                         :file-list="fileList"
                         name="files"
@@ -16,6 +16,16 @@
                         :action="baseUrl+'upload/'">
                     <el-button size="small" type="danger">上传公文</el-button>
                 </el-upload>
+                <el-select
+                        v-model="Cateid"
+                        filterable
+                        clearable
+                        size="small"
+                        style="width:150px;float: right;"
+                        placeholder="请先选择公文模板"
+                >
+                    <el-option v-for="item in categoryDoc" :key="item.Id" :value="item.Id" :label="item.Name" />
+                </el-select>
             </div>
             <div class="list-item" v-if="list.length > 0" @click="handleDetail(list[0])">
                 <span>{{list[0].Name}}</span>
@@ -25,17 +35,17 @@
         <el-card shadow="hover" style="margin-top: 20px">
             <div slot="header" class="clearfix">
                 <span style="margin-right: 20px;">已编辑公文</span>
-                <el-button style="" size="small" type="danger">一键导出</el-button>
-                <el-upload
-                        style="display: inline-block"
-                        :limit="1"
-                        :file-list="fileList"
-                        name="files"
-                        :on-success="success"
-                        :on-progress="progress"
-                        :action="baseUrl+'/upload/'">
-                    <el-button size="small" type="danger">一键导入</el-button>
-                </el-upload>
+                <!--<el-button style="" size="small" type="danger">一键导出</el-button>-->
+                <!--<el-upload-->
+                        <!--style="display: inline-block"-->
+                        <!--:limit="1"-->
+                        <!--:file-list="fileList"-->
+                        <!--name="files"-->
+                        <!--:on-success="success"-->
+                        <!--:on-progress="progress"-->
+                        <!--:action="baseUrl+'/upload/'">-->
+                    <!--<el-button size="small" type="danger">一键导入</el-button>-->
+                <!--</el-upload>-->
                 <el-input
                         style="float: right;width: 200px"
                         placeholder="请输入搜索关键字"
@@ -91,6 +101,8 @@
         components: {Pagination},
         data() {
             return {
+                categoryDoc:[],
+                Cateid:'',
                 listQuery: {},
                 fileList: [],
                 list: [],
@@ -102,7 +114,8 @@
             }
         },
         created() {
-            this.getList()
+            this.getList();
+            this.getTemplate();
         },
         mounted() {
 
@@ -143,6 +156,11 @@
                 this.$message({
                     message: 'cancel!',
                     type: 'warning'
+                })
+            },
+            getTemplate() {
+                getTemplate().then(res => {
+                    this.categoryDoc = res.Data
                 })
             },
             getList() {

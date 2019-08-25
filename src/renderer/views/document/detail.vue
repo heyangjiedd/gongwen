@@ -1,10 +1,10 @@
 <template>
     <div class="components-container-editor" ref="container">
         <el-row>
-            <el-col :xs="14" :lg="15" :style="{padding:'10px'}">
+            <el-col :xs="17" :lg="19" :style="{padding:'10px'}">
                 <div class="editor-content" v-html="content"/>
             </el-col>
-            <el-col :xs="7" :lg="7" :style="{padding:'10px'}">
+            <el-col :xs="3" :lg="3" :style="{padding:'10px'}">
 
             </el-col>
             <el-col :xs="3" :lg="2" :style="{padding:'10px'}">
