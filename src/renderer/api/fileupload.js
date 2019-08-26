@@ -10,6 +10,20 @@ export function getByPath(params) {
         params
     })
 }
+export function wordformat(params) {
+    return request({
+        url: `/wordformat`,
+        method: 'get',
+        params
+    })
+}
+export function getsuggestWord(params) {
+    return request({
+        url: `/getsuggestWord`,
+        method: 'get',
+        params
+    })
+}
 export function exportDataBaser() {
     return request({
         url: `/exportDataBaser`,

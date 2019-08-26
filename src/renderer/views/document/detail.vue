@@ -39,7 +39,7 @@
 </template>
 
 <script>
-    import {getByPath} from '@/api/fileupload'
+    import {getByPath,getsuggestWord,wordformat} from '@/api/fileupload'
 
     export default {
         name: 'TinymceDemo',
@@ -53,11 +53,16 @@
         },
         mounted() {
             this.height = this.$refs.container.clientHeight;
-            getByPath({filepath:this.$route.query.path+'.html'}).then(res => {
+            getsuggestWord({fileName:this.$route.query.path}).then(res => {
                 this.content = res.wordHtml
             }).catch(res=>{
                 this.$router.go(-1)
-            })
+            });
+            wordformat({filepath:this.$route.query.path+'_jy.docx',layout:'html'}).then(res => {
+                this.content = res.wordHtml
+            }).catch(res=>{
+                this.$router.go(-1)
+            });
         },
         methods:{
             download(){
@@ -65,16 +70,18 @@
                 this.downloadCommon('.docx')
             },
             downloadWord(){
+                this.visible = false;
                 this.visiblePZ = false;
                 this.downloadCommon('.docx')
             },
             downloadPDF(){
+                this.visible = false;
                 this.visiblePZ = false;
                 this.downloadCommon('.pdf')
             },
             downloadCommon(url){
                 const ele = document.createElement('a');
-                ele.setAttribute('href',`${this.base}doc/${this.$route.query.path}${url}`); //设置下载文件的url地址
+                ele.setAttribute('href',`${this.baseUrl}doc/${this.$route.query.path}${url}`); //设置下载文件的url地址
                 ele.click();
             }
         }

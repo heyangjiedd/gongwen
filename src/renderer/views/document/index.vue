@@ -11,20 +11,21 @@
                         :show-file-list="false"
                         :on-success="success"
                         :on-progress="progress"
+                        :data="{Cateid}"
                         :before-upload="before"
                         accept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                         :action="baseUrl+'upload/'">
-                    <el-button size="small" type="danger">上传公文</el-button>
+                    <el-button size="small" type="danger" :disabled='!Cateid'>上传公文</el-button>
                 </el-upload>
                 <el-select
                         v-model="Cateid"
                         filterable
                         clearable
                         size="small"
-                        style="width:150px;float: right;"
-                        placeholder="请先选择公文模板"
+                        style="width:200px;float: right;"
+                        placeholder="上传前请先选择公文模板"
                 >
-                    <el-option v-for="item in categoryDoc" :key="item.Id" :value="item.Id" :label="item.Name" />
+                    <el-option v-for="item in categoryDoc" :key="item.id" :value="item.id" :label="item.docTypeName" />
                 </el-select>
             </div>
             <div class="list-item" v-if="list.length > 0" @click="handleDetail(list[0])">
@@ -92,7 +93,7 @@
 </template>
 
 <script>
-    import {get, add, update, remove} from '@/api/doc'
+    import {get, add, update, remove,getCateDocList} from '@/api/doc'
     import {get as getTemplate} from '@/api/doctemplate'
     import Pagination from '@/components/Pagination'
     import { Loading} from 'element-ui'
@@ -143,7 +144,7 @@
                 this.$router.push({path: '/home/detail', query: {path:path}})
             },
             before(file) {
-                const isJPG = /.(docx|doc)$/.test(file.name)
+                const isJPG = /.(docx|doc)$/.test(file.name);
                 if (!isJPG) {
                     this.$message.error('上传word文档!')
                 }
@@ -159,8 +160,8 @@
                 })
             },
             getTemplate() {
-                getTemplate().then(res => {
-                    this.categoryDoc = res.Data
+                getCateDocList().then(res => {
+                    this.categoryDoc = res.info || []
                 })
             },
             getList() {

@@ -44,7 +44,7 @@ function createWindow() {
     })
     if (process.env.NODE_ENV === 'development') {
         BrowserWindow.addDevToolsExtension(
-            path.join(os.homedir(), '/AppData/Local/Google/Chrome/User Data/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/5.1.1_0')
+            path.join(os.homedir(), '/AppData/Local/Google/Chrome/User Data/Default/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/4.1.4_0')
         )
     }
     // const trayMenuTemplate = [

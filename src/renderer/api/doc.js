@@ -7,7 +7,13 @@ export function get(params) {
     params
   })
 }
-
+export function getCateDocList(data) {
+    return request({
+        url: '/CategoryDoc/getCateDocList',
+        method: 'post',
+        data
+    })
+}
 export function getById(id) {
   return request({
     url: `/doc/${id}`,

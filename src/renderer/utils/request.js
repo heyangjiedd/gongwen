@@ -26,7 +26,7 @@ service.interceptors.request.use(config => {
     if (config.method === 'post' || config.method === 'put') {
         config.data = objToLocaleLowerCaseKey(config.data)
     }
-    if (config.method === 'get') {
+    if (config.method === 'get' && config.url!='/getsuggestWord') {
         config.params = objToLocaleLowerCaseKey(config.params)
     }
     return config

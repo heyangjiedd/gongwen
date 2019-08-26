@@ -121,6 +121,7 @@ export const constantRouterMap = [
   {
     path: '/user',
     component: Layout,
+      role:['padmin','cadmin'],
     children: [
       {
         path: 'index',
@@ -133,6 +134,7 @@ export const constantRouterMap = [
     {
         path: '/license',
         component: Layout,
+        role:['padmin','cadmin'],
         children: [
             {
                 path: 'index',
