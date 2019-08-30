@@ -10,6 +10,23 @@ export function getByPath(params) {
         params
     })
 }
+
+export function getmistakewordHtml(params) {
+    return request({
+        url: `/getmistakewordHtml`,
+        method: 'get',
+        params
+    })
+}
+
+export function reviseToWord(data) {
+    return request({
+        url: '/reviseToWord',
+        method: 'post',
+        data
+    })
+}
+
 export function wordformat(params) {
     return request({
         url: `/wordformat`,

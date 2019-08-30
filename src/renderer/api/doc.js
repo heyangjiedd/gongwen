@@ -14,6 +14,7 @@ export function getCateDocList(data) {
         data
     })
 }
+
 export function getById(id) {
   return request({
     url: `/doc/${id}`,

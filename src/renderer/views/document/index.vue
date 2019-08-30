@@ -51,6 +51,7 @@
                         style="float: right;width: 200px"
                         placeholder="请输入搜索关键字"
                         size="small"
+                        @keydown.enter.native="getList"
                         v-model="listQuery.keyWords">
                     <i slot="suffix" @click="getList" class="el-input__icon el-icon-search"></i>
                 </el-input>
@@ -96,7 +97,7 @@
     import {get, add, update, remove,getCateDocList} from '@/api/doc'
     import {get as getTemplate} from '@/api/doctemplate'
     import Pagination from '@/components/Pagination'
-    import { Loading} from 'element-ui'
+    import { Loading,MessageBox} from 'element-ui'
 
     export default {
         components: {Pagination},
@@ -139,7 +140,20 @@
             },
             success(data) {
                 this.loadingInstance.close();
-                this.$message.success(data.msg);
+                if (data.code === 50008 || data.code === 50012 || data.code === 50014) {
+                    // to re-login
+                    MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+                        confirmButtonText: '重新登录',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.$store.dispatch('user/resetToken').then(() => {
+                            location.reload()// 为了重新实例化vue-router对象 避免bug
+                        })
+                    })
+                    return
+                }
+                this.$message.success(data.message||data.msg);
                 let path = `${data.filesurl[0].split('.')[0]}`
                 this.$router.push({path: '/home/detail', query: {path:path}})
             },
@@ -147,6 +161,10 @@
                 const isJPG = /.(docx|doc)$/.test(file.name);
                 if (!isJPG) {
                     this.$message.error('上传word文档!')
+                }
+                if(!this.Cateid){
+                    this.$message.error('请先选择公文类型!');
+                    return false;
                 }
                 return isJPG
             },

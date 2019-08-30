@@ -31,12 +31,14 @@ function createWindow() {
         height: 563,
         useContentSize: true,
         width: 1000,
+        show: false,
         webPreferences: {
             webSecurity: false,//允许跨域
         },
         icon:path.join(__dirname, '/static/logo.png'),
     })
-
+    mainWindow.maximize()
+    mainWindow.show()
     mainWindow.loadURL(winURL)
 
     mainWindow.on('closed', () => {

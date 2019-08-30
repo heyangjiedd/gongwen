@@ -19,7 +19,7 @@ service.interceptors.request.use(config => {
         // config.headers['X-Token'] = store.getters.token// 让每个请求携带自定义token 请根据实际情况自行修改
     }
     loadingIndex++;
-    loadingInstance = Loading.service({text: '请求中', background: 'rgba(0, 0, 0, 0.28)'});
+    loadingInstance = Loading.service({text: '请求中', background: 'rgba(0, 0, 0, 0.28)',spinner: 'el-icon-loading',});
     if (config.method === 'post' || config.method === 'put') {
         config.data = objToLocaleLowerCaseKey(config.data)
     }

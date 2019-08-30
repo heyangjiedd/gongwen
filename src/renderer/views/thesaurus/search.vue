@@ -9,6 +9,7 @@
                     style="float: right;width: 200px"
                     placeholder="请输入搜索关键字"
                     size="small"
+                    @keydown.enter.native="getWords"
                     v-model="listQuery.keyWords">
                 <i slot="suffix" @click="getWords" class="el-input__icon el-icon-search"></i>
             </el-input>
@@ -44,7 +45,8 @@
                 </el-table-column>
                 <el-table-column label="储存路径" prop="Cateid" min-width="40">
                     <template slot-scope="{row}">
-                        {{row.Scope===1?'公共词库':row.Cateid+'/私有词库'}}
+                        <el-tag type="danger" v-if="row.Scope===1">公共词库</el-tag>
+                        <el-tag type="success" v-else>{{row.Catename}}/私有词库</el-tag>
                     </template>
                 </el-table-column>
             </el-table>
