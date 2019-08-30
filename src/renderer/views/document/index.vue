@@ -153,6 +153,7 @@
                     })
                     return
                 }
+
                 this.$message.success(data.message||data.msg);
                 let path = `${data.filesurl[0].split('.')[0]}`
                 this.$router.push({path: '/home/detail', query: {path:path}})
