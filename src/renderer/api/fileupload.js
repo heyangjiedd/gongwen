@@ -3,6 +3,14 @@ import request from '@/utils/request'
 export const base = 'http://47.108.65.129:8020/'//全局baseUrl
 export const baseUrl = base + 'v1/'//全局baseUrl
 
+export function getByWord(params) {
+    return request({
+        url: `/WordOperation/getrevise`,
+        method: 'get',
+        params
+    })
+}
+
 export function getByPath(params) {
     return request({
         url: `/getwordHtml`,

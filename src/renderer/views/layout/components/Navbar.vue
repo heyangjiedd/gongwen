@@ -8,11 +8,6 @@
         <i class="el-icon-caret-bottom"></i>
       </div>
       <el-dropdown-menu class="user-dropdown" slot="dropdown">
-        <router-link class="inlineBlock" to="/">
-          <el-dropdown-item>
-            主 页
-          </el-dropdown-item>
-        </router-link>
         <el-dropdown-item divided>
           <span @click="logout" style="display:block;">退 出</span>
         </el-dropdown-item>

@@ -1,9 +1,11 @@
 <template>
     <div>
-        <div class="title-container"style="padding: 20px 20px 10px 20px;background: #231815 ">
+        <div v-if="isCollapse" class="title-container"style="padding: 10px;background: #231815 ">
+            <img :style="{width: '100%'}" :src="icon" alt="蓉易公文™ - 党政机关公文处理平台">
+        </div>
+        <div v-else class="title-container"style="padding: 20px 20px 10px 20px;background: #231815 ">
             <img :style="{width: '100%'}" :src="img_404_cloud" alt="蓉易公文™ - 党政机关公文处理平台">
         </div>
-
         <scroll-bar>
 
             <el-menu
@@ -26,10 +28,11 @@
     import SidebarItem from './SidebarItem'
     import ScrollBar from '@/components/ScrollBar'
     import img_404_cloud from '@/assets/logov2.jpg'
+    import icon from '@/assets/icon.png'
 
     export default {
         data() {
-            return {img_404_cloud}
+            return {img_404_cloud,icon}
         },
         components: {SidebarItem, ScrollBar},
         computed: {
