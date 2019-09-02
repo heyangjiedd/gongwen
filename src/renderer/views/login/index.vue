@@ -60,8 +60,8 @@
             return {
                 img_404_cloud,
                 loginForm: {
-                    username: '',
-                    password: ''
+                    username: 'admin',
+                    password: 'password'
                 },
                 loginRules: {
                     username: [{required: true, trigger: 'blur', validator: validateUsername}],
@@ -85,7 +85,7 @@
                         this.loading = true
                         this.$store.dispatch('Login', this.loginForm).then(res => {
                             this.loading = false
-                            this.$router.push({path: '/home'})
+                            // this.$router.push({path: '/home'})
                         }).catch(() => {
                             this.loading = false
                         })
