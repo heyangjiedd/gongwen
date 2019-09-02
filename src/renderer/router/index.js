@@ -131,6 +131,19 @@ export const constantRouterMap = [
       }
     ]
   },
+    {
+        path: '/password',
+        component: Layout,
+        role:['puser','padmin','cadmin','cuser'],
+        children: [
+            {
+                path: 'password',
+                name: 'password',
+                component: () => import('@/views/user/account'),
+                meta: { title: '修改密码', icon: 'people' }
+            }
+        ]
+    },
     // {
     //     path: '/license',
     //     component: Layout,
