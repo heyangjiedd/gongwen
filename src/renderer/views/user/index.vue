@@ -32,7 +32,7 @@
       <el-table-column label="账号" prop="Account" min-width="80"/>
       <el-table-column label="单位" prop="CName" min-width="80"/>
 
-      <el-table-column label="操作" align="center" width="150">
+      <el-table-column label="操作" align="center" width="250">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleEdit(row)">
             编辑
@@ -40,9 +40,9 @@
           <el-button type="danger" size="mini" @click="handleRemove(row)">
             删除
           </el-button>
-            <!--<el-button type="text" size="mini" @click="handleDetail(row)">-->
-                <!--详情-->
-            <!--</el-button>-->
+          <el-button  size="mini" @click="handleRest(row)">
+            重置密码
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -135,6 +135,7 @@
 
 <script>
   import { get, add, update, remove } from '@/api/userinfo'
+  import { resetpassword } from '@/api/user'
   import { get as getCompany} from '@/api/company'
   import { parseTime } from '@/utils'
   import Pagination from '@/components/Pagination'
@@ -194,6 +195,15 @@
         this.form = { ...this.form }
         this.dialogVisible = true
         this.title = '用户新增'
+      },
+      handleRest(scope){
+          resetpassword({id:scope.Id}).then(res => {
+              this.$message.success({
+                  message:`重置成功，用户：${scope.Name},密码：${res}`,
+                  duration:0,
+                  showClose:true
+              })
+          })
       },
       handleEdit(scope) {
         this.form = { ...scope}

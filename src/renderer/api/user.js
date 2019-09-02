@@ -1,5 +1,19 @@
 import request from '@/utils/request'
 
+export function changepassword(data){
+    return request({
+        url: '/user/changepassword',
+        method: 'put',
+        data
+    })
+}
+export function resetpassword(data){
+    return request({
+        url: '/user/resetpassword',
+        method: 'put',
+        data
+    })
+}
 export function login(data) {
   // return new Promise((resolve, reject) => {
   //   resolve({code:20000,data:{token:'admin-token'}})
