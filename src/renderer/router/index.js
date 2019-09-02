@@ -121,7 +121,7 @@ export const constantRouterMap = [
   {
     path: '/user',
     component: Layout,
-      role:['padmin','cadmin'],
+      role:['puser','padmin','cadmin'],
     children: [
       {
         path: 'index',
@@ -131,19 +131,19 @@ export const constantRouterMap = [
       }
     ]
   },
-    {
-        path: '/license',
-        component: Layout,
-        role:['padmin','cadmin'],
-        children: [
-            {
-                path: 'index',
-                name: 'license',
-                component: () => import('@/views/license/index'),
-                meta: { title: '许可证管理', icon: 'tree' }
-            }
-        ]
-    },
+    // {
+    //     path: '/license',
+    //     component: Layout,
+    //     role:['padmin','cadmin'],
+    //     children: [
+    //         {
+    //             path: 'index',
+    //             name: 'license',
+    //             component: () => import('@/views/license/index'),
+    //             meta: { title: '许可证管理', icon: 'tree' }
+    //         }
+    //     ]
+    // },
   // {
   //   path: '/account',
   //   component: Layout,

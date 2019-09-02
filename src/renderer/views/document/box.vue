@@ -35,17 +35,6 @@
         }
     }
 </script>
-<style lang="scss">
-    .error{
-        border-bottom: 1px dashed gold;
-        /*&:after{*/
-            /*content: ">";*/
-            /*position: absolute;*/
-            /*border-bottom: 1px solid;*/
-            /*background: gold;*/
-        /*}*/
-    }
-</style>
 <style scoped lang="scss">
 
     .box-man {
@@ -70,7 +59,9 @@
             line-height: 2rem;
         }
         .pagetag {
-            float: right;
+            position: absolute;
+            top: 750px;
+            right: 20px;
         }
         .level1 {}
         .level2 {}

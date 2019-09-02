@@ -30,14 +30,14 @@
       <el-table-column label="用户姓名" prop="Name" min-width="80"/>
       <el-table-column label="手机" prop="Mobile" min-width="80"/>
       <el-table-column label="账号" prop="Account" min-width="80"/>
-      <el-table-column label="单位" prop="Cid" min-width="80"/>
+      <el-table-column label="单位" prop="CName" min-width="80"/>
 
-      <el-table-column label="操作" align="center" width="120">
+      <el-table-column label="操作" align="center" width="150">
         <template slot-scope="{row}">
-          <el-button type="text" size="mini" @click="handleEdit(row)">
+          <el-button type="primary" size="mini" @click="handleEdit(row)">
             编辑
           </el-button>
-          <el-button size="mini" type="text" @click="handleRemove(row)">
+          <el-button type="danger" size="mini" @click="handleRemove(row)">
             删除
           </el-button>
             <!--<el-button type="text" size="mini" @click="handleDetail(row)">-->

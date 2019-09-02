@@ -9,6 +9,7 @@
                     style="float: right;width: 200px"
                     placeholder="请输入搜索关键字"
                     size="small"
+                    @keydown.enter.native="goSearch"
                     v-model="listQuery.keyWords">
                 <i slot="suffix" @click="goSearch" class="el-input__icon el-icon-search"></i>
             </el-input>

@@ -68,9 +68,9 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="名称" prop="Name" min-width="80"></el-table-column>
-                <el-table-column label="操作" width="100">
+                <el-table-column label="操作" width="150">
                     <template slot-scope="{row}">
-                        <el-button type="text" size="mini" @click.stop="handleEdit(row)">
+                        <el-button type="primary" size="mini" @click.stop="handleEdit(row)">
                             编辑
                         </el-button>
                         <el-popover
@@ -82,7 +82,7 @@
                                 <el-button size="mini" type="danger" @click.stop="row.visible = false">取消</el-button>
                                 <el-button size="mini" type="danger" @click.stop="handleRemove(row)">确定</el-button>
                             </div>
-                            <el-button type="text" size="mini" slot="reference" @click.stop>删除</el-button>
+                            <el-button type="danger" size="mini" slot="reference" @click.stop>删除</el-button>
                         </el-popover>
                     </template>
                 </el-table-column>

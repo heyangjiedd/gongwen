@@ -9,6 +9,8 @@
                 <!--                错别字直线-->
                 <div v-for="(item,index) in mapPOP" :key="index" class="map-box"
                      :style="{
+                    borderLeft: `1px solid ${item.color}`,
+                    borderBottom: `1px solid ${item.color}`,
                     left:item.x+item.width/2+'px',
                     top:item.y+item.height+'px',
                     right:'-11px'}">
@@ -21,6 +23,9 @@
             <div class="middle">
                 <!--                连接折线-->
                 <div v-for="(item,index) in mapSX" :key="'sx'+ index" :class="item.is ? 'sx1' : 'sx2'" :style="{
+                    borderTop: `1px solid ${item.is?item.color:'#fff'}`,
+                    borderBottom: `1px solid ${item.is?'#fff':item.color}`,
+                    borderLeft: `1px solid ${item.color}`,
                     left:item.left+'px',
                     width:item.width+'px',
                     height:item.height+'px',
@@ -33,8 +38,8 @@
                 position:'relative',
                 marginBottom:'5px',
                 right:0}">
-                    <div class="cuobiezi">
-                        <div style="line-height: 20px">
+                    <div class="cuobiezi" :style="{border:`1px solid ${item.color}`}">
+                        <div>
                             <span>选择以下词修正：</span>
                             <span v-for="i in 4" class="ciku" @click="item.value = '提示'+ i ">
                            {{'提示'+i+','}}
@@ -83,118 +88,121 @@
 </template>
 
 <script>
-  import { getByPath, getsuggestWord, wordformat, getmistakewordHtml, reviseToWord, getByWord } from '@/api/fileupload'
-  import Tooltip from './tooltip'
-  import Box from './box'
+    import {getByPath, getsuggestWord, wordformat, getmistakewordHtml, reviseToWord, getByWord} from '@/api/fileupload'
+    import Tooltip from './tooltip'
+    import Box from './box'
 
-  export default {
-    name: 'TinymceDemo',
-    components: { Tooltip, Box },
-    data() {
-      return {
-        visible: false,
-        visiblePZ: false,
-        content: '',
-        list: [],//文本板块
-        mapPOP: [],//错别字库
-        mapSX: [],//连接折线
-        item: { show: false, left: 0, top: 0, id: null }
-      }
-    },
-    mounted() {
-      this.getDetail()
-      // wordformat({filepath:this.$route.query.path+'_jy.docx',layout:'html'}).then(res => {
-      //     this.content = res.wordHtml
-      // }).catch(res=>{
-      //     this.$router.go(-1)
-      // });
-    },
-    methods: {
-      getDetail() {
-        this.list = []
-        getByWord({ filepath: this.$route.query.path }).then(res => {
-          this.list = res.word.map((item) => {
-            let content = item.content.replace(/---@([^@#]+)#---/gm, (a, b) => {
-              return `<span class="error">${b}</span>`
-            })
-            return { ...item, content }
-          })
-          this.$nextTick(() => {
-            this.setItemTips()
-          })
-        }).catch(res => {
-          this.$message.error('获取失败')
-        })
-      },
-      setItemTips() {
-        let s = window.document.getElementsByClassName('error')
-        this.mapPOP = [];
-        [...s].forEach(item => {
-          let data = {
-            value: '',
-            x: item.offsetLeft,
-            y: item.offsetTop,
-            height: item.offsetHeight,
-            width: item.offsetWidth
-          }
-          if (this.mapPOP.find(r => {
-            return data.y == r.y
-          })) {
-            data.y = data.y + 2
-          }
-          this.mapPOP.push(data)
-        })
-        this.$nextTick(() => {
-          this.mapSX = [...this.$refs.pop].map((item, index) => {
-            let pop = this.mapPOP[index].y + this.mapPOP[index].height
-            let sx = item.offsetTop + item.offsetHeight / 2
-            let is = pop > sx
-            let height = is ? pop - sx : sx - pop
-            let top = is ? sx : pop
-            return { width: 30, left: 10, top: top + 4, height: height, is }
-          })
-        })
-      },
-      showToop(item) {
-        this.item = {
-          left: item.offsetLeft + 30 + 'px',
-          top: item.offsetTop + 'px',
-          id: item.id,
-          show: true
+    export default {
+        name: 'TinymceDemo',
+        components: {Tooltip, Box},
+        data() {
+            return {
+                color: ['#00FFFF', '#FFD700', '#0000FF', '#A52A2A', '#5F9EA0', '#D2691E', '#DC143C', '#B8860B', '#006400'],
+                visible: false,
+                visiblePZ: false,
+                content: '',
+                list: [],//文本板块
+                mapPOP: [],//错别字库
+                mapSX: [],//连接折线
+                item: {show: false, left: 0, top: 0, id: null}
+            }
+        },
+        mounted() {
+            this.getDetail()
+            // wordformat({filepath:this.$route.query.path+'_jy.docx',layout:'html'}).then(res => {
+            //     this.content = res.wordHtml
+            // }).catch(res=>{
+            //     this.$router.go(-1)
+            // });
+        },
+        methods: {
+            getDetail() {
+                this.list = []
+                getByWord({filepath: this.$route.query.path}).then(res => {
+                    let index = 0;
+                    this.list = res.word.map((item) => {
+                        let content = item.content.replace(/---@([^@#]+)#---/gm, (a, b) => {
+                            return `<span class="error" style="border-bottom: 1px dashed ${this.color[index++%this.color.length]}">${b}</span>`
+                        })
+                        return {...item, content}
+                    })
+                    this.$nextTick(() => {
+                        this.setItemTips()
+                    })
+                }).catch(res => {
+                    this.$message.error('获取失败')
+                })
+            },
+            setItemTips() {
+                let s = window.document.getElementsByClassName('error')
+                this.mapPOP = [];
+                [...s].forEach((item, index) => {
+                    let data = {
+                        value: '',
+                        x: item.offsetLeft,
+                        y: item.offsetTop,
+                        height: item.offsetHeight,
+                        width: item.offsetWidth,
+                        color: this.color[index%this.color.length],
+                    }
+                    if (this.mapPOP.find(r => {
+                        return data.y == r.y
+                    })) {
+                        data.y = data.y + 2
+                    }
+                    this.mapPOP.push(data)
+                })
+                this.$nextTick(() => {
+                    this.mapSX = [...this.$refs.pop].map((item, index) => {
+                        let pop = this.mapPOP[index].y + this.mapPOP[index].height
+                        let sx = item.offsetTop + item.offsetHeight / 2
+                        let is = pop > sx
+                        let height = is ? pop - sx : sx - pop
+                        let top = is ? sx : pop
+                        return {width: 30, left: 10, top: top + 5, height: height, is, color: this.color[index%this.color.length],}
+                    })
+                })
+            },
+            showToop(item) {
+                this.item = {
+                    left: item.offsetLeft + 30 + 'px',
+                    top: item.offsetTop + 'px',
+                    id: item.id,
+                    show: true
+                }
+            },
+            sure(revise) {
+                let data = this.list.find(item => item.id == this.item.id)
+                reviseToWord({paramlist: [{...data, revise}], pzname: this.$route.query.path}).then(res => {
+                    this.$message.success('修改成功')
+                    this.getDetail()
+                    this.canel()
+                })
+            },
+            canel() {
+                this.item.show = false
+            },
+            download() {
+                this.visible = false
+                this.downloadCommon('.docx')
+            },
+            downloadWord() {
+                this.visible = false
+                this.visiblePZ = false
+                this.downloadCommon('_zs.docx')
+            },
+            downloadPDF() {
+                this.visible = false
+                this.visiblePZ = false
+                this.downloadCommon('_zs.pdf')
+            },
+            downloadCommon(url) {
+                const ele = document.createElement('a')
+                ele.setAttribute('href', `${this.baseUrl}doc/${this.$route.query.path}${url}`) //设置下载文件的url地址
+                ele.click()
+            }
         }
-      },
-      sure(revise) {
-        let data = this.list.find(item => item.id == this.item.id)
-        reviseToWord({ paramlist: [{ ...data, revise }], pzname: this.$route.query.path }).then(res => {
-          this.$message.success('修改成功')
-          this.getDetail()
-          this.canel()
-        })
-      },
-      canel() {
-        this.item.show = false
-      },
-      download() {
-        this.visible = false
-        this.downloadCommon('.docx')
-      },
-      downloadWord() {
-        this.visible = false
-        this.visiblePZ = false
-        this.downloadCommon('_zs.docx')
-      },
-      downloadPDF() {
-        this.visible = false
-        this.visiblePZ = false
-        this.downloadCommon('_zs.pdf')
-      },
-      downloadCommon(url) {
-        const ele = document.createElement('a')
-        ele.setAttribute('href', `${this.baseUrl}doc/${this.$route.query.path}${url}`) //设置下载文件的url地址
-        ele.click()
-      }
     }
-  }
 </script>
 <style rel="stylesheet/scss" lang="scss">
     .components-container-editor {
@@ -216,8 +224,6 @@
                     position: absolute;
                     overflow: auto;
                     height: 4px;
-                    border-left: 1px solid gold;
-                    border-bottom: 1px solid gold;
                 }
 
                 .btn-box {
@@ -239,13 +245,13 @@
                 }
 
                 .bottom-left {
-                    bottom: 20px;
+                    top: 700px;
                     border-bottom: none;
                     border-left: none;
                 }
 
                 .bottom-right {
-                    bottom: 20px;
+                    top: 700px;
                     right: 20px;
                     border-bottom: none;
                     border-right: none;
@@ -256,22 +262,11 @@
                 width: 300px;
                 position: relative;
 
-                .sx1 {
-                    border-left: 1px solid gold;
-                    border-top: 1px solid gold;
-                }
-
-                .sx2 {
-                    border-left: 1px solid gold;
-                    border-bottom: 1px solid gold;
-                }
-
                 .cuobiezi {
                     background: #fff;
                     width: 250px;
                     padding: 3px;
                     border-radius: 4px;
-                    border: 1px solid gold;
                     color: gainsboro;
                     line-height: 1.4;
                     font-size: 12px;
@@ -306,12 +301,6 @@
                         border-color: transparent;
                         border-style: solid;
                     }
-                }
-
-                .map-box {
-                    position: absolute;
-                    height: 1px;
-                    background: gold;
                 }
             }
 
