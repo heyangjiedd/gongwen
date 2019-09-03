@@ -12,7 +12,7 @@
                     borderLeft: `1px solid ${item.color}`,
                     borderBottom: `1px solid ${item.color}`,
                     left:item.x+item.width/2+'px',
-                    top:item.y+item.height+'px',
+                    top:item.y+item.height+3+'px',
                     right:'-11px'}">
                 </div>
                 <!--                文本段落-->
@@ -29,7 +29,7 @@
                     left:item.left+'px',
                     width:item.width+'px',
                     height:item.height+'px',
-                    top:item.top+'px',
+                    top:item.top+3+'px',
                     position:'absolute'}">
                 </div>
                 <!--                错别字修正框-->
@@ -40,6 +40,7 @@
                 right:0}">
                     <div class="cuobiezi" :style="{border:`1px solid ${item.color}`}">
                         <div>
+                            <span :style="{color: `${item.color}`}">[{{index+1}}]、</span>
                             <span>选择以下词修正：</span>
                             <span v-for="i in 4" class="ciku" @click="item.value = '提示'+ i ">
                            {{'提示'+i+','}}
@@ -122,7 +123,7 @@
                     let index = 0;
                     this.list = res.word.map((item) => {
                         let content = item.content.replace(/---@([^@#]+)#---/gm, (a, b) => {
-                            return `<span class="error" style="border-bottom: 1px dashed ${this.color[index++%this.color.length]}">${b}</span>`
+                            return `<span class="error" style="border-bottom: 1px dashed ${this.color[index%this.color.length]}">${b}<span class="num" style="font-size: 12px;color: ${this.color[index%this.color.length]}">[${++index}]</span></span>`
                         })
                         return {...item, content}
                     })
@@ -134,7 +135,7 @@
                 })
             },
             setItemTips() {
-                let s = window.document.getElementsByClassName('error')
+                let s = window.document.getElementsByClassName('num')
                 this.mapPOP = [];
                 [...s].forEach((item, index) => {
                     let data = {
@@ -144,23 +145,22 @@
                         height: item.offsetHeight,
                         width: item.offsetWidth,
                         color: this.color[index%this.color.length],
-                        index,
                     }
                     if (this.mapPOP.find(r => {
                         return data.y == r.y
                     })) {
-                        data.y = data.y + 2
+                        data.y = data.y + 1
                     }
                     this.mapPOP.push(data)
                 })
                 this.$nextTick(() => {
-                  this.mapSX = [...this.$refs.pop].map((item) => {
-                    let pop = this.mapPOP[item.index].y + this.mapPOP[item.index].height
+                  this.mapSX = [...this.$refs.pop].map((item, index) => {
+                    let pop = this.mapPOP[index].y + this.mapPOP[index].height
                     let sx = item.offsetTop + item.offsetHeight / 2
                     let is = pop > sx
                     let height = is ? pop - sx : sx - pop
                     let top = is ? sx : pop
-                    return {width: 30, left: 10, top: top + 5, height: height, is, color: this.color[item.index%this.color.length],}
+                    return {width: 30, left: 10, top: top + 5, height: height, is, color: this.color[index%this.color.length],}
                   })
                 })
             },
