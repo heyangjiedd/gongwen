@@ -140,7 +140,7 @@ export const constantRouterMap = [
                 path: 'password',
                 name: 'password',
                 component: () => import('@/views/user/account'),
-                meta: { title: '修改密码', icon: 'people' }
+                meta: { title: '修改密码', icon: 'lock' }
             }
         ]
     },
