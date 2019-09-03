@@ -32,7 +32,7 @@
       <el-table-column label="账号" prop="Account" min-width="80"/>
       <el-table-column label="单位" prop="CName" min-width="80"/>
 
-      <el-table-column label="操作" align="center" width="250">
+      <el-table-column label="操作" align="center" width="320">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleEdit(row)">
             编辑
@@ -42,6 +42,12 @@
           </el-button>
           <el-button  size="mini" @click="handleRest(row)">
             重置密码
+          </el-button>
+          <el-button v-if="row.Status == 2" type="primary" size="mini" @click="handleSwicth({...row,Status:1})">
+            解除
+          </el-button>
+          <el-button v-else size="mini" type="danger" @click="handleSwicth({...row,Status:2})">
+            冻结
           </el-button>
         </template>
       </el-table-column>
@@ -69,12 +75,12 @@
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :md="24" :lg="24">
-            <el-form-item label="密码" prop="Password">
-              <el-input placeholder="请输入密码" type="password" v-model="form.Password" clearable>
-              </el-input>
-            </el-form-item>
-          </el-col>
+<!--          <el-col :md="24" :lg="24">-->
+<!--            <el-form-item label="密码" prop="Password">-->
+<!--              <el-input placeholder="请输入密码" type="password" v-model="form.Password" clearable>-->
+<!--              </el-input>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
           <!--<el-col :md="24" :lg="24">-->
             <!--<el-form-item label="单位" prop="cid">-->
               <!--<el-select-->
@@ -115,11 +121,6 @@
           <el-col :md="24" :lg="24">
             <el-form-item label="账号：">
               <span>{{form.Account}}</span>
-            </el-form-item>
-          </el-col>
-          <el-col :md="24" :lg="24">
-            <el-form-item label="密码：">
-              <span>{{form.Password}}</span>
             </el-form-item>
           </el-col>
           <el-col :md="24" :lg="24">
@@ -204,6 +205,21 @@
                   showClose:true
               })
           })
+      },
+      handleSwicth(scope){
+        this.$confirm(`确认${scope.Status == 2?'冻结':'解除'}该账号？`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          callback: (res) => {
+            if (res == 'confirm') {
+              update({...scope,createtime:undefined}).then(res => {
+                this.$message.success('操作成功')
+                this.getList()
+              });
+            }
+          }
+        })
       },
       handleEdit(scope) {
         this.form = { ...scope}
