@@ -19,7 +19,7 @@ export function login(data) {
   //   resolve({code:20000,data:{token:'admin-token'}})
   // })
   return request({
-    url: '/user/login/',
+    url: '/user/login',
     method: 'post',
     data
   })

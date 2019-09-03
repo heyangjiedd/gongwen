@@ -144,6 +144,7 @@
                         height: item.offsetHeight,
                         width: item.offsetWidth,
                         color: this.color[index%this.color.length],
+                        index,
                     }
                     if (this.mapPOP.find(r => {
                         return data.y == r.y
@@ -153,14 +154,14 @@
                     this.mapPOP.push(data)
                 })
                 this.$nextTick(() => {
-                    this.mapSX = [...this.$refs.pop].map((item, index) => {
-                        let pop = this.mapPOP[index].y + this.mapPOP[index].height
-                        let sx = item.offsetTop + item.offsetHeight / 2
-                        let is = pop > sx
-                        let height = is ? pop - sx : sx - pop
-                        let top = is ? sx : pop
-                        return {width: 30, left: 10, top: top + 5, height: height, is, color: this.color[index%this.color.length],}
-                    })
+                  this.mapSX = [...this.$refs.pop].map((item) => {
+                    let pop = this.mapPOP[item.index].y + this.mapPOP[item.index].height
+                    let sx = item.offsetTop + item.offsetHeight / 2
+                    let is = pop > sx
+                    let height = is ? pop - sx : sx - pop
+                    let top = is ? sx : pop
+                    return {width: 30, left: 10, top: top + 5, height: height, is, color: this.color[item.index%this.color.length],}
+                  })
                 })
             },
             showToop(item) {
