@@ -65,7 +65,7 @@
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="sure">确定</el-button>
+                <el-button type="danger" @click="sure">确定</el-button>
             </div>
         </el-dialog>
         <el-dialog :title="title" :visible.sync="dialogVisibleWord" @close="()=>restForm('formWord','formWord')">
@@ -88,7 +88,7 @@
 
 <script>
   import {get, add, update, remove} from '@/api/category'
-  import {get as wordGet, add as wordAdd , update as wordUpdate , remove as wordRemove} from '@/api/word'
+  import {get as wordGet, add as wordAdd , update as wordUpdate , remove as wordRemove,getByIdCoorectName,addCoorectName,updateCoorectName} from '@/api/word'
   import Pagination from '@/components/Pagination'
   import {exportDataBaser,updateDataBaser} from '@/api/fileupload'
 

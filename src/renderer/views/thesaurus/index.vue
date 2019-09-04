@@ -28,7 +28,7 @@
                             <el-input v-model="item.NameCopy" size="mini" clearable></el-input>
                             <div style="text-align: right; margin-top: 10px">
                                 <el-button size="mini" type="danger" @click.stop="handleEdit(item)">确认修改</el-button>
-                                <el-button size="mini" type="danger" @click.stop="handleRemove(item)">删除</el-button>
+                                <el-button size="mini" type="danger" v-if="!(item.children&&item.children.length>0)" @click.stop="handleRemove(item)">删除</el-button>
                             </div>
                             <el-button type="text" style="float: right" size="mini" slot="reference"
                                        @click.stop="item.NameCopy = item.Name">操作
@@ -54,7 +54,7 @@
                         </el-col>
                     </el-row>
 
-                    <div style="text-align: right;font-size: 12px">更新于 {{new Date() | parseTime('{y}-{m}-{d} {h}:{i}')}}
+                    <div style="text-align: right;font-size: 12px">更新于 {{new Date(item.Updatetime.time) | parseTime('{y}-{m}-{d} {h}:{i}')}}
                     </div>
                 </el-card>
             </el-col>

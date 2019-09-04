@@ -1,5 +1,28 @@
 import request from '@/utils/request'
 
+export function getByIdCoorectName(id) {
+  return request({
+    url: `/word/CoorectName/${id}`,
+    method: 'get'
+  })
+}
+
+export function addCoorectName(data) {
+  return request({
+    url: '/word/CoorectName/',
+    method: 'post',
+    data
+  })
+}
+
+export function updateCoorectName(data) {
+  return request({
+    url: `/word/CoorectName/${data.id||data.Id}`,
+    method: 'post',
+    data
+  })
+}
+
 export function get(params) {
   return request({
     url: '/word',
