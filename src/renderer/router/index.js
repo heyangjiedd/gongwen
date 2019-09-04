@@ -39,6 +39,12 @@ export const constantRouterMap = [
       meta: { title: '公文管理', icon: 'upload' },
       component: () => import('@/views/document/index')
     },{
+      path: 'edit',
+      name: 'edit',
+      hidden: true,
+      meta: { title: '公文编辑', icon: 'upload' },
+      component: () => import('@/views/document/edit')
+    },{
       path: 'detail',
       name: 'detail',
       hidden: true,

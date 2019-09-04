@@ -1,16 +1,64 @@
 <template>
   <div class="components-container-editor" ref="container">
     <div class="content">
-      <div class="left" v-show="list.length > 0">
+      <div class="left"  v-show="list.length > 0">
         <div class="btn-box top-left"></div>
         <div class="btn-box top-right"></div>
+        <!--                错别字直线-->
+        <div v-for="(item,index) in mapPOP" :key="index" class="map-box"
+             :style="{
+                    borderLeft: `1px solid ${item.color}`,
+                    borderBottom: `1px solid ${item.color}`,
+                    left:item.x+item.width/2+'px',
+                    top:item.y+item.height+3+'px',
+                    right:'-11px'}">
+        </div>
         <!--                文本段落-->
         <div v-for="(item,index) in list" :key="'box'+index">
           <Box :item="item"></Box>
         </div>
       </div>
+      <div class="middle">
+        <!--                连接折线-->
+        <div v-for="(item,index) in mapSX" :key="'sx'+ index" :class="item.is ? 'sx1' : 'sx2'" :style="{
+                    borderTop: `1px solid ${item.is?item.color:'#fff'}`,
+                    borderBottom: `1px solid ${item.is?'#fff':item.color}`,
+                    borderLeft: `1px solid ${item.color}`,
+                    left:item.left+'px',
+                    width:item.width+'px',
+                    height:item.height+'px',
+                    top:item.top+3+'px',
+                    position:'absolute'}">
+        </div>
+        <!--                错别字修正框-->
+        <div v-for="(item,index) in mapPOP" ref="pop" :key="'tip'+index" :style="{
+                left:'40px',
+                position:'relative',
+                marginBottom:'5px',
+                right:0}">
+          <div class="cuobiezi" :style="{border:`1px solid ${item.color}`}">
+            <div>
+              <span :style="{color: `${item.color}`}">[{{index+1}}]、</span>
+              <span>选择以下词修正：</span>
+              <span v-for="i in 4" class="ciku" @click="item.value = '提示'+ i ">
+                           {{'提示'+i+','}}
+                        </span>
+              <span>手动输入正确词:</span>
+            </div>
+            <el-input v-model="item.value" placeholder="请输入正确词" size="mini" clearable @keyup.enter.native=""
+                      style="margin-bottom: 5px"/>
+            <div style="text-align: right; margin: 0">
+              <el-button size="mini" type="danger" @click="">忽略</el-button>
+              <el-button size="mini" type="primary" @click="">确定</el-button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="right">
         <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="$router.go(-1)">返回首页
+        </el-button>
+        <br/>
+        <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="visible = false">保存公文
         </el-button>
         <br/>
         <el-popover
@@ -60,14 +108,20 @@
     },
     mounted() {
       this.getDetail()
+      // wordformat({filepath:this.$route.query.path+'_jy.docx',layout:'html'}).then(res => {
+      //     this.content = res.wordHtml
+      // }).catch(res=>{
+      //     this.$router.go(-1)
+      // });
     },
     methods: {
       getDetail() {
         this.list = []
         getByWord({filepath: this.$route.query.path}).then(res => {
+          let index = 0;
           this.list = res.word.map((item) => {
             let content = item.content.replace(/---@([^@#]+)#---/gm, (a, b) => {
-              return b
+              return `<span class="error" style="border-bottom: 1px dashed ${this.color[index%this.color.length]}">${b}<span class="num" style="font-size: 12px;color: ${this.color[index%this.color.length]}">[${++index}]</span></span>`
             })
             return {...item, content}
           })
