@@ -5,7 +5,7 @@
         <div class="btn-box top-left"></div>
         <div class="btn-box top-right"></div>
         <!--                错别字直线-->
-        <div v-for="(item,index) in mapPOP" :key="index" class="map-box"
+        <div v-if="visiblePreview" v-for="(item,index) in mapPOP" :key="index" class="map-box"
              :style="{
                     borderLeft: `1px solid ${item.color}`,
                     borderBottom: `1px solid ${item.color}`,
@@ -20,7 +20,7 @@
       </div>
       <div class="middle">
         <!--                连接折线-->
-        <div v-for="(item,index) in mapSX" :key="'sx'+ index" :class="item.is ? 'sx1' : 'sx2'" :style="{
+        <div v-if="visiblePreview" v-for="(item,index) in mapSX" :key="'sx'+ index" :class="item.is ? 'sx1' : 'sx2'" :style="{
                     borderTop: `1px solid ${item.is?item.color:'#fff'}`,
                     borderBottom: `1px solid ${item.is?'#fff':item.color}`,
                     borderLeft: `1px solid ${item.color}`,
@@ -31,7 +31,7 @@
                     position:'absolute'}">
         </div>
         <!--                错别字修正框-->
-        <div v-for="(item,index) in mapPOP" ref="pop" :key="'tip'+index" :style="{
+        <div v-if="visiblePreview" v-for="(item,index) in mapPOP" ref="pop" :key="'tip'+index" :style="{
                 left:'40px',
                 position:'relative',
                 marginBottom:'5px',
@@ -59,6 +59,10 @@
         </el-button>
         <br/>
         <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="visible = false">保存公文
+        </el-button>
+        <br/>
+        <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="visiblePreview = !visiblePreview">
+          {{visiblePreview ?'预览公文':'继续编辑'}}
         </el-button>
         <br/>
         <el-popover
@@ -99,6 +103,7 @@
         color: ['#00FFFF', '#FFD700', '#0000FF', '#A52A2A', '#5F9EA0', '#D2691E', '#DC143C', '#B8860B', '#006400'],
         visible: false,
         visiblePZ: false,
+        visiblePreview:true,
         content: '',
         list: [],//文本板块
         mapPOP: [],//错别字库
