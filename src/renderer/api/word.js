@@ -2,22 +2,22 @@ import request from '@/utils/request'
 
 export function getByIdCoorectName(id) {
   return request({
-    url: `/word/CoorectName/${id}`,
+    url: `/word/getCoorectName/${id}`,
     method: 'get'
   })
 }
 
 export function addCoorectName(data) {
   return request({
-    url: '/word/CoorectName/',
+    url: '/word/addCoorectName',
     method: 'post',
     data
   })
 }
 
-export function updateCoorectName(data) {
+export function updateCoorectName(id,data) {
   return request({
-    url: `/word/CoorectName/${data.id||data.Id}`,
+    url: `/word/updateCoorectName/${id}`,
     method: 'post',
     data
   })

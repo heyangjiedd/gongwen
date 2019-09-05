@@ -61,10 +61,10 @@
         <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="visible = false">保存公文
         </el-button>
         <br/>
-        <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="visiblePreview = !visiblePreview">
-          {{visiblePreview ?'预览公文':'继续编辑'}}
-        </el-button>
-        <br/>
+<!--        <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="visiblePreview = !visiblePreview">-->
+<!--          {{visiblePreview ?'预览公文':'继续编辑'}}-->
+<!--        </el-button>-->
+<!--        <br/>-->
         <el-popover
           width="200"
           v-model="visible">

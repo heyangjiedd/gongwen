@@ -4,6 +4,9 @@
 
 export function objToLocaleLowerCaseKey(obj={}) {
   let result = {}
+  if(Array.isArray(obj)){
+    return obj
+  }
   for (let i in obj){
     result[i.toLocaleLowerCase()] = obj[i]
   }
