@@ -59,7 +59,7 @@
                                 </el-popover>
                             </div>
                             <el-button type="text" size="mini" slot="reference"
-                                       @click.stop="row.NameCopy = row.Name;row.CoorectNameCopy = row.CoorectName.split(',')">
+                                       @click.stop="row.NameCopy = row.Name;row.CoorectNameCopy = row.CoorectName">
                                 {{row.Name}}
                             </el-button>
                         </el-popover>
@@ -134,7 +134,7 @@
         },
         title: '',
         form: {},
-        formWord: { coorectName: [] },
+        formWord: {},
         list: [],
         listWords: [],
         rules: {
@@ -179,11 +179,14 @@
         this.$router.push({ path: '/home/detail', query: { id: scope.id } })
       },
       handleEdit(data) {
-        wordUpdate({ ...data, Name: data.NameCopy, updatetime: undefined }).then(() => {
-          updateCoorectName(data.Id, data.CoorectNameCopy).then(() => {
-            this.$message.success('操作成功')
-            this.getWords()
-          })
+        wordUpdate({
+          ...data,
+          Name: data.NameCopy,
+          CoorectName: data.CoorectNameCopy,
+          updatetime: undefined
+        }).then(() => {
+          this.$message.success('操作成功')
+          this.getWords()
         })
       },
       handleMove(row, item) {
@@ -231,7 +234,7 @@
       },
       getWords() {
         wordGet({ ...this.listQuery, ...this.paging }).then(res => {
-          this.listWords = res.Data
+          this.listWords = res.Data.map(item=>({...item,NameCopy:'',CoorectNameCopy:''}))
           this.paging.total = res.Recordsfiltered
         })
       },
@@ -257,11 +260,6 @@
         updateDataBaser().then(res => {
           this.$message.success('导出成功')
         })
-      },
-      restForm(formfer, form) {
-        this.$refs[formfer] && this.$refs[formfer].resetFields()
-        this.$refs[formfer] && this.$refs[formfer].clearValidate()
-        this[form] = { coorectName: [] }
       }
     }
   }

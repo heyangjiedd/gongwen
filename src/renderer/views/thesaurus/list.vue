@@ -41,7 +41,8 @@
                                 <el-row>
                                     <el-col :md="24" :lg="24">
                                         <el-form-item style="margin-bottom: 0" label="词汇名称" prop="Name">
-                                            <el-input v-model="row.NameCopy" size="mini" type="input" clearable></el-input>
+                                            <el-input v-model="row.NameCopy" size="mini" type="input"
+                                                      clearable></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :md="24" :lg="24">
@@ -66,7 +67,8 @@
                                             class="el-icon-arrow-right el-icon--right"/></el-button>
                                 </el-popover>
                             </div>
-                            <el-button type="text" size="mini" slot="reference" @click.stop="row.NameCopy = row.Name;row.CoorectNameCopy = row.CoorectName.split(',')">
+                            <el-button type="text" size="mini" slot="reference"
+                                       @click.stop="row.NameCopy = row.Name;row.CoorectNameCopy = row.CoorectName">
                                 {{row.Name}}
                             </el-button>
                         </el-popover>
@@ -145,7 +147,7 @@
         title: '',
         fileList: [],
         form: {},
-        formWord: {coorectName:[]},
+        formWord: {},
         list: [],
         listWords: [],
         rules: {
@@ -190,11 +192,14 @@
         this.$router.push({ path: '/home/detail', query: { id: scope.id } })
       },
       handleEdit(data) {
-        wordUpdate({ ...data, Name: data.NameCopy, updatetime: undefined }).then(() => {
-          updateCoorectName(data.Id,data.CoorectNameCopy).then(()=>{
-            this.$message.success('操作成功')
-            this.getWords()
-          })
+        wordUpdate({
+          ...data,
+          Name: data.NameCopy,
+          CoorectName: data.CoorectNameCopy,
+          updatetime: undefined
+        }).then(() => {
+          this.$message.success('操作成功')
+          this.getWords()
         })
       },
       handleMove(row, item) {
@@ -227,7 +232,6 @@
         this.$refs['formWord'].validate((valid) => {
           if (valid) {
             wordAdd({ ...this.formWord, Scope: 0, Cateid: this.activeName }).then(res => {
-              // addCoorectName({})
               this.$message.success('操作成功')
               this.dialogVisibleWord = false
               this.getWords()
@@ -242,8 +246,8 @@
         })
       },
       getWords() {
-        wordGet({ ...this.listQuery, ...this.paging, Cateid: this.activeName }).then(res => {
-          this.listWords = res.Data
+        wordGet({ ...this.listQuery, ...this.paging, Cateid: this.activeName, Scope: 1 }).then(res => {
+          this.listWords = res.Data.map(item=>({...item,NameCopy:'',CoorectNameCopy:''}))
           this.paging.total = res.Recordsfiltered
         })
       },
@@ -270,11 +274,6 @@
           this.$message.success('导入成功')
         })
       },
-      restForm(formfer, form) {
-        this.$refs[formfer] && this.$refs[formfer].resetFields()
-        this.$refs[formfer] && this.$refs[formfer].clearValidate()
-        this[form] = {coorectName:[]}
-      }
     }
   }
 </script>

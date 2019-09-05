@@ -30,16 +30,19 @@
     name: 'index',
     props:{
       value: {
-        type: Array,
-        default: () => []
+        type: String,
+        default: ''
       }
     },
     watch:{
-      value(newVal,oldVal){
-        this.dynamicTags = newVal ? newVal : [];
+      value:{
+        handler(newVal,oldVal){
+          this.dynamicTags = newVal ? newVal.split(',') : [];
+        },
+        immediate: true
       },
       dynamicTags(newVal){
-        this.$emit('input',newVal);
+        this.$emit('input',newVal.join(','));
       }
     },
     data() {
@@ -76,9 +79,8 @@
     .el-tag + .el-tag {
         margin-left: 10px;
     }
-
     .button-new-tag {
-        margin-left: 10px;
+        /*margin-left: 10px;*/
     }
 
     .input-new-tag {
