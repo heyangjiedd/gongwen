@@ -142,7 +142,7 @@
       return {
         dialogVisible: false,
         dialogVisibleWord: false,
-        activeName: '' + (this.$route.params.item && this.$route.params.item.Id),
+        activeName: '' + this.$route.query.Id,
         listQuery: {},
         title: '',
         fileList: [],

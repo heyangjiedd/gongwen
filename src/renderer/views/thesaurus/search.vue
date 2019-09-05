@@ -1,7 +1,7 @@
 <template>
     <div class="app-container">
         <el-row>
-            <el-button style="float: left;" size="small" type="danger" @click.stop="$router.push('/thesaurus/index')"><i
+            <el-button style="float: left;" size="small" type="danger" @click.stop="$router.go(-1)"><i
                     class="el-icon-arrow-left el-icon--left"/>返回
             </el-button>
             <el-button style="float: right;" size="small" type="danger" @click="downloadCommon">一键导出词库</el-button>

@@ -114,7 +114,7 @@
                 this.$router.push({path: '/thesaurus/search', query: {keyWords: this.listQuery.keyWords}})
             },
             goList(item) {
-                this.$router.push({name: 'list', params: {item: {...item}}})
+                this.$router.push({path: '/thesaurus/list', query: {Id: item.Id}})
             },
             handleRemove(data) {
                 remove(data.Id).then(() => {
