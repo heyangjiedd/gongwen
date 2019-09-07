@@ -55,32 +55,36 @@
              :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
              v-html="item.content"></div>
         <div v-if="item.typename == 'zhengli'" class="zhengli"
-             :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"></div>
+             :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
+             v-html="item.content"></div>
+        <div v-if="item.typename == 'banji'" class="banji"
+             :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
+             v-html="item.content"></div>
     </div>
 </template>
 
 <script>
-  export default {
-    name: 'box',
-    props: {
-      item: {
-        type: Object,
-        default: () => {
-        }
-      }
-    },
-    mounted() {
+    export default {
+        name: 'box',
+        props: {
+            item: {
+                type: Object,
+                default: () => {
+                }
+            }
+        },
+        mounted() {
 
-    },
-    methods: {}
-  }
+        },
+        methods: {}
+    }
 </script>
 <style scoped lang="scss">
 
     .box-man {
         .biaoti {
             text-align: center;
-            margin: 55px 0 20px 0;
+            margin: 90px 0 20px 0;
         }
 
         .fawejiguan {
@@ -142,30 +146,50 @@
         }
 
         .level1 {
+            text-indent: 2rem;
+            line-height: 2rem;
         }
 
         .level2 {
+            text-indent: 2rem;
+            line-height: 2rem;
         }
 
         .level3 {
+            text-indent: 2rem;
+            line-height: 2rem;
         }
 
         .level4 {
         }
 
         .fujian {
+            margin-top: 20px;
         }
 
         .danweimingcheng {
+            text-align: right;
+            margin: 10px 0;
         }
 
         .chengwenriqi {
+            text-align: right;
+            margin: 10px 0;
         }
 
         .chuxi {
+            text-indent: 2rem;
+            line-height: 2rem;
         }
-
         .zhengli {
+            text-indent: 2rem;
+            line-height: 2rem;
+        }
+        .banji{
+            margin-top: 100px;
+            text-align: center;
+            border-bottom: 2px solid;
+            border-top: 2px solid;
         }
     }
 

@@ -13,6 +13,18 @@
                     top:item.y+item.height+3+'px',
                     right:'-11px'}">
         </div>
+        <!--三个输入框-->
+        <div class="three">
+          <div>
+            <input type="text" placeholder="份号">
+          </div>
+          <div>
+            <input type="text" placeholder="密级和期限">
+          </div>
+          <div>
+            <input type="text" placeholder="紧急程度">
+          </div>
+        </div>
         <!--                文本段落-->
         <div v-for="(item,index) in list" :key="'box'+index">
           <Box :item="item"></Box>
@@ -230,7 +242,14 @@
         position: relative;
         border: 1px solid gainsboro;
         padding: 20px 20px 20px 20px;
-
+        .three{
+          position: absolute;
+          top: 45px;
+          input{
+            height: 15px;
+            font-size: 12px;
+          }
+        }
         .map-box {
           position: absolute;
           overflow: auto;

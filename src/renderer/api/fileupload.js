@@ -10,7 +10,14 @@ export function getByWord(params) {
         params
     })
 }
-
+export function upload(data) {
+    return request({
+        url: '/upload',
+        method: 'post',
+        headers: { "Content-Type": "multipart/form-data" },
+        data
+    })
+}
 export function getByPath(params) {
     return request({
         url: `/getwordHtml`,

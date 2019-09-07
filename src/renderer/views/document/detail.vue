@@ -71,9 +71,7 @@
             })
             return {...item, content}
           })
-          this.$nextTick(() => {
-            this.setItemTips()
-          })
+            console.log(this.list)
         }).catch(res => {
           this.$message.error('获取失败')
         })
