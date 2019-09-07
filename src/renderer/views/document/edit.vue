@@ -40,16 +40,16 @@
             <div>
               <span :style="{color: `${item.color}`}">[{{index+1}}]、</span>
               <span>选择以下词修正：</span>
-              <span v-for="i in 4" class="ciku" @click="item.value = '提示'+ i ">
-                           {{'提示'+i+','}}
+              <span v-for="(i,index) in item.coorectnames" class="ciku" @click="item.value = i" :key="index">
+                           {{i}}
                         </span>
               <span>手动输入正确词:</span>
             </div>
             <el-input v-model="item.value" placeholder="请输入正确词" size="mini" clearable @keyup.enter.native=""
                       style="margin-bottom: 5px"/>
             <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="danger" @click="">忽略</el-button>
-              <el-button size="mini" type="primary" @click="">确定</el-button>
+              <el-button size="mini" type="danger" @click="sure(item.index,false)">忽略</el-button>
+              <el-button size="mini" type="primary" @click="sure(item.index,true)">确定</el-button>
             </div>
           </div>
         </div>
@@ -125,8 +125,10 @@
         getByWord({filepath: this.$route.query.path}).then(res => {
           let index = 0;
           this.list = res.word.map((item) => {
+            let list = item.content.split(/---@([^@#]+)#---/).filter(item=>item);
             let content = item.content.replace(/---@([^@#]+)#---/gm, (a, b) => {
-              return `<span class="error" style="border-bottom: 1px dashed ${this.color[index%this.color.length]}">${b}<span class="num" style="font-size: 12px;color: ${this.color[index%this.color.length]}">[${++index}]</span></span>`
+              return `<span class="error" style="border-bottom: 1px dashed ${this.color[index%this.color.length]}">${b}
+<span class="num" data-index="${index}" data-coorectnames=${item.coorectnames[b]} style="font-size: 12px;color: ${this.color[index%this.color.length]}">[${++index}]</span></span>`
             })
             return {...item, content}
           })
@@ -137,12 +139,17 @@
           this.$message.error('获取失败')
         })
       },
+      sure(index,is){
+
+      },
       setItemTips() {
         let s = window.document.getElementsByClassName('num')
         this.mapPOP = [];
         [...s].forEach((item, index) => {
           let data = {
+            index:item.getAttribute('data-index'),
             value: '',
+            coorectnames:item.getAttribute('data-coorectnames').split(','),
             x: item.offsetLeft,
             y: item.offsetTop,
             height: item.offsetHeight,
