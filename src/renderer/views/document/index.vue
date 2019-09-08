@@ -16,18 +16,18 @@
           :http-request="request"
           accept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           action="">
-          <el-button size="small" type="danger" :disabled='!Cateid'>上传公文</el-button>
+          <el-button size="small" type="danger" >上传公文</el-button>
         </el-upload>
-        <el-select
-          v-model="Cateid"
-          filterable
-          clearable
-          size="small"
-          style="width:200px;float: right;"
-          placeholder="上传前请先选择公文模板"
-        >
-          <el-option v-for="item in categoryDoc" :key="item.id" :value="item.id" :label="item.docTypeName"/>
-        </el-select>
+        <!--<el-select-->
+          <!--v-model="Cateid"-->
+          <!--filterable-->
+          <!--clearable-->
+          <!--size="small"-->
+          <!--style="width:200px;float: right;"-->
+          <!--placeholder="上传前请先选择公文模板"-->
+        <!--&gt;-->
+          <!--<el-option v-for="item in categoryDoc" :key="item.id" :value="item.id" :label="item.docTypeName"/>-->
+        <!--</el-select>-->
       </div>
       <div class="list-item" v-if="list.length > 0" @click="handleDetail(list[0])">
         <span>{{list[0].Name}}</span>
@@ -177,10 +177,10 @@
         if (!isJPG) {
           this.$message.error('上传word文档!')
         }
-        if (!this.Cateid) {
-          this.$message.error('请先选择公文类型!');
-          return false;
-        }
+        // if (!this.Cateid) {
+        //   this.$message.error('请先选择公文类型!');
+        //   return false;
+        // }
         return isJPG
       },
       onSubmit() {

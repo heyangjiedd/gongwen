@@ -10,6 +10,14 @@ export function getByWord(params) {
         params
     })
 }
+export function saveWord(data) {
+    return request({
+        url: `/WordOperation/torevise`,
+        method: 'post',
+        data
+    })
+}
+
 export function upload(data) {
     return request({
         url: '/upload',
