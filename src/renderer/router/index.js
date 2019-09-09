@@ -36,7 +36,7 @@ export const constantRouterMap = [
     children: [{
       path: 'document',
       name: 'document',
-      meta: { title: '公文管理', icon: 'upload' },
+      meta: { title: '公文管理', icon: 'tab' },
       component: () => import('@/views/document/index')
     },{
       path: 'edit',
@@ -92,7 +92,7 @@ export const constantRouterMap = [
         path: 'index',
         name: 'index',
         component: () => import('@/views/thesaurus/index'),
-        meta: { title: '自定义词库', icon: 'ciku' }
+        meta: { title: '自定义词库', icon: 'documentation' }
       },
       {
         path: 'list',
