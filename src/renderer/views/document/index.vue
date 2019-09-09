@@ -53,7 +53,7 @@
           placeholder="请输入搜索关键字"
           size="small"
           @keydown.enter.native="getList"
-          v-model="listQuery.keyWords">
+          v-model="listQuery.Name">
           <i slot="suffix" @click="getList" class="el-input__icon el-icon-search"></i>
         </el-input>
       </div>
