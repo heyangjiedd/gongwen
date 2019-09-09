@@ -27,7 +27,7 @@
                 </div>
                 <!--                文本段落-->
                 <div v-for="(item,index) in list" :key="'box'+index">
-                    <Box :item="item"></Box>
+                    <Box :item="item" :list="list"></Box>
                 </div>
             </div>
             <div class="middle">
