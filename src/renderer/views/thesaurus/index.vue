@@ -149,9 +149,8 @@
                     get({...this.paging, Scope: 0}).then(resp => {
                         this.list = resp.Data.map(item => {
                             let data = res.Data.filter(r => r.Cateid == item.Id)
-                            return {...item, children: data}
+                            return {...item, children: data,NameCopy:''}
                         })
-                        console.log(this.list)
                     })
                 })
             },
@@ -193,6 +192,9 @@
                 padding: 10px 0;
                 white-space: nowrap;
                 text-overflow: ellipsis;
+                &:hover{
+                    color: #c00000;
+                }
             }
         }
         &:hover {

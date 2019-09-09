@@ -116,7 +116,7 @@
     .fawejiguan {
       text-align: center;
       padding-bottom: 5px;
-      border-bottom: 2px solid red;
+      border-bottom: 4px solid red;
     }
 
     .biaoti1 {

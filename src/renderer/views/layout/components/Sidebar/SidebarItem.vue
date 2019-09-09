@@ -3,7 +3,8 @@
         <template v-for="item in routes" v-if="!item.hidden&&item.children">
 
             <router-link
-                    v-if="hasOneShowingChildren(item.children) && !item.children[0].children&&!item.alwaysShow" v-show="hasOath(item)"
+                    v-if="hasOneShowingChildren(item.children) && !item.children[0].children&&!item.alwaysShow"
+                    v-show="hasOath(item)"
                     :to="item.path+'/'+item.children[0].path"
                     :key="item.children[0].name">
                 <el-menu-item :index="item.path+'/'+item.children[0].path"
@@ -60,11 +61,11 @@
                 return false
             },
             hasOath(data) {
-                if(!data.role) return true;
+                if (!data.role) return true;
                 let user = localStorage.getItem('user');
-                if(!user) return false;
+                if (!user) return false;
                 let userObj = JSON.parse(user);
-                if(data.role.includes(userObj.role)){
+                if (data.role.includes(userObj.role)) {
                     return true
                 }
                 return false;
@@ -73,6 +74,14 @@
     }
 </script>
 <style lang="scss" scoped>
+    .el-menu-item {
+        &:hover {
+            > span {
+                color: #FFF;
+            }
+        }
+    }
+
     /deep/ .scroll-wrapper {
         background: #231815 !important;
         .el-submenu {

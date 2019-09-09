@@ -279,9 +279,9 @@
             }
 
             .right {
-                position: absolute;
-                right: 0;
-                min-width: 100px;
+              position: fixed;
+              right: 25px;
+              min-width: 100px;
             }
         }
 

@@ -74,6 +74,7 @@
                         </el-popover>
                     </template>
                 </el-table-column>
+                <el-table-column label="提示词" prop="CoorectName" min-width="100"/>
                 <el-table-column label="保存时间" prop="time" min-width="40">
                     <template slot-scope="{row}">
                         {{row.Updatetime&&row.Updatetime.time | parseTime('{y}-{m}-{d} {h}:{i}')}}

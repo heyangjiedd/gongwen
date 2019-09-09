@@ -12,9 +12,20 @@
                     placeholder="请输入搜索关键字"
                     size="small"
                     @keydown.enter.native="getWords"
-                    v-model="listQuery.keyWords">
+                    v-model="listQuery.Name">
                 <i slot="suffix" @click="getWords" class="el-input__icon el-icon-search"></i>
             </el-input>
+            <el-select
+                    v-model="listQuery.Cateid"
+                    filterable
+                    clearable
+                    size="small"
+                    @change="getWords"
+                    style="width:200px;float: right;margin-right: 10px"
+                    placeholder="词库"
+            >
+                <el-option v-for="item in list" :key="item.Id" :value="item.Id" :label="item.Name"/>
+            </el-select>
         </el-row>
         <el-card shadow="hover" style="margin-top:20px">
             <el-table
@@ -65,6 +76,7 @@
                         </el-popover>
                     </template>
                 </el-table-column>
+                <el-table-column label="提示词" prop="CoorectName" min-width="100"/>
                 <el-table-column label="储存路径" prop="Cateid" min-width="40">
                     <template slot-scope="{row}">
                         <el-tag type="danger" v-if="row.Scope===1">公共词库</el-tag>
@@ -130,7 +142,7 @@
         dialogVisible: false,
         dialogVisibleWord: false,
         listQuery: {
-          keyWords: this.$route.query.keyWords
+            Name: this.$route.query.keyWords
         },
         title: '',
         form: {},
