@@ -105,6 +105,9 @@
 
     /* reset element-ui css */
     .login-container {
+        .main{
+            background: transparent !important;
+        }
         .title-container {
             text-align: center;
             padding-bottom: 20px;
