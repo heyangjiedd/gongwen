@@ -132,7 +132,7 @@
         form.append("files", data.file);
         upload(form).then(res =>{
           this.$message.success('操作成功')
-          this.getList()
+            this.handleEdit({Path:res[0].split('.')[0]});
         })
       },
       handleDetail(scope) {

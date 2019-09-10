@@ -62,8 +62,14 @@ service.interceptors.response.use(
             }
             return Promise.reject('error')
         } else {
+            if (res.filesurl) {
+                return res.filesurl
+            }
             if (res.extend) {
                 return res.extend
+            }
+            if(typeof res.data == 'string'){
+                return res.data
             }
             return res.data && {...res.data, Data: res.data.data, Recordsfiltered: Number(res.data.recordsFiltered)}
         }
