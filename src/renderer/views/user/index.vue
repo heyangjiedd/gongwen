@@ -75,12 +75,12 @@
               </el-input>
             </el-form-item>
           </el-col>
-<!--          <el-col :md="24" :lg="24">-->
-<!--            <el-form-item label="密码" prop="Password">-->
-<!--              <el-input placeholder="请输入密码" type="password" v-model="form.Password" clearable>-->
-<!--              </el-input>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
+          <el-col :md="24" :lg="24" v-if="!form.Id">
+            <el-form-item label="密码" prop="Password">
+              <el-input placeholder="请输入密码" type="password" v-model="form.Password" clearable>
+              </el-input>
+            </el-form-item>
+          </el-col>
           <!--<el-col :md="24" :lg="24">-->
             <!--<el-form-item label="单位" prop="cid">-->
               <!--<el-select-->
