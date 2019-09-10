@@ -22,7 +22,7 @@
                     size="small"
                     @change="getWords"
                     style="width:200px;float: right;margin-right: 10px"
-                    placeholder="词库"
+                    placeholder="查找词库类别"
             >
                 <el-option v-for="item in list" :key="item.Id" :value="item.Id" :label="item.Name"/>
             </el-select>

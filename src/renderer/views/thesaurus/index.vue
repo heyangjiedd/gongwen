@@ -25,10 +25,10 @@
                                 placement="right"
                                 width="400"
                                 v-model="item.visible">
-                            <el-input v-model="item.NameCopy" size="mini" clearable></el-input>
+                            <el-input v-model="item.NameCopy" @keydown.enter.native="handleEdit(item)" size="mini" clearable></el-input>
                             <div style="text-align: right; margin-top: 10px">
                                 <el-button size="mini" type="danger" @click.stop="handleEdit(item)">确认修改</el-button>
-                                <el-button size="mini" type="danger" v-if="!(item.children&&item.children.length>0)" @click.stop="handleRemove(item)">删除</el-button>
+                                <el-button size="mini" type="danger" @click.stop="handleRemove(item)">删除</el-button>
                             </div>
                             <el-button type="text" style="float: right" size="mini" slot="reference"
                                        @click.stop="item.NameCopy = item.Name">操作
