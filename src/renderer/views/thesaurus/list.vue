@@ -31,7 +31,7 @@
                     row-class-name="table-item"
                     cell-class-name="table-cell-item"
                     style="width: 100%">
-                <el-table-column label="名称" prop="Name" min-width="80">
+                <el-table-column label="错词" prop="Name" min-width="80">
                     <template slot-scope="{row}">
                         <el-popover
                                 placement="right"
@@ -40,13 +40,13 @@
                             <el-form label-position="left" label-width="100px">
                                 <el-row>
                                     <el-col :md="24" :lg="24">
-                                        <el-form-item style="margin-bottom: 0" label="词汇名称" prop="Name">
+                                        <el-form-item style="margin-bottom: 0" label="错词" prop="Name">
                                             <el-input v-model="row.NameCopy" size="mini" type="input"
                                                       clearable></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :md="24" :lg="24">
-                                        <el-form-item style="margin-bottom: 10px" label="提示词组" prop="coorectName">
+                                        <el-form-item style="margin-bottom: 10px" label="正确词" prop="coorectName">
                                             <TagList v-model="row.CoorectNameCopy"></TagList>
                                         </el-form-item>
                                     </el-col>
@@ -74,7 +74,7 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column label="提示词" prop="CoorectName" min-width="100"/>
+                <el-table-column label="正确词" prop="CoorectName" min-width="100"/>
                 <el-table-column label="保存时间" prop="time" min-width="40">
                     <template slot-scope="{row}">
                         {{row.Updatetime&&row.Updatetime.time | parseTime('{y}-{m}-{d} {h}:{i}')}}
@@ -103,13 +103,13 @@
             <el-form ref="formWord" :rules="rulesWord" :model="formWord" label-position="left" label-width="100px">
                 <el-row>
                     <el-col :md="24" :lg="24">
-                        <el-form-item label="词汇名称" prop="Name">
-                            <el-input placeholder="请输入词汇" v-model="formWord.Name" clearable>
+                        <el-form-item label="错词" prop="Name">
+                            <el-input placeholder="请输入错词" v-model="formWord.Name" clearable>
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :md="24" :lg="24">
-                        <el-form-item label="提示词组" prop="coorectName">
+                        <el-form-item label="正确词" prop="coorectName">
                             <TagList v-model="formWord.coorectName"></TagList>
                         </el-form-item>
                     </el-col>
@@ -247,7 +247,7 @@
         })
       },
       getWords() {
-        wordGet({ ...this.listQuery, ...this.paging, Cateid: this.activeName, Scope: 1 }).then(res => {
+        wordGet({ ...this.listQuery, ...this.paging, Cateid: this.activeName, Scope: 0 }).then(res => {
           this.listWords = res.Data.map(item=>({...item,NameCopy:'',CoorectNameCopy:''}))
           this.paging.total = res.Recordsfiltered
         })
