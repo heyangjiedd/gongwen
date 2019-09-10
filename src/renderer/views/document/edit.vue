@@ -285,10 +285,10 @@
       position: relative;
 
       .left {
-        width: 635px;
+        width: 685px;
         position: relative;
         border: 1px solid gainsboro;
-        padding: 20px 20px 20px 20px;
+        padding: 20px 45px 20px 45px;
         .three {
           position: absolute;
           top: 45px;
@@ -312,6 +312,7 @@
         }
 
         .top-left {
+          left: 20px;
           border-left: none;
           border-top: none;
         }

@@ -1,7 +1,7 @@
 <template>
   <div class="box-man">
     <div v-if="item.typename == 'biaoti'" class="biaoti"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
+         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt'}"
          v-html="item.content"></div>
     <div v-if="item.typename == 'fawejiguan'" class="fawejiguan"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
@@ -157,12 +157,13 @@
       }
 
       .pagetagbefore-left {
+        left: -25px;
         border-bottom: none;
         border-left: none;
       }
 
       .pagetagbefore-right {
-        right: 20px;
+        right: -25px;
         border-bottom: none;
         border-right: none;
       }
@@ -190,6 +191,7 @@
       }
     }
     .pagetag {
+      margin-right: -25px;
       text-align: right;
       margin-top: 60px;
       margin-bottom: 20px;
