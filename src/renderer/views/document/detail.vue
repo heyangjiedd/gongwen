@@ -182,13 +182,13 @@
             position: relative;
 
             .left {
-                width: 685px;
-                position: relative;
-                border: 1px solid gainsboro;
-                padding: 20px 45px 20px 45px;
+              width: 765px;
+              position: relative;
+              border: 1px solid gainsboro;
+              padding: 50px 75px 20px 75px;
                 .three {
                     position: absolute;
-                    top: 45px;
+                    top: 75px;
                     font-size: 12px;
                     >div{
                         padding: 3px 0;
@@ -208,13 +208,13 @@
                 }
 
                 .top-left {
-                    left: 20px;
+                    left: 45px;
                     border-left: none;
                     border-top: none;
                 }
 
                 .top-right {
-                    right: 20px;
+                    right: 45px;
                     border-right: none;
                     border-top: none;
                 }

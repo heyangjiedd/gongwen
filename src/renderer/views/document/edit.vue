@@ -285,13 +285,13 @@
       position: relative;
 
       .left {
-        width: 685px;
+        width: 765px;
         position: relative;
         border: 1px solid gainsboro;
-        padding: 20px 45px 20px 45px;
+        padding: 50px 75px 20px 75px;
         .three {
           position: absolute;
-          top: 45px;
+          top: 75px;
           input {
             height: 15px;
             font-size: 12px;
@@ -312,13 +312,13 @@
         }
 
         .top-left {
-          left: 20px;
+          left: 45px;
           border-left: none;
           border-top: none;
         }
 
         .top-right {
-          right: 20px;
+          right: 45px;
           border-right: none;
           border-top: none;
         }
