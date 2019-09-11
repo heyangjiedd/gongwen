@@ -1,5 +1,8 @@
 <template>
   <div class="box-man">
+    <div v-if="item.typename == 'biaoti'" class="biaoti" ref="biaoti"
+         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',transform:this.scale}"
+         v-html="item.content"></div>
     <div v-if="item.typename == 'biaoti'" class="biaoti"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt'}"
          v-html="item.content"></div>
@@ -63,7 +66,7 @@
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
          v-html="item.content"></div>
     <div v-if="item.typename == 'banji'" class="banji"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
+         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize,}"
          v-html="item.content"></div>
   </div>
 </template>
@@ -84,7 +87,8 @@
     },
     data(){
       return {
-        typenames:[]
+        typenames:[],
+        scale:'',
       }
     },
     computed:{
@@ -101,6 +105,14 @@
             return item.typename == this.item.typename;
           });
       }
+      this.$nextTick(()=>{
+        if(this.item.typename == 'biaoti'){
+          if(this.$refs.biaoti.scrollWidth <= this.$refs.biaoti.offsetWidth) return
+          let b = this.$refs.biaoti.offsetWidth / this.$refs.biaoti.scrollWidth;
+          this.scale = `scaleX(${b})  translateX(-${(this.$refs.biaoti.scrollWidth -this.$refs.biaoti.offsetWidth)/2}px)`
+        }
+      })
+
     },
     methods: {}
   }
@@ -111,6 +123,9 @@
     .biaoti {
       text-align: center;
       margin: 90px 0 20px 0;
+      white-space: nowrap;
+      /*overflow: hidden;*/
+      /*font-stretch: extra-condensed;*/
     }
 
     .fawejiguan {
