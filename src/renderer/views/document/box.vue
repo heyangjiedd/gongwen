@@ -106,11 +106,11 @@
           });
       }
       this.$nextTick(()=>{
-        if(this.item.typename == 'biaoti'){
-          if(this.$refs.biaoti.scrollWidth <= this.$refs.biaoti.offsetWidth) return
-          let b = this.$refs.biaoti.offsetWidth / this.$refs.biaoti.scrollWidth;
-          this.scale = `scaleX(${b})  translateX(-${(this.$refs.biaoti.scrollWidth -this.$refs.biaoti.offsetWidth)/2}px)`
-        }
+        // if(this.item.typename == 'biaoti'){
+        //   if(this.$refs.biaoti.scrollWidth <= this.$refs.biaoti.offsetWidth) return
+        //   let b = this.$refs.biaoti.offsetWidth / this.$refs.biaoti.scrollWidth;
+        //   this.scale = `scaleX(${b})  translateX(-${(this.$refs.biaoti.scrollWidth -this.$refs.biaoti.offsetWidth)/2}px)`
+        // }
       })
 
     },
