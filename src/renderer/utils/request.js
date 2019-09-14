@@ -20,7 +20,7 @@ service.interceptors.request.use(config => {
     }
     loadingIndex++;
     loadingInstance = Loading.service({text: '请求中', background: 'rgba(0, 0, 0, 0.28)',spinner: 'el-icon-loading',});
-    if((config.method ==='post'||config.method ==='put')&&config.url != '/upload' ){
+    if((config.method ==='post'||config.method ==='put')&&(config.headers['Content-Type'] != 'multipart/form-data') ){
         config.data = objToLocaleLowerCaseKey(config.data)
     }
     if (config.method === 'get' && config.url!='/getsuggestWord') {

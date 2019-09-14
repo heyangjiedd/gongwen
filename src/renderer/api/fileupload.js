@@ -64,15 +64,30 @@ export function getsuggestWord(params) {
         params
     })
 }
-export function exportDataBaser() {
+export function exportsystem() {
     return request({
-        url: `/exportDataBaser`,
+        url: `/exportsystem`,
         method: 'get',
     })
 }
-export function updateDataBaser() {
+export function getoperation(params) {
     return request({
-        url: `/updateDataBaser`,
+        url: `/getoperation`,
         method: 'get',
+        params,
+    })
+}
+export function exportDataBaser(id) {
+    return request({
+        url: `/exportDataBaser/${id}`,
+        method: 'get',
+    })
+}
+export function updateDataBaser(id,data) {
+    return request({
+        url: `/updateDataBaser/${id}`,
+        headers: { "Content-Type": "multipart/form-data" },
+        method: 'post',
+        data,
     })
 }

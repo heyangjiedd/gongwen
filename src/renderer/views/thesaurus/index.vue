@@ -1,12 +1,22 @@
 <template>
     <div class="app-container">
         <el-row>
-            <el-button style="float: right;margin-right: 10px" size="small" type="danger" @click="downloadCommon">
+            <el-button style="float: right;" size="small" type="danger" @click="_downloadCommon">
                 一键导出词库
             </el-button>
-            <el-button style="float: right;margin-right: 10px" size="small" type="danger" @click="uploadCommon">一键导入词库
-            </el-button>
-            <el-button style="float: right;" size="small" type="danger" @click="handleAdd">新建关键词库</el-button>
+            <el-upload
+                    style="float: right;margin-right: 10px"
+                    :limit="1"
+                    name="files"
+                    :show-file-list="false"
+                    :on-success="_success"
+                    :on-progress="_progress"
+                    :before-upload="_before"
+                    :http-request="_request"
+                    action="">
+                <el-button size="small" type="danger" >一键导入词库</el-button>
+            </el-upload>
+            <el-button style="float: right;margin-right: 10px;margin-left: 10px" size="small" type="danger" @click="handleAdd">新建关键词库</el-button>
             <el-input
                     style="float: right;width: 200px"
                     placeholder="请输入搜索关键字"
