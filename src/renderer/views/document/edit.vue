@@ -1,5 +1,43 @@
 <template>
   <div class="components-container-editor" ref="container">
+    <div class="filter-container">
+      <el-button size="small" type="danger" @click.stop="$router.go(-1)"><i class="el-icon-arrow-left el-icon--left"/>返回</el-button>
+      <el-select
+        v-model="fontFamily"
+        size="small"
+        style="margin-left: 10px;width: 150px"
+      >
+        <el-option v-for="item in fontFamilys" :key="item" :value="item" :label="item"/>
+      </el-select>
+      <el-input
+        style="width: 150px"
+        placeholder="份号"
+        size="small"
+        v-model="three.one">
+      </el-input>
+      <el-input
+        style="width: 150px"
+        placeholder="密级和期限"
+        size="small"
+        v-model="three.two">
+      </el-input>
+      <el-input
+        style="width: 150px"
+        placeholder="紧急程度"
+        size="small"
+        v-model="three.thr">
+      </el-input>
+      <el-select
+        v-model="output"
+        size="small"
+        style="margin-left: 10px;width: 150px"
+      >
+        <el-option v-for="item in outputs" :key="item" :value="item" :label="item"/>
+      </el-select>
+      <el-button :disabled="!!this.mapPOP.length" size="small" type="danger"
+                 @click.stop="save">保存公文
+      </el-button>
+    </div>
     <div class="content">
       <div class="left" v-show="list.length > 0">
         <div class="btn-box top-left"></div>
@@ -12,18 +50,6 @@
                     left:item.x+item.width/2+'px',
                     top:item.y+item.height+3+'px',
                     right:'-11px'}">
-        </div>
-        <!--三个输入框-->
-        <div class="three">
-          <div>
-            <input type="text" v-model="three.one" placeholder="份号">
-          </div>
-          <div>
-            <input type="text" v-model="three.two" placeholder="密级和期限">
-          </div>
-          <div>
-            <input type="text" v-model="three.thr" placeholder="紧急程度">
-          </div>
         </div>
         <!--                文本段落-->
         <div v-for="(item,index) in list" :key="'box'+index">
@@ -71,21 +97,6 @@
         </div>
       </div>
       <div class="right">
-        <el-button style="margin-bottom: 10px;width: 100px" size="small" type="danger" @click.stop="$router.go(-1)">返回首页
-        </el-button>
-        <br/>
-        <el-select
-          v-model="fontFamily"
-          size="small"
-          style="margin-bottom: 10px;width: 100px"
-        >
-          <el-option v-for="item in fontFamilys" :key="item" :value="item" :label="item"/>
-        </el-select>
-        <br/>
-        <el-button style="margin-bottom: 10px;width: 100px" :disabled="!!this.mapPOP.length" size="small" type="danger"
-                   @click.stop="save">保存公文
-        </el-button>
-        <br/>
         <!--        <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="visiblePreview = !visiblePreview">-->
         <!--          {{visiblePreview ?'预览公文':'继续编辑'}}-->
         <!--        </el-button>-->
@@ -145,6 +156,8 @@
         three: {},
         fontFamilys: ['仿宋简体', '仿宋GBK', '仿宋gb2312'],
         fontFamily: '仿宋简体',
+        outputs:['通知','请示','报告','函'],
+        output:'通知'
       }
     },
     mounted() {
@@ -153,7 +166,7 @@
     watch:{
       fontFamily(newVal){
         this.setList();
-      }
+      },
     },
     methods: {
       save() {
@@ -276,11 +289,24 @@
 </script>
 <style rel="stylesheet/scss" lang="scss">
   .components-container-editor {
+    display: flex;
+    flex-direction: column;
     background: #ffffff;
-    padding: 20px;
+    padding: 0 20px 20px 20px;
     min-width: 1080px;
+    /*height: 100%;*/
 
+    .filter-container{
+      position: fixed;
+      background: #fff;
+      width: 100%;
+      z-index: 100;
+    }
     .content {
+      /*overflow-y: scroll;*/
+      /*overflow-x: hidden;*/
+      /*flex: 1 1 auto;*/
+      margin-top: 53px;
       display: flex;
       position: relative;
 

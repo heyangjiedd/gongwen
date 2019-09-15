@@ -1,5 +1,5 @@
 <template>
-    <div class="components-container-editor" ref="container">
+    <div class="components-container-detail" ref="container">
         <div class="content">
             <div class="left" v-show="list.length > 0">
                 <div class="btn-box top-left"></div>
@@ -172,7 +172,7 @@
     }
 </script>
 <style rel="stylesheet/scss" lang="scss">
-    .components-container-editor {
+    .components-container-detail {
         background: #ffffff;
         padding: 20px;
         min-width: 1080px;
