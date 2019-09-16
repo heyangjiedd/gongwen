@@ -37,8 +37,11 @@
       <el-button :disabled="!!this.mapPOP.length" size="small" type="danger"
                  @click.stop="save">保存公文
       </el-button>
+      <el-button size="small" type="danger"
+                 @click.stop="createPicture">导出批注版
+      </el-button>
     </div>
-    <div class="content">
+    <div class="content" id="content">
       <div class="left" v-show="list.length > 0">
         <div class="btn-box top-left"></div>
         <div class="btn-box top-right"></div>
@@ -137,6 +140,7 @@
   } from '@/api/fileupload'
   import Tooltip from './tooltip'
   import Box from './box'
+  import html2canvas from 'html2canvas';
 
   export default {
     name: 'TinymceDemo',
@@ -169,6 +173,26 @@
       },
     },
     methods: {
+      createPicture(){
+        html2canvas(document.getElementById('content')).then(canvas =>{
+          this.imgmap = canvas.toDataURL()
+          if (window.navigator.msSaveOrOpenBlob) {
+            var bstr = atob(this.imgmap.split(',')[1])
+            var n = bstr.length
+            var u8arr = new Uint8Array(n)
+            while (n--) {
+              u8arr[n] = bstr.charCodeAt(n)
+            }
+            var blob = new Blob([u8arr])
+            window.navigator.msSaveOrOpenBlob(blob, 'chart-download' + '.' + 'png')
+          } else {
+            const a = document.createElement('a')
+            a.href = this.imgmap
+            a.setAttribute('download', this.$route.query.path)
+            a.click()
+          }
+        })
+      },
       save() {
         let data = {
           wordcontent: this.list.map(item => {
