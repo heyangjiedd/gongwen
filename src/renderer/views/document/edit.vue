@@ -48,6 +48,8 @@
         <!--                错别字直线-->
         <div v-if="visiblePreview" v-for="(item,index) in mapPOP" :key="index" class="map-box"
              :style="{
+                    borderRight:'0px dashed #fff',
+                    borderTop: '0px dashed #fff',
                     borderLeft: `1px solid ${item.color}`,
                     borderBottom: `1px solid ${item.color}`,
                     left:item.x+item.width/2+'px',
@@ -63,6 +65,7 @@
         <!--                连接折线-->
         <div v-if="visiblePreview" v-for="(item,index) in mapSX" :key="'sx'+ index"
              :class="item.is ? 'sx1' : 'sx2'" :style="{
+                    borderRight:'0px dashed #fff',
                     borderTop: `1px solid ${item.is?item.color:'#fff'}`,
                     borderBottom: `1px solid ${item.is?'#fff':item.color}`,
                     borderLeft: `1px solid ${item.color}`,
@@ -174,7 +177,10 @@
     },
     methods: {
       createPicture(){
-        html2canvas(document.getElementById('content')).then(canvas =>{
+        let dom = document.getElementById('content');
+        html2canvas(dom,{
+          allowTaint: true,
+        }).then(canvas =>{
           this.imgmap = canvas.toDataURL()
           if (window.navigator.msSaveOrOpenBlob) {
             var bstr = atob(this.imgmap.split(',')[1])
@@ -237,7 +243,7 @@
               index++;
               return replace.valvue
             }
-            return `<span class="error" style="border-bottom: 1px dashed ${this.color[index % this.color.length]}">${b}
+            return `<span class="error" style="border: 1px dashed ${this.color[index % this.color.length]}; border-top:0px dashed #fff; border-left:0px dashed #fff; border-right:0px dashed #fff">${b}
 <span class="num" data-index="${index}" data-val="${b}" data-coorectnames=${item.coorectnames[b]} style="font-size: 12px;color: ${this.color[index % this.color.length]}">[${++index}]</span></span>`
           });
           return {...item, content}
