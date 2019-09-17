@@ -29,7 +29,7 @@
     <div v-if="item.typename == 'pagetag'" class="pagetag"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
          v-html="item.content"></div>
-    <div v-if="item.typename == 'pagetag' && showAfter" style="background: #e6e6e6;height: 20px"></div>
+    <div v-if="item.typename == 'pagetag' && showAfter" class="pageafter"></div>
     <div v-if="item.typename == 'pagetag' && showAfter" class="pagetagafter">
       <div class="pagetagbefore-left-bottom"></div>
       <div class="pagetagbefore-right-bottom"></div>
@@ -63,6 +63,12 @@
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
          v-html="item.content"></div>
     <div v-if="item.typename == 'banji'" class="banji"
+         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
+         v-html="item.content"></div>
+    <div v-if="item.typename == 'banji1'" class="banji1"
+         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
+         v-html="item.content"></div>
+    <div v-if="item.typename == 'banji2'" class="banji2"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
          v-html="item.content"></div>
   </div>
@@ -118,35 +124,35 @@
   .box-man {
     .biaoti {
       text-align: center;
-      margin: 90px 0 20px 0;
+      margin: 136px 0 20px 0;
       white-space: nowrap;
     }
 
     .fawejiguan {
       text-align: center;
       padding-bottom: 5px;
-      border-bottom: 4px solid red;
+      border-bottom: 5px solid red;
+      margin-bottom: 46px;
     }
 
     .biaoti1 {
-      margin: 20px 0 10px 0;
       text-align: center;
     }
 
     .zhusongjiguan {
-      margin: 10px 0 0 0;
-      text-indent: 2rem;
-      line-height: 2rem;
+      margin: 22px 0 0 0;
     }
 
     .zhengwen {
-      text-indent: 2rem;
+      text-indent: 2.6rem;
       line-height: 2rem;
+      text-align: justify;
     }
 
     .shumin {
       text-align: right;
-      margin: 10px 0;
+      padding-right: 22px;
+      margin: 22px 0 0 0;
     }
 
     .datatime {
@@ -179,7 +185,7 @@
     }
     .pagetagafter {
       position: relative;
-      margin-top: 80px;
+      margin-top: 100px;
       top:-30px;
       div {
         position: absolute;
@@ -189,12 +195,13 @@
       }
 
       .pagetagbefore-left-bottom{
+        left: -25px;
         border-top: none;
         border-left: none;
       }
 
       .pagetagbefore-right-bottom {
-        right: 20px;
+        right: -25px;
         border-top: none;
         border-right: none;
       }
@@ -205,19 +212,26 @@
       margin-top: 60px;
       margin-bottom: 20px;
     }
+    .pageafter{
+      position: absolute;
+      right: 0;
+      left: 0;
+      background: #e6e6e6;
+      height: 20px
+    }
 
     .level1 {
-      text-indent: 2rem;
+      text-indent: 2.6rem;
       line-height: 2rem;
     }
 
     .level2 {
-      text-indent: 2rem;
+      text-indent: 2.6rem;
       line-height: 2rem;
     }
 
     .level3 {
-      text-indent: 2rem;
+      text-indent: 2.6rem;
       line-height: 2rem;
     }
 
@@ -225,7 +239,7 @@
     }
 
     .fujian {
-      margin-top: 20px;
+      margin-top: 22px;
     }
 
     .danweimingcheng {
@@ -249,6 +263,16 @@
     .banji {
       margin-top: 100px;
       text-align: center;
+      border-bottom: 2px solid;
+      border-top: 2px solid;
+    }
+    .banji1 {
+      margin-top: 22px;
+    }
+    .banji2 {
+      margin-top: 100px;
+      text-align: center;
+      padding: 10px 22px;
       border-bottom: 2px solid;
       border-top: 2px solid;
     }

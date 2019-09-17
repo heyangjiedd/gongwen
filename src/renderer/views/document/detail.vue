@@ -189,7 +189,8 @@
                 .three {
                     position: absolute;
                     top: 75px;
-                    font-size: 12px;
+                    font-size: 22px;
+                    font-family: '黑体';
                     >div{
                         padding: 3px 0;
                     }

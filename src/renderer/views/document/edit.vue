@@ -7,6 +7,7 @@
             <el-select
                     v-model="fontFamily"
                     size="small"
+                    placeholder="正文字体选择"
                     style="margin-left: 10px;width: 130px"
             >
                 <el-option v-for="item in fontFamilys" :key="item" :value="item" :label="item"/>
@@ -14,34 +15,45 @@
             <el-input
                     style="width: 120px"
                     placeholder="份号"
+                    @blur="oneBlur"
+                    :maxlength="6"
                     size="small"
                     v-model="three.one">
             </el-input>
-            <el-input
-                    style="width: 120px"
-                    placeholder="密级和期限"
+            <el-select
+                    v-model="three.fou"
                     size="small"
-                    v-model="three.two">
+                    placeholder="密级"
+                    style="width: 80px"
+            >
+                <el-option v-for="item in threefou" :key="item" :value="item" :label="item"/>
+            </el-select>
+            <el-input placeholder="期限" size="small" v-model="three.fiv" style="width: 80px">
             </el-input>
-            <el-input
-                    style="width: 120px"
+            <el-select
+                    v-model="three.six"
+                    size="small"
+                    placeholder="单位"
+                    style="width: 80px"
+            >
+                <el-option v-for="item in threefiv" :key="item" :value="item" :label="item"/>
+            </el-select>
+            <el-select
+                    v-model="three.thr"
+                    size="small"
                     placeholder="紧急程度"
-                    size="small"
-                    v-model="three.thr">
-            </el-input>
+                    style="width: 100px"
+            >
+                <el-option v-for="item in threethr" :key="item" :value="item" :label="item"/>
+            </el-select>
             <el-select
                     v-model="output"
                     size="small"
-                    style="width: 100px"
+                    placeholder="转为函格式"
+                    style="width: 120px"
             >
                 <el-option v-for="item in outputs" :key="item.value" :value="item.value" :label="item.name"/>
             </el-select>
-            <el-button :disabled="!!this.mapPOP.length" size="small" type="danger"
-                       @click.stop="save">保存公文
-            </el-button>
-            <el-button size="small" type="danger"
-                       @click.stop="createPicture">导出批注版
-            </el-button>
         </div>
         <div class="content" id="content">
             <div class="left" v-show="list.length > 0">
@@ -57,6 +69,17 @@
                     left:item.x+item.width/2+'px',
                     top:item.y+item.height+3+'px',
                     right:'-11px'}">
+                </div>
+                <div class="three">
+                    <div>
+                        {{three.one}}
+                    </div>
+                    <div>
+                        {{three.two}}
+                    </div>
+                    <div>
+                        {{three.thr}}
+                    </div>
                 </div>
                 <!--                文本段落-->
                 <div v-for="(item,index) in list" :key="'box'+index">
@@ -105,6 +128,13 @@
                 </div>
             </div>
             <div class="right">
+                <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="createPicture">导出批注版
+                </el-button>
+                <br/>
+                <el-button style="margin-bottom: 10px" :disabled="!!this.mapPOP.length" size="small" type="danger"
+                           @click.stop="save"> 保 存 公 文
+                </el-button>
+                <br/>
                 <!--        <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="visiblePreview = !visiblePreview">-->
                 <!--          {{visiblePreview ?'预览公文':'继续编辑'}}-->
                 <!--        </el-button>-->
@@ -145,7 +175,7 @@
     } from '@/api/fileupload'
     import Tooltip from './tooltip'
     import Box from './box'
-    import html2canvas from 'html2canvas';
+    import html2canvas from 'html2canvas'
 
     export default {
         name: 'TinymceDemo',
@@ -162,26 +192,54 @@
                 mapPOP: [],//错别字库
                 mapSX: [],//连接折线
                 replace: [],
-                three: {},
+                three: {
+                    one: '',
+                    two: '',
+                    thr: '',
+                    fou: '',
+                    fiv: '',
+                    six: '',
+                },
+                threethr: ['特急', '加急', '平急'],
+                threefou:['绝密', '机密', '秘密'],
+                threefiv:['年', '月'],
                 fontFamilys: ['仿宋简体', '仿宋GBK', '仿宋_GB2312'],
-                fontFamily: '仿宋简体',
-                outputs: [{name: '公文', value: 1}, {name: '函', value: 2}],
-                output: 1
+                fontFamily: '',
+                outputs: [{name: '是', value: 2}, {name: '否', value: 1}],
+                output: '',
             }
         },
         mounted() {
-            this.getDetail();
+            this.getDetail()
         },
         watch: {
             fontFamily(newVal) {
-                this.setList();
+                this.setList()
             },
+            'three.fou'(){
+                if(this.three.fou&&this.three.fiv&&this.three.six){
+                    this.three.two = this.three.fou + '★'+ this.three.fiv + this.three.six;
+                }
+            },
+            'three.fiv'(){
+                if(this.three.fou&&this.three.fiv&&this.three.six){
+                    this.three.two = this.three.fou + '★'+ this.three.fiv + this.three.six;
+                }
+            },
+            'three.six'(){
+                if(this.three.fou&&this.three.fiv&&this.three.six){
+                    this.three.two = this.three.fou + '★'+ this.three.fiv + this.three.six;
+                }
+            }
         },
         methods: {
+            oneBlur() {
+                this.three.one = (Array(6).join('0') + this.three.one).slice(-6);
+            },
             createPicture() {
-                let dom = document.getElementById('content');
+                let dom = document.getElementById('content')
                 html2canvas(dom, {
-                    allowTaint: true,
+                    allowTaint: true
                 }).then(canvas => {
                     this.imgmap = canvas.toDataURL()
                     if (window.navigator.msSaveOrOpenBlob) {
@@ -202,71 +260,71 @@
                 })
             },
             save() {
-                let wordcontentList = [...this.list];
-                wordcontentList.reverse();
-                let index = wordcontentList.findIndex(item=>item.typename == 'shumin');
-                if(index != -1){
-                    wordcontentList.splice(index,0,{typename:'shumin',content:''})
+                let wordcontentList = [...this.list]
+                wordcontentList.reverse()
+                let index = wordcontentList.findIndex(item => item.typename == 'shumin')
+                if (index != -1) {
+                    wordcontentList.splice(index, 0, {typename: 'shumin', content: ''})
                 }
-                wordcontentList.reverse();
+                wordcontentList.reverse()
                 let data = {
-                    wordcontent:wordcontentList.map(item => {
+                    wordcontent: wordcontentList.map(item => {
                         return {[item.typename]: item.content}
-                    }) ,
+                    }),
                     filepath: this.$route.query.path,
                     han: [this.three.one || '', this.three.two || '', this.three.thr || ''],
-                    status:this.output,
-                    fontstyle:this.fontFamily,
+                    status: this.output,
+                    fontstyle: this.fontFamily
                 }
                 saveWord(data).then(res => {
-                    this.$message.success('保存成功');
+                    this.$message.success('保存成功')
                     this.$router.go(-1)
                 })
             },
             getDetail() {
                 getByWord({filepath: this.$route.query.path}).then(res => {
-                    let han = res.word.shift();
+                    let han = res.word.shift()
                     this.three = {
                         one: han.han[0],
                         two: han.han[1],
-                        thr: han.han[2],
+                        thr: han.han[2]
                     }
-                    this.oldList = res.word || [];
-                    this.setList();
+                    this.oldList = res.word || []
+                    this.setList()
                 }).catch(res => {
                     this.$message.error('获取失败')
                 })
             },
             sure(index, valvue) {
-                this.replace.push({index, valvue});
-                this.setList();
+                this.replace.push({index, valvue})
+                this.setList()
             },
             setList() {
-                let index = 0;
-                this.list = [];
+                let index = 0
+                this.list = []
                 this.list = this.oldList.map((item) => {
                     if (item.typename == 'zhengwen') {
-                        item.style.fontFamily = this.fontFamily;
+                        item.style.fontFamily = this.fontFamily
                     }
                     let content = item.content.replace(/---@([^@#]+)#---/gm, (a, b) => {
-                        let replace = this.replace.find(r => r.index == index);
+                        let replace = this.replace.find(r => r.index == index)
                         if (replace) {
-                            index++;
+                            index++
                             return replace.valvue
                         }
                         return `<span class="error" style="border: 1px dashed ${this.color[index % this.color.length]}; border-top:0px dashed #fff; border-left:0px dashed #fff; border-right:0px dashed #fff">${b}
 <span class="num" data-index="${index}" data-val="${b}" data-coorectnames=${item.coorectnames[b]} style="font-size: 12px;color: ${this.color[index % this.color.length]}">[${++index}]</span></span>`
-                    });
+                    })
                     return {...item, content}
-                });
+                })
                 this.$nextTick(() => {
                     this.setItemTips()
                 })
             },
             setItemTips() {
-                let s = window.document.getElementsByClassName('num');
-                this.mapPOP = [];
-                this.mapSX = [];
+                let s = window.document.getElementsByClassName('num')
+                this.mapPOP = []
+                this.mapSX = []
                 if (s.length === 0) {
                     return
                 }
@@ -280,7 +338,7 @@
                         y: item.offsetTop,
                         height: item.offsetHeight,
                         width: item.offsetWidth,
-                        color: this.color[index % this.color.length],
+                        color: this.color[index % this.color.length]
                     }
                     if (this.mapPOP.find(r => {
                         return data.y == r.y
@@ -288,7 +346,7 @@
                         data.y = data.y + 1
                     }
                     this.mapPOP.push(data)
-                });
+                })
                 this.$nextTick(() => {
                     this.mapSX = [...this.$refs.pop].map((item, index) => {
                         let pop = this.mapPOP[index].y + this.mapPOP[index].height
@@ -302,7 +360,7 @@
                             top: top + 5,
                             height: height,
                             is,
-                            color: this.color[index % this.color.length],
+                            color: this.color[index % this.color.length]
                         }
                     })
                 })
@@ -337,7 +395,6 @@
         padding: 0 20px 20px 20px;
         min-width: 1080px;
         /*height: 100%;*/
-
         .filter-container {
             position: fixed;
             background: #fff;
@@ -351,7 +408,6 @@
             margin-top: 53px;
             display: flex;
             position: relative;
-
             .left {
                 width: 765px;
                 position: relative;
@@ -360,6 +416,8 @@
                 .three {
                     position: absolute;
                     top: 75px;
+                    font-size: 22px;
+                    font-family: '黑体';
                     input {
                         height: 15px;
                         font-size: 12px;
@@ -371,32 +429,27 @@
                     overflow: auto;
                     height: 4px;
                 }
-
                 .btn-box {
                     position: absolute;
                     width: 25px;
                     height: 25px;
                     border: 1px solid gainsboro;
                 }
-
                 .top-left {
                     left: 45px;
                     border-left: none;
                     border-top: none;
                 }
-
                 .top-right {
                     right: 45px;
                     border-right: none;
                     border-top: none;
                 }
-
                 .bottom-left {
                     top: 700px;
                     border-bottom: none;
                     border-left: none;
                 }
-
                 .bottom-right {
                     top: 700px;
                     right: 20px;
@@ -404,11 +457,9 @@
                     border-right: none;
                 }
             }
-
             .middle {
                 width: 300px;
                 position: relative;
-
                 .cuobiezi {
                     background: #fff;
                     width: 250px;
@@ -418,22 +469,18 @@
                     line-height: 1.4;
                     font-size: 12px;
                 }
-
                 .ciku {
                     cursor: pointer;
                     color: black;
-
                     &:hover {
                         color: #66b1ff;
                     }
                 }
-
                 .tips {
                     bottom: -6px;
                     margin-right: 3px;
                     border-top-color: #ebeef5;
                     border-bottom-width: 0;
-
                     &:after {
                         bottom: 1px;
                         margin-left: -6px;
@@ -450,24 +497,20 @@
                     }
                 }
             }
-
             .right {
                 position: fixed;
                 right: 15px;
                 min-width: 100px;
             }
         }
-
         .main {
             .content {
                 width: 1000px;
             }
-
             .pizhu {
                 float: right;
                 width: 200px;
             }
-
             .btn {
                 float: right;
                 width: 100px;
