@@ -52,7 +52,7 @@
                         <el-col :span="11">
                             <ul class="index-ul">
                                 <li class="index-li" v-if="item.children&&item.children.length>0" @click="goList(item)"
-                                    v-for="(r,n) in item.children.slice(0,6)">
+                                    :title="r.Name" v-for="(r,n) in item.children.slice(0,6)">
                                     {{r.Name}}
                                 </li>
                             </ul>
@@ -60,7 +60,7 @@
                         <el-col :span="11" :offset="1">
                             <ul class="index-ul">
                                 <li class="index-li" v-if="item.children&&item.children.length>0" @click="goList(item)"
-                                    v-for="(r,n) in item.children.slice(6,12)">
+                                    :title="r.Name" v-for="(r,n) in item.children.slice(6,12)">
                                     {{r.Name}}
                                 </li>
                             </ul>
@@ -68,7 +68,7 @@
                     </el-row>
 
                     <div style="text-align: right;font-size: 12px">更新于 {{new Date(item.Updatetime.time) |
-                        parseTime('{y}-{m}-{d} {h}:{i}')}}
+                        parseTime('{y}-{m}-{d}  {h}:{i}')}}
                     </div>
                 </el-card>
             </el-col>
@@ -217,7 +217,7 @@
                 padding: 10px 0;
                 white-space: nowrap;
                 text-overflow: ellipsis;
-
+                overflow: hidden;
                 &:hover {
                     color: #c00000;
                 }
