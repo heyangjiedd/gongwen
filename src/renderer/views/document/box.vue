@@ -16,7 +16,7 @@
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
          v-html="item.content"></div>
     <div v-if="item.typename == 'shumin'" class="shumin"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
+         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize,paddingRight: showBefore?'44px':'22px',margin: showBefore?'22px 0 0 0':'44px 0 0 0'}"
          v-html="item.content"></div>
     <div v-if="item.typename == 'datatime'" class="datatime"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
@@ -27,7 +27,7 @@
       <div class="pagetagbefore-right"></div>
     </div>
     <div v-if="item.typename == 'pagetag'" class="pagetag"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
+         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize,textAlign:showLeft?'left':'right'}"
          v-html="item.content"></div>
     <div v-if="item.typename == 'pagetag' && showAfter" class="pageafter"></div>
     <div v-if="item.typename == 'pagetag' && showAfter" class="pagetagafter">
@@ -95,15 +95,18 @@
       }
     },
     computed:{
-      showBefore(){
-
-      },
       showAfter(){
         return this.typenames.findIndex(item=>item.content == this.item.content) !== (this.typenames.length-1)
-      }
+      },
+      showLeft(){
+        return this.typenames.findIndex(item=>item.content == this.item.content)%2 !== 0
+      },
+      showBefore(){
+        return this.typenames.findIndex(item=>item.content == this.item.content) !== 0
+      },
     },
     mounted() {
-      if(this.item.typename == 'pagetag'){
+      if(this.item.typename == 'pagetag' || this.item.typename == 'shumin'){
           this.typenames = this.list.filter(item=>{
             return item.typename == this.item.typename;
           });
@@ -131,6 +134,7 @@
     .fawejiguan {
       text-align: center;
       padding-bottom: 5px;
+      border: 0px solid red;
       border-bottom: 5px solid red;
       margin-bottom: 46px;
     }
@@ -208,6 +212,8 @@
     }
     .pagetag {
       margin-right: -25px;
+      margin-left: -25px;
+      padding: 0 22px;
       text-align: right;
       margin-top: 60px;
       margin-bottom: 20px;
