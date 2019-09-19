@@ -37,6 +37,7 @@
           <span>{{row.Createtime.time | parseTime}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="注册IP" prop="createip" min-width="80"/>
       <el-table-column label="操作" align="center" width="320">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleEdit(row)">
