@@ -168,7 +168,7 @@
         })
       },
       getList() {
-        wordGet({ Scope: 0 ,Status:0}).then(res => {
+        wordGet({ Scope: 0 ,Status:1}).then(res => {
           get({ ...this.paging, Scope: 0 }).then(resp => {
             this.paging.total = resp.Recordsfiltered
             this.list = resp.Data.map(item => {

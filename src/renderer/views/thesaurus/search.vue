@@ -288,7 +288,7 @@
                 })
             },
             getWords() {
-                wordGet({...this.listQuery, ...this.paging, Status: 0}).then(res => {
+                wordGet({...this.listQuery, ...this.paging, Status: 1}).then(res => {
                     this.listWords = res.Data.map(item => ({...item, NameCopy: '', CoorectNameCopy: ''}))
                     this.paging.total = res.Recordsfiltered
                 })
