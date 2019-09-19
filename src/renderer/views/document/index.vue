@@ -29,7 +29,7 @@
           <!--<el-option v-for="item in categoryDoc" :key="item.id" :value="item.id" :label="item.docTypeName"/>-->
         <!--</el-select>-->
       </div>
-      <div class="list-item" v-if="list.length > 0" @click="handleDetail(list[0])">
+      <div class="list-item" v-if="list.length > 0" @click="handleEdit(list[0])">
         <span>{{list[0].Name}}</span>
         <span style="margin-left: 10px">{{list[0].Createtime&&list[0].Createtime.time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
       </div>
@@ -211,6 +211,9 @@
   }
 </script>
 <style lang="scss" scoped>
+  .el-icon-search {
+    cursor: pointer;
+  }
   /deep/ .table-item {
     cursor: pointer;
     &:hover {

@@ -17,7 +17,7 @@
                 </div>
                 <!--                文本段落-->
                 <div v-for="(item,index) in list" :key="'box'+index">
-                    <Box :item="item"></Box>
+                    <Box :item="item" :list="list"></Box>
                 </div>
             </div>
             <div class="right">
@@ -29,17 +29,18 @@
                         v-model="visible">
                     <p>请选择您要导出的公文版本</p>
                     <div style="text-align: right; margin: 0">
-                        <el-popover
-                                width="200"
-                                v-model="visiblePZ">
-                            <p>请选择您要导出的批注公文版本</p>
-                            <div style="text-align: right; margin: 0">
-                                <el-button size="mini" type="danger" @click.stop="downloadWord">Word版</el-button>
-                                <el-button size="mini" type="danger" @click.stop="downloadPDF">PDF版</el-button>
-                            </div>
-                            <el-button type="danger" size="mini" slot="reference" @click.stop>正式版</el-button>
-                        </el-popover>
-                        <el-button size="mini" type="danger" @click.stop="download">批注版</el-button>
+                        <!--<el-popover-->
+                                <!--width="200"-->
+                                <!--v-model="visiblePZ">-->
+                            <!--<p>请选择您要导出的公文版本</p>-->
+                            <!--<div style="text-align: right; margin: 0">-->
+                                <!--<el-button size="mini" type="danger" @click.stop="downloadWord">Word版</el-button>-->
+                                <!--<el-button size="mini" type="danger" @click.stop="downloadPDF">PDF版</el-button>-->
+                            <!--</div>-->
+                            <!--<el-button type="danger" size="mini" slot="reference" @click.stop>正式版</el-button>-->
+                        <!--</el-popover>-->
+                      <el-button size="mini" type="danger" @click.stop="downloadWord">Word版</el-button>
+                      <el-button size="mini" type="danger" @click.stop="downloadPDF">PDF版</el-button>
                     </div>
                     <el-button type="danger" size="mini" slot="reference" @click.stop>导出公文</el-button>
                 </el-popover>

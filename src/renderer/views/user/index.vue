@@ -27,11 +27,16 @@
       :data="list"
       style="width: 100%;"
     >
-      <el-table-column label="用户姓名" prop="Name" min-width="80"/>
-      <el-table-column label="手机" prop="Mobile" min-width="80"/>
+      <el-table-column label="序号" type="index" align="center" show-overflow-tooltip width="50px"/>
       <el-table-column label="账号" prop="Account" min-width="80"/>
-      <el-table-column label="单位" prop="CName" min-width="80"/>
-
+      <el-table-column label="所属单位" prop="CName" min-width="80"/>
+      <el-table-column label="姓名" prop="Name" min-width="80"/>
+      <el-table-column label="手机" prop="Mobile" min-width="80"/>
+      <el-table-column label="创建时间" prop="Createtime" min-width="80">
+        <template slot-scope="{row}">
+          <span>{{row.Createtime.time | parseTime}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="320">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleEdit(row)">
@@ -156,6 +161,8 @@
           total:0,
           start:1,
           pagesize:10,
+          sort:'Createtime',
+          order:'desc',//asc倒序 desc升序
         },
         dict:{
           company:[],

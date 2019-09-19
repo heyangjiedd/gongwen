@@ -89,7 +89,48 @@
                         </el-popover>
                     </template>
                 </el-table-column>
-                <el-table-column label="正确词" prop="CoorectName" min-width="100"/>
+                <el-table-column label="正确词" prop="CoorectName" min-width="100">
+                    <template slot-scope="{row}">
+                        <el-popover
+                                placement="right"
+                                width="400"
+                                v-model="row.visible1">
+                            <el-form label-position="left" label-width="100px">
+                                <el-row>
+                                    <el-col :md="24" :lg="24">
+                                        <el-form-item style="margin-bottom: 0" label="错词" prop="Name">
+                                            <el-input v-model="row.NameCopy" size="mini" type="input" clearable></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :md="24" :lg="24">
+                                        <el-form-item style="margin-bottom: 10px" label="正确词" prop="coorectName">
+                                            <TagList v-model="row.CoorectNameCopy"></TagList>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                            </el-form>
+                            <div style="text-align: right;">
+                                <el-button size="mini" type="danger" @click.stop="handleEdit(row)">确认修改</el-button>
+                                <el-button size="mini" type="danger" @click.stop="handleRemove(row)">删除</el-button>
+                                <el-popover
+                                        placement="right"
+                                        trigger="hover"
+                                        v-model="row.visibleCopy1"
+                                        width="200">
+                                    <div v-for="(item,index) in list" class="list-item-hover" :key="index" @click="handleMove(row,item)">
+                                        {{item.Name}}
+                                    </div>
+                                    <el-button slot="reference" size="mini" type="danger" @click.stop>转移至其他词库<i
+                                            class="el-icon-arrow-right el-icon--right"/></el-button>
+                                </el-popover>
+                            </div>
+                            <el-button type="text" size="mini" slot="reference"
+                                       @click.stop="row.NameCopy = row.Name;row.CoorectNameCopy = row.CoorectName">
+                                {{row.CoorectName}}
+                            </el-button>
+                        </el-popover>
+                    </template>
+                </el-table-column>
                 <el-table-column label="储存路径" prop="Cateid" min-width="40">
                     <template slot-scope="{row}">
                         <el-tag type="danger" v-if="row.Scope===1">公共词库</el-tag>

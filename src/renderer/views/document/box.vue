@@ -3,10 +3,13 @@
     <div v-if="item.typename == 'biaoti'" class="biaoti" ref="biaoti"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',transform:this.scale}"
          v-html="item.content"></div>
-    <div v-if="item.typename == 'fawejiguan'" class="fawejiguan"
+    <div v-if="item.typename == 'biaoti1'" class="biaoti1"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
          v-html="item.content"></div>
-    <div v-if="item.typename == 'biaoti1'" class="biaoti1"
+    <div v-if="item.typename == 'biaoti2'" class="biaoti2"
+         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
+         v-html="item.content"></div>
+    <div v-if="item.typename == 'fawejiguan'" class="fawejiguan"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
          v-html="item.content"></div>
     <div v-if="item.typename == 'zhusongjiguan'" class="zhusongjiguan"
@@ -142,7 +145,9 @@
     .biaoti1 {
       text-align: center;
     }
-
+    .biaoti2 {
+      text-align: center;
+    }
     .zhusongjiguan {
       margin: 22px 0 0 0;
     }
