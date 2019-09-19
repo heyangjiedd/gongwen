@@ -83,7 +83,10 @@
           </el-col>
           <el-col :md="24" :lg="24" v-if="!form.Id">
             <el-form-item label="密码" prop="Password">
-              <el-input placeholder="请输入密码" type="password" v-model="form.Password" clearable>
+              <el-input placeholder="请输入密码" ref="password" :type="passwordType" v-model="form.password" >
+                <span slot="suffix" @click.stop="showPwd">
+                  <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+                </span>
               </el-input>
             </el-form-item>
           </el-col>
@@ -155,7 +158,8 @@
         list: [],
         dialogVisible: false,
         dialogVisibleDetail: false,
-        form: {},
+          form: {password:''},
+          passwordType:'password',
         title: '',
         listQuery: {},
         paging:{
@@ -181,6 +185,16 @@
       this.getCompany();
     },
     methods: {
+        showPwd() {
+            if (this.passwordType === 'password') {
+                this.passwordType = 'text'
+            } else {
+                this.passwordType = 'password'
+            }
+            this.$nextTick(() => {
+                this.$refs.password.focus()
+            })
+        },
       sure() {
         this.$refs['form'].validate((valid) => {
           if (valid) {

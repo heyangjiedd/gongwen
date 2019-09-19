@@ -251,10 +251,9 @@
 
     .fujian {
       margin-top: 22px;
+      text-indent: 2.6rem;
     }
-
     .danweimingcheng {
-      text-align: right;
       margin: 10px 0;
     }
 

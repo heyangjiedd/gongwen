@@ -17,9 +17,11 @@
                     :before-upload="_before"
                     :http-request="_request"
                     action="">
-                <el-button size="small" type="danger" >一键导入词库</el-button>
+                <el-button size="small" type="danger">一键导入词库</el-button>
             </el-upload>
-            <el-button style="float: right;margin-right: 10px;margin-left: 10px" size="small" type="danger" @click="handleAdd">新建关键词库</el-button>
+            <el-button style="float: right;margin-right: 10px;margin-left: 10px" size="small" type="danger"
+                       @click="handleAdd">新建关键词库
+            </el-button>
             <el-input
                     style="float: right;width: 200px"
                     placeholder="请输入搜索关键字"
@@ -97,7 +99,8 @@
                                 <el-row>
                                     <el-col :md="24" :lg="24">
                                         <el-form-item style="margin-bottom: 0" label="错词" prop="Name">
-                                            <el-input v-model="row.NameCopy" size="mini" type="input" clearable></el-input>
+                                            <el-input v-model="row.NameCopy" size="mini" type="input"
+                                                      clearable></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :md="24" :lg="24">
@@ -115,7 +118,8 @@
                                         trigger="hover"
                                         v-model="row.visibleCopy1"
                                         width="200">
-                                    <div v-for="(item,index) in list" class="list-item-hover" :key="index" @click="handleMove(row,item)">
+                                    <div v-for="(item,index) in list" class="list-item-hover" :key="index"
+                                         @click="handleMove(row,item)">
                                         {{item.Name}}
                                     </div>
                                     <el-button slot="reference" size="mini" type="danger" @click.stop>转移至其他词库<i
@@ -177,160 +181,160 @@
 </template>
 
 <script>
-  import { get, add, update, remove } from '@/api/category'
-  import {
-    get as wordGet,
-    add as wordAdd,
-    update as wordUpdate,
-    remove as wordRemove,
-    getByIdCoorectName,
-    addCoorectName,
-    updateCoorectName
-  } from '@/api/word'
-  import Pagination from '@/components/Pagination'
-  import TagList from '@/components/TagList'
-  import { exportDataBaser, updateDataBaser } from '@/api/fileupload'
+    import {get, add, update, remove} from '@/api/category'
+    import {
+        get as wordGet,
+        add as wordAdd,
+        update as wordUpdate,
+        remove as wordRemove,
+        getByIdCoorectName,
+        addCoorectName,
+        updateCoorectName
+    } from '@/api/word'
+    import Pagination from '@/components/Pagination'
+    import TagList from '@/components/TagList'
+    import {exportDataBaser, updateDataBaser} from '@/api/fileupload'
 
-  export default {
-    components: { Pagination, TagList },
-    data() {
-      return {
-        dialogVisible: false,
-        dialogVisibleWord: false,
-        activeName: '' + this.$route.query.Id,
-        listQuery: {},
-        title: '',
-        fileList: [],
-        form: {},
-        formWord: {},
-        list: [],
-        listWords: [],
-        rules: {
-          Name: [{ required: true, message: '请填写词库名称', trigger: 'blur' }]
+    export default {
+        components: {Pagination, TagList},
+        data() {
+            return {
+                dialogVisible: false,
+                dialogVisibleWord: false,
+                activeName: '' + this.$route.query.Id,
+                listQuery: {},
+                title: '',
+                fileList: [],
+                form: {},
+                formWord: {},
+                list: [],
+                listWords: [],
+                rules: {
+                    Name: [{required: true, message: '请填写词库名称', trigger: 'blur'}]
+                },
+                rulesWord: {
+                    Name: [{required: true, message: '请填写词汇', trigger: 'blur'}]
+                },
+                paging: {
+                    total: 0,
+                    start: 1,
+                    pagesize: 5
+                }
+            }
         },
-        rulesWord: {
-          Name: [{ required: true, message: '请填写词汇', trigger: 'blur' }]
+        created() {
+            this.getList()
+            this.getWords()
         },
-        paging: {
-          total: 0,
-          start: 1,
-          pagesize: 5
+        mounted() {
+
+        },
+        methods: {
+            goSearch() {
+                this.$router.push({path: '/thesaurus/search', query: {keyWords: this.listQuery.keyWords}})
+            },
+            handleClick() {
+                this.paging.start = 1
+                this.getWords()
+            },
+            handleAddWord() {
+                this.formWord = {...this.formWord}
+                this.dialogVisibleWord = true
+                this.title = '词汇新增'
+            },
+            handleAdd() {
+                this.form = {...this.form}
+                this.dialogVisible = true
+                this.title = '词库新增'
+            },
+            handleDetail(scope) {
+                this.$router.push({path: '/home/detail', query: {id: scope.id}})
+            },
+            handleEdit(data) {
+                wordUpdate({
+                    ...data,
+                    Name: data.NameCopy,
+                    CoorectName: data.CoorectNameCopy,
+                    updatetime: undefined
+                }).then(() => {
+                    this.$message.success('操作成功')
+                    this.getWords()
+                })
+            },
+            handleMove(row, item) {
+                wordUpdate({...row, Cateid: item.Id, updatetime: undefined}).then(() => {
+                    this.$message.success('操作成功')
+                    this.getWords()
+                })
+            },
+            handleRemove(data) {
+                wordUpdate({...data, status: -1, updatetime: undefined}).then(() => {
+                    this.$message.success('操作成功')
+                    this.getWords()
+                })
+            },
+            success(data) {
+                this.$message.success(data.msg)
+            },
+            sure() {
+                this.$refs['form'].validate((valid) => {
+                    if (valid) {
+                        add({...this.form, Scope: 0}).then(res => {
+                            this.$message.success('操作成功')
+                            this.dialogVisible = false
+                            this.getList()
+                        })
+                    }
+                })
+            },
+            sureWord() {
+                this.$refs['formWord'].validate((valid) => {
+                    if (valid) {
+                        wordAdd({...this.formWord, Scope: 0, Cateid: this.activeName}).then(res => {
+                            this.$message.success('操作成功')
+                            this.dialogVisibleWord = false
+                            this.getWords()
+                        })
+                    }
+                })
+            },
+            onCancel() {
+                this.$message({
+                    message: 'cancel!',
+                    type: 'warning'
+                })
+            },
+            getWords() {
+                wordGet({...this.listQuery, ...this.paging, Cateid: this.activeName, Scope: 0, Status: 0}).then(res => {
+                    this.listWords = res.Data.map(item => ({...item, NameCopy: '', CoorectNameCopy: ''}))
+                    this.paging.total = res.Recordsfiltered
+                })
+            },
+            getList() {
+                get({Scope: 0}).then(res => {
+                    this.list = res.Data.map(item => {
+                        return {...item, Id: '' + item.Id}
+                    })
+                })
+            },
+            handleFilter() {
+                this.listQuery = {}
+                this.getList()
+            },
+            downloadCommon() {
+                exportDataBaser().then(res => {
+                    const ele = document.createElement('a')
+                    ele.setAttribute('href', `${this.baseUrl}/doc/database/yilongowen_database_back.sql`) //设置下载文件的url地址
+                    ele.click()
+                })
+            },
+            uploadCommon() {
+                updateDataBaser().then(res => {
+                    this.$message.success('导入成功')
+                })
+            },
         }
-      }
-    },
-    created() {
-      this.getList()
-      this.getWords()
-    },
-    mounted() {
-
-    },
-    methods: {
-      goSearch() {
-        this.$router.push({ path: '/thesaurus/search', query: { keyWords: this.listQuery.keyWords } })
-      },
-      handleClick() {
-        this.paging.start = 1
-        this.getWords()
-      },
-      handleAddWord() {
-        this.formWord = { ...this.formWord }
-        this.dialogVisibleWord = true
-        this.title = '词汇新增'
-      },
-      handleAdd() {
-        this.form = { ...this.form }
-        this.dialogVisible = true
-        this.title = '词库新增'
-      },
-      handleDetail(scope) {
-        this.$router.push({ path: '/home/detail', query: { id: scope.id } })
-      },
-      handleEdit(data) {
-        wordUpdate({
-          ...data,
-          Name: data.NameCopy,
-          CoorectName: data.CoorectNameCopy,
-          updatetime: undefined
-        }).then(() => {
-          this.$message.success('操作成功')
-          this.getWords()
-        })
-      },
-      handleMove(row, item) {
-        wordUpdate({ ...row, Cateid: item.Id, updatetime: undefined }).then(() => {
-          this.$message.success('操作成功')
-          this.getWords()
-        })
-      },
-      handleRemove(data) {
-        wordRemove(data.Id).then(() => {
-          this.$message.success('操作成功')
-          this.getWords()
-        })
-      },
-      success(data) {
-        this.$message.success(data.msg)
-      },
-      sure() {
-        this.$refs['form'].validate((valid) => {
-          if (valid) {
-            add({ ...this.form, Scope: 0 }).then(res => {
-              this.$message.success('操作成功')
-              this.dialogVisible = false
-              this.getList()
-            })
-          }
-        })
-      },
-      sureWord() {
-        this.$refs['formWord'].validate((valid) => {
-          if (valid) {
-            wordAdd({ ...this.formWord, Scope: 0, Cateid: this.activeName }).then(res => {
-              this.$message.success('操作成功')
-              this.dialogVisibleWord = false
-              this.getWords()
-            })
-          }
-        })
-      },
-      onCancel() {
-        this.$message({
-          message: 'cancel!',
-          type: 'warning'
-        })
-      },
-      getWords() {
-        wordGet({ ...this.listQuery, ...this.paging, Cateid: this.activeName, Scope: 0 }).then(res => {
-          this.listWords = res.Data.map(item=>({...item,NameCopy:'',CoorectNameCopy:''}))
-          this.paging.total = res.Recordsfiltered
-        })
-      },
-      getList() {
-        get({ Scope: 0 }).then(res => {
-          this.list = res.Data.map(item => {
-            return { ...item, Id: '' + item.Id }
-          })
-        })
-      },
-      handleFilter() {
-        this.listQuery = {}
-        this.getList()
-      },
-      downloadCommon() {
-        exportDataBaser().then(res => {
-          const ele = document.createElement('a')
-          ele.setAttribute('href', `${this.baseUrl}/doc/database/yilongowen_database_back.sql`) //设置下载文件的url地址
-          ele.click()
-        })
-      },
-      uploadCommon() {
-        updateDataBaser().then(res => {
-          this.$message.success('导入成功')
-        })
-      },
     }
-  }
 </script>
 <style lang="scss" scoped>
     .list-item-hover {
