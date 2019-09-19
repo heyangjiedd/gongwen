@@ -304,7 +304,7 @@
                 this.list = []
                 this.list = this.oldList.map((item) => {
                     if (item.typename == 'zhengwen') {
-                        item.style.fontFamily = this.fontFamily
+                        item.style.fontFamily = this.fontFamily||item.style.fontFamily
                     }
                     let content = item.content.replace(/---@([^@#]+)#---/gm, (a, b) => {
                         let replace = this.replace.find(r => r.index == index)
