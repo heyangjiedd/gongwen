@@ -10,7 +10,7 @@ let loadingIndex = 1
 const service = axios.create({
     baseURL: baseUrl, // api的base_url
     withCredentials: true, // send cookies when cross-domain requests
-    timeout: 15000 // 请求超时时间
+    timeout: 500000 // 请求超时时间
 })
 
 // request拦截器

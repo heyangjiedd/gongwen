@@ -162,7 +162,12 @@
             downloadPDF() {
                 this.visible = false
                 this.visiblePZ = false
-                this.downloadCommon('.pdf')
+                wordformat({filepath:this.$route.query.path,layout:'pdf'}).then(res => {
+                  const ele = document.createElement('a')
+                  ele.setAttribute('href', `${this.baseUrl}doc/${res.filepaths[0]}`) //设置下载文件的url地址
+                  ele.setAttribute('target', `_blank`) //设置下载文件的url地址
+                  ele.click()
+                })
             },
             downloadCommon(url) {
                 const ele = document.createElement('a')
