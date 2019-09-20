@@ -3,15 +3,12 @@
     <div v-if="item.typename == 'biaoti'&&typenames.length===1" class="biaoti" ref="biaoti"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',transform:this.scale}"
          v-html="item.content"></div>
-<!--    <div v-if="item.typename == 'biaoti'&&typenames.length!==1&&isFirst" class="biaoti-first" ref="biaoti"-->
-<!--         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',transform:this.scale}"-->
-<!--         v-html="item.content"></div>-->
-<!--    <div v-if="item.typename == 'biaoti'&&typenames.length!==1&&isSecond" class="biaoti-second" ref="biaoti"-->
-<!--         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',transform:this.scale}"-->
-<!--         v-html="item.content"></div>-->
-<!--    <div v-if="item.typename == 'biaoti'&&typenames.length!==1&&!isFirst&&!isSecond" class="biaoti-not" ref="biaoti"-->
-<!--         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',transform:this.scale}"-->
-<!--         v-html="item.content"></div>-->
+    <div v-if="item.typename == 'biaoti'&&typenames.length!==1&&isFirst" class="biaoti-first" ref="biaoti"
+         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',top:((typenames.length)*55+((typenames.length-2)*10))/2+'px'}"
+         v-html="item.content"></div>
+    <div v-if="item.typename == 'biaoti'&&typenames.length!==1&&!isFirst" class="biaoti-second" ref="biaoti"
+         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',transform:this.scale}"
+         v-html="item.content"></div>
     <div v-if="item.typename == 'biaoti1'" class="biaoti1"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
          v-html="item.content"></div>
@@ -137,15 +134,15 @@
       }
       this.$nextTick(()=>{
         if(this.item.typename == 'biaoti'){
+          let scrollWidth = this.$refs.biaoti.scrollWidth,offsetWidth = this.$refs.biaoti.offsetWidth,
+            translateX = (scrollWidth - offsetWidth)/2;
           if(this.typenames.length > 1){
-            // if(this.$refs.biaoti.scrollWidth <= (this.$refs.biaoti.offsetWidth - 60)) return
-            // let b = (this.$refs.biaoti.offsetWidth - 60) / this.$refs.biaoti.scrollWidth;
-            // this.scale = `scaleX(${b}) translateX(-${((this.$refs.biaoti.offsetWidth - 60) -this.$refs.biaoti.offsetWidth)/2}px)`
-          }else{
-            if(this.$refs.biaoti.scrollWidth <= this.$refs.biaoti.offsetWidth) return
-            let b = this.$refs.biaoti.offsetWidth / this.$refs.biaoti.scrollWidth;
-            this.scale = `scaleX(${b}) translateX(-${(this.$refs.biaoti.scrollWidth -this.$refs.biaoti.offsetWidth)/2}px)`
+            offsetWidth = this.$refs.biaoti.offsetWidth - 100;
+            translateX = (scrollWidth - offsetWidth)/2+50;
           }
+          if(scrollWidth <= offsetWidth) return
+          let b = offsetWidth / scrollWidth;
+          this.scale = `scaleX(${b}) translateX(-${translateX}px)`
         }
       })
     },
@@ -162,19 +159,20 @@
     }
     .biaoti-first{
       text-align: right;
+      margin-top: 81px;
       position: relative;
       white-space: nowrap;
     }
     .biaoti-second{
       text-align: center;
-      margin-top: 81px;
+      margin-bottom: 10px;
       white-space: nowrap;
     }
-    .biaoti-not{
-      text-align: center;
-      margin: 10px 0 20px 0;
-      white-space: nowrap;
-    }
+    /*.biaoti-not{*/
+    /*  text-align: center;*/
+    /*  margin-bottom: 10px;*/
+    /*  white-space: nowrap;*/
+    /*}*/
     .fawejiguan {
       text-align: center;
       padding-bottom: 5px;
