@@ -27,7 +27,7 @@
                 <el-popover
                         width="200"
                         v-model="visible">
-                    <p>请选择您要导出的公文版本</p>
+                    <p>请选择您要导出的版本</p>
                     <div style="text-align: right; margin: 0">
                         <!--<el-popover-->
                                 <!--width="200"-->
@@ -42,7 +42,7 @@
                       <el-button size="mini" type="danger" @click.stop="downloadWord">Word版</el-button>
                       <el-button size="mini" type="danger" @click.stop="downloadPDF">PDF版</el-button>
                     </div>
-                    <el-button type="danger" size="mini" slot="reference" @click.stop>导出公文</el-button>
+                    <el-button type="danger" size="mini" slot="reference" @click.stop>导出文件</el-button>
                 </el-popover>
             </div>
         </div>

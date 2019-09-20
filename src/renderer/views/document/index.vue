@@ -63,7 +63,7 @@
         row-class-name="table-item"
         cell-class-name="table-cell-item"
         style="width: 100%">
-        <el-table-column label="操作时间" prop="time" min-width="40">
+        <el-table-column label="操作时间" prop="time" width="150">
           <template slot-scope="{row}">
             {{row.Createtime&&row.Createtime.time | parseTime('{y}-{m}-{d} {h}:{i}')}}
           </template>
