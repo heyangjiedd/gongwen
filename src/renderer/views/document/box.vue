@@ -1,8 +1,17 @@
 <template>
   <div class="box-man">
-    <div v-if="item.typename == 'biaoti'" class="biaoti" ref="biaoti"
+    <div v-if="item.typename == 'biaoti'&&typenames.length===1" class="biaoti" ref="biaoti"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',transform:this.scale}"
          v-html="item.content"></div>
+<!--    <div v-if="item.typename == 'biaoti'&&typenames.length!==1&&isFirst" class="biaoti-first" ref="biaoti"-->
+<!--         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',transform:this.scale}"-->
+<!--         v-html="item.content"></div>-->
+<!--    <div v-if="item.typename == 'biaoti'&&typenames.length!==1&&isSecond" class="biaoti-second" ref="biaoti"-->
+<!--         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',transform:this.scale}"-->
+<!--         v-html="item.content"></div>-->
+<!--    <div v-if="item.typename == 'biaoti'&&typenames.length!==1&&!isFirst&&!isSecond" class="biaoti-not" ref="biaoti"-->
+<!--         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',transform:this.scale}"-->
+<!--         v-html="item.content"></div>-->
     <div v-if="item.typename == 'biaoti1'" class="biaoti1"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
          v-html="item.content"></div>
@@ -51,7 +60,7 @@
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
          v-html="item.content"></div>
     <div v-if="item.typename == 'fujian'" class="fujian"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
+         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize,textIndent: showBefore?'5.2rem':'6.5rem'}"
          v-html="item.content"></div>
     <div v-if="item.typename == 'danweimingcheng'" class="danweimingcheng"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
@@ -63,6 +72,12 @@
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
          v-html="item.content"></div>
     <div v-if="item.typename == 'zhengli'" class="zhengli"
+         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
+         v-html="item.content"></div>
+    <div v-if="item.typename == 'cihan'" class="cihan"
+         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
+         v-html="item.content"></div>
+    <div v-if="item.typename == 'qingpishi'" class="qingpishi"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
          v-html="item.content"></div>
     <div v-if="item.typename == 'banji'" class="banji"
@@ -107,18 +122,30 @@
       showBefore(){
         return this.typenames.findIndex(item=>item.content == this.item.content) !== 0
       },
+      isFirst(){
+        return this.typenames.findIndex(item=>item.content == this.item.content) === 0
+      },
+      isSecond(){
+        return this.typenames.findIndex(item=>item.content == this.item.content) === 1
+      },
     },
     mounted() {
-      if(this.item.typename == 'pagetag' || this.item.typename == 'shumin'){
+      if(this.item.typename == 'pagetag' || this.item.typename == 'shumin'||this.item.typename == 'biaoti'||this.item.typename == 'fujian'){
           this.typenames = this.list.filter(item=>{
             return item.typename == this.item.typename;
           });
       }
       this.$nextTick(()=>{
         if(this.item.typename == 'biaoti'){
-          if(this.$refs.biaoti.scrollWidth <= this.$refs.biaoti.offsetWidth) return
-          let b = this.$refs.biaoti.offsetWidth / this.$refs.biaoti.scrollWidth;
-          this.scale = `scaleX(${b}) translateX(-${(this.$refs.biaoti.scrollWidth -this.$refs.biaoti.offsetWidth)/2}px)`
+          if(this.typenames.length > 1){
+            // if(this.$refs.biaoti.scrollWidth <= (this.$refs.biaoti.offsetWidth - 60)) return
+            // let b = (this.$refs.biaoti.offsetWidth - 60) / this.$refs.biaoti.scrollWidth;
+            // this.scale = `scaleX(${b}) translateX(-${((this.$refs.biaoti.offsetWidth - 60) -this.$refs.biaoti.offsetWidth)/2}px)`
+          }else{
+            if(this.$refs.biaoti.scrollWidth <= this.$refs.biaoti.offsetWidth) return
+            let b = this.$refs.biaoti.offsetWidth / this.$refs.biaoti.scrollWidth;
+            this.scale = `scaleX(${b}) translateX(-${(this.$refs.biaoti.scrollWidth -this.$refs.biaoti.offsetWidth)/2}px)`
+          }
         }
       })
     },
@@ -133,7 +160,21 @@
       margin: 136px 0 20px 0;
       white-space: nowrap;
     }
-
+    .biaoti-first{
+      text-align: right;
+      position: relative;
+      white-space: nowrap;
+    }
+    .biaoti-second{
+      text-align: center;
+      margin-top: 81px;
+      white-space: nowrap;
+    }
+    .biaoti-not{
+      text-align: center;
+      margin: 10px 0 20px 0;
+      white-space: nowrap;
+    }
     .fawejiguan {
       text-align: center;
       padding-bottom: 5px;
@@ -269,6 +310,14 @@
     .zhengli {
       text-indent: 2rem;
       line-height: 2rem;
+    }
+    .cihan{
+      text-indent: 2.6rem;
+      line-height: 2.6rem;
+    }
+    .qingpishi{
+      text-align: right;
+      margin: 0 22px;
     }
     .banji {
       margin-top: 100px;

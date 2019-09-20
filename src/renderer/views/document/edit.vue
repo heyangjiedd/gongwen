@@ -206,7 +206,7 @@
                 fontFamilys: ['仿宋简体', '仿宋GBK', '仿宋_GB2312'],
                 fontFamily: '',
                 outputs: [{name: '是', value: 2}, {name: '否', value: 1}],
-                output: '',
+                output: 2,
             }
         },
         mounted() {

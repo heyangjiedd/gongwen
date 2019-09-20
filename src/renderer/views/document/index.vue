@@ -119,7 +119,7 @@
     },
     created() {
       this.getList();
-      this.getTemplate();
+      // this.getTemplate();
     },
     mounted() {
 
@@ -132,7 +132,7 @@
         form.append("files", data.file);
         upload(form).then(res =>{
           this.$message.success('操作成功')
-          this.handleEdit({Path:res[0].split('.')[0]});
+          this.handleEdit({Path:res});
         })
       },
       handleDetail(scope) {
