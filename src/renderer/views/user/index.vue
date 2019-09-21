@@ -42,16 +42,16 @@
           <el-button type="primary" size="mini" @click="handleEdit(row)">
             编辑
           </el-button>
-          <el-button type="danger" size="mini" @click="handleRemove({...row,Status:3})">
+          <el-button type="danger" size="mini" @click="handleRemove({...row,Status:4})">
             删除
           </el-button>
           <el-button size="mini" @click="handleRest(row)">
             重置密码
           </el-button>
-          <el-button v-if="row.status == 2" type="primary" size="mini" @click="handleSwicth({...row,Status:1})">
+          <el-button v-if="row.status == 2" type="primary" size="mini" @click="handleSwicth({...row,Status:2})">
             解除
           </el-button>
-          <el-button v-else size="mini" type="danger" @click="handleSwicth({...row,Status:2})">
+          <el-button v-else size="mini" type="danger" @click="handleSwicth({...row,Status:3})">
             冻结
           </el-button>
         </template>
@@ -225,7 +225,7 @@
                 this.title = '账号修改'
             },
             handleSwicth(scope) {
-                this.$confirm(`确认${scope.Status == 2 ? '冻结' : '解除'}该账号？`, '提示', {
+                this.$confirm(`确认${scope.Status == 3 ? '冻结' : '解除'}该账号？`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning',
@@ -266,7 +266,7 @@
             },
             getList() {
                 // get({ ...this.listQuery,...this.paging}).then(res => {
-                userbyStatus({...this.listQuery, ...this.paging, Status: '0,1,2', role: 'cuser',cid:JSON.parse(localStorage.getItem('user')).cid}).then(res => {
+                userbyStatus({...this.listQuery, ...this.paging, Status: '1,2,3', role: 'cuser',cid:JSON.parse(localStorage.getItem('user')).cid}).then(res => {
                     this.list = res.info.list || [];
                     this.paging.total = res.info.total;
                 })
