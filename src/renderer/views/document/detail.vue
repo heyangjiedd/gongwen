@@ -4,17 +4,6 @@
             <div class="left" v-show="list.length > 0">
                 <div class="btn-box top-left"></div>
                 <div class="btn-box top-right"></div>
-                <div class="three">
-                    <div>
-                        {{three.one}}
-                    </div>
-                    <div>
-                        {{three.two}}
-                    </div>
-                    <div>
-                        {{three.thr}}
-                    </div>
-                </div>
                 <!--                文本段落-->
                 <div v-for="(item,index) in list" :key="'box'+index">
                     <Box :item="item" :list="list"></Box>
@@ -78,18 +67,12 @@
             getDetail() {
                 this.list = []
                 getByWord({filepath: this.$route.query.path}).then(res => {
-                    let han = res.word.shift();
-                    this.three = {
-                        one:han.han[0],
-                        two:han.han[1],
-                        thr:han.han[2],
-                    }
-                    this.list = res.word.map((item) => {
-                        let content = item.content.replace(/---@([^@#]+)#---/gm, (a, b) => {
-                            return b
-                        });
-                        return {...item, content}
+                  this.list = res.word.list.map((item) => {
+                    item.items = item.items.map(r => {
+                      return {...r,content2:r.content}
                     })
+                    return {...item}
+                  })
                 }).catch(res => {
                     this.$message.error('获取失败')
                 })

@@ -37,7 +37,6 @@
           <span>{{row.Createtime.time | parseTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="注册IP" prop="createip" min-width="80"/>
       <el-table-column label="操作" align="center" width="320">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleEdit(row)">
@@ -173,7 +172,7 @@
           company:[],
         },
         rules: {
-          Name: [{ required: true, message: '请填写用户', trigger: 'blur' }],
+          Name: [{ required: true, message: '请填写账户', trigger: 'blur' }],
           Account: [{ required: true, message: '请填写账号', trigger: 'blur' }],
           Password: [{ required: true, message: '请填写密码', trigger: 'blur' }],
           Mobile: [{ required: true, message: '请填写手机', trigger: 'blur' }],

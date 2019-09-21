@@ -1,5 +1,22 @@
 <template>
   <div class="box-man">
+    <div ref="biaoti" >
+      <div style="min-height: 22px"><div v-for="(r,index) in item.preitems" :key="index" v-html="r"></div></div>
+
+      <div v-if="item.inline == 0" v-for="(r,index) in item.items" :key="index"  v-html="r.content2"
+           :style="{...r.wordStyle,
+                 textAlignLast: (item.type == 'biaoti')? 'justify':'',
+                 textAlign: (item.type == 'biaoti'||item.type == 'biaoti1')? 'justify':'',
+                 whiteSpace: (item.type == 'biaoti'||item.type == 'biaoti1')? 'nowrap':''}"
+           ref="items"></div>
+      <span v-else v-for="(r,index) in item.items" :key="index"  v-html="r.content2" :style="{...r.wordStyle}"></span>
+
+      <div  style="min-height: 22px"><div v-for="(r,index) in item.postitems" :key="index"  v-html="r"></div></div>
+    </div>
+
+
+
+
     <div v-if="item.typename == 'biaoti'&&typenames.length===1" class="biaoti" ref="biaoti"
          :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',transform:this.scale}"
          v-html="item.content"></div>
@@ -133,16 +150,18 @@
           });
       }
       this.$nextTick(()=>{
-        if(this.item.typename == 'biaoti'){
-          let scrollWidth = this.$refs.biaoti.scrollWidth,offsetWidth = this.$refs.biaoti.offsetWidth,
-            translateX = (scrollWidth - offsetWidth)/2;
-          if(this.typenames.length > 1){
-            offsetWidth = this.$refs.biaoti.offsetWidth - 100;
-            translateX = (scrollWidth - offsetWidth)/2+50;
-          }
-          if(scrollWidth <= offsetWidth) return
-          let b = offsetWidth / scrollWidth;
-          this.scale = `scaleX(${b}) translateX(-${translateX}px)`
+        if(this.item.type == 'biaoti'||this.item.type == 'biaoti1'){
+          this.$refs.items.forEach(r=>{
+            let scrollWidth = r.scrollWidth,offsetWidth = r.offsetWidth,
+              translateX = (scrollWidth - offsetWidth)/2;
+            if(this.typenames.length > 1){
+              offsetWidth = this.$refs.biaoti.offsetWidth - 100;
+              translateX = (scrollWidth - offsetWidth)/2+50;
+            }
+            if(scrollWidth <= offsetWidth) return
+            let b = offsetWidth / scrollWidth;
+            r.style.transform = `scaleX(${b}) translateX(-${translateX}px)`
+          })
         }
       })
     },
@@ -153,8 +172,8 @@
 
   .box-man {
     .biaoti {
-      text-align: center;
       margin: 136px 0 20px 0;
+      text-align: center;
       white-space: nowrap;
     }
     .biaoti-first{

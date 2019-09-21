@@ -64,25 +64,14 @@
              :style="{
                     borderRight:'0px dashed #fff',
                     borderTop: '0px dashed #fff',
-                    borderLeft: `1px dashed ${item.color}`,
-                    borderBottom: `1px dashed ${item.color}`,
-                    left:item.x+item.width/2+'px',
-                    top:item.y+item.height+3+'px',
+                    borderLeft: `1px dashed #b4373b`,
+                    borderBottom: `1px dashed #b4373b`,
+                    left:item.x+item.width+'px',
+                    top:item.y+item.height+'px',
                     right:'-11px'}">
         </div>
-        <div class="three">
-          <div>
-            {{three.one}}
-          </div>
-          <div>
-            {{three.two}}
-          </div>
-          <div>
-            {{three.thr}}
-          </div>
-        </div>
         <!--                文本段落-->
-        <div v-for="(item,index) in list" :key="'box'+index">
+        <div v-for="(item,index) in list" :key="_uuid()">
           <Box :item="item" :list="list"></Box>
         </div>
       </div>
@@ -91,13 +80,13 @@
         <div v-if="visiblePreview" v-for="(item,index) in mapSX" :key="'sx'+ index"
              :class="item.is ? 'sx1' : 'sx2'" :style="{
                     borderRight:'0px dashed #fff',
-                    borderTop: `1px dashed ${item.is?item.color:'#fff'}`,
-                    borderBottom: `1px dashed ${item.is?'#fff':item.color}`,
-                    borderLeft: `1px dashed ${item.color}`,
+                    borderTop: `1px dashed ${item.is?'#b4373b':'#fff'}`,
+                    borderBottom: `1px dashed ${item.is?'#fff':'#b4373b'}`,
+                    borderLeft: `1px dashed ${'#b4373b'}`,
                     left:item.left+'px',
                     width:item.width+'px',
                     height:item.height+'px',
-                    top:item.top+3+'px',
+                    top:item.top+'px',
                     position:'absolute'}">
         </div>
         <!--                错别字修正框-->
@@ -106,23 +95,20 @@
                 position:'relative',
                 marginBottom:'5px',
                 right:0}">
-          <div class="cuobiezi" :style="{border:`1px dashed ${item.color}`}">
+          <div class="cuobiezi" :style="{border:`1px solid #b4373b`}">
             <div>
-              <span :style="{color: `${item.color}`}">批注[{{index+1}}]、</span>
-              <span>【{{item.val}}】选择以下词修正：</span>
-              <span v-for="(i,index) in item.coorectnames" class="ciku" @click="item.value = i"
-                    :key="index">
-                           {{i}}
-                        </span>
-              <span>手动输入正确词:</span>
+              <div style="font-weight: 500;margin-bottom: 5px">批注[{{index+1}}] 【{{item.val}}】</div>
+              <div style="margin-bottom: 5px"><span >选择正确词：</span>
+                <span style="color: #b4373b;margin-right: 5px" v-for="(i,index) in errorList[item.val].coorectname.split(',')" class="ciku"
+                      @click="item.value = i" :key="index">{{i}}</span></div>
+              <div  style="margin-bottom: 5px"><span>输入正确词：</span><input v-model="item.value"
+                                                                         style="border:none;border-bottom:1px solid;background: #efdbdc;width: 170px" type="text"></div>
             </div>
-            <el-input v-model="item.value" placeholder="请输入正确词" size="mini" clearable @keyup.enter.native=""
-                      style="margin-bottom: 5px"/>
-            <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="danger" @click="sure(item.index,item.val)">忽略
-              </el-button>
-              <el-button size="mini" type="primary" @click="sure(item.index,item.value)">确定
-              </el-button>
+            <div style="text-align: right; margin: 0;font-size: 13px;">
+              <span @click="sure(item.index,item.val)" style="cursor: pointer;margin-right: 8px">[<span style="font-size: 12px">忽略</span>]
+              </span>
+              <span @click="sure(item.index,item.value)" style="cursor:pointer ">[<span style="font-size: 12px">确定</span>]
+              </span>
             </div>
           </div>
         </div>
@@ -134,30 +120,6 @@
         <el-button style="width: 92px;text-align: center" size="small" type="danger"
                    @click.stop="save"> {{output === 1 ?'保 存 公 文':'保 存 函'}}
         </el-button>
-        <br/>
-        <!--        <el-button style="margin-bottom: 10px" size="small" type="danger" @click.stop="visiblePreview = !visiblePreview">-->
-        <!--          {{visiblePreview ?'预览公文':'继续编辑'}}-->
-        <!--        </el-button>-->
-        <!--        <br/>-->
-        <!--<el-popover-->
-        <!--width="200"-->
-        <!--v-model="visible">-->
-        <!--<p>请选择您要导出的公文版本</p>-->
-        <!--<div style="text-align: right; margin: 0">-->
-        <!--<el-popover-->
-        <!--width="200"-->
-        <!--v-model="visiblePZ">-->
-        <!--<p>请选择您要导出的批注公文版本</p>-->
-        <!--<div style="text-align: right; margin: 0">-->
-        <!--<el-button size="mini" type="danger" @click.stop="downloadWord">Word版</el-button>-->
-        <!--<el-button size="mini" type="danger" @click.stop="downloadPDF">PDF版</el-button>-->
-        <!--</div>-->
-        <!--<el-button type="danger" size="mini" slot="reference" @click.stop>正式版</el-button>-->
-        <!--</el-popover>-->
-        <!--<el-button size="mini" type="danger" @click.stop="download">批注版</el-button>-->
-        <!--</div>-->
-        <!--<el-button type="danger" size="mini" slot="reference" @click.stop>导出公文</el-button>-->
-        <!--</el-popover>-->
       </div>
     </div>
   </div>
@@ -176,7 +138,7 @@
   import Tooltip from './tooltip'
   import Box from './box'
   import html2canvas from 'html2canvas'
-  import { Loading } from 'element-ui'
+  import {Loading} from 'element-ui'
 
   export default {
     name: 'TinymceDemo',
@@ -189,6 +151,7 @@
         visiblePreview: true,
         content: '',
         oldList: [],
+        errorList: {},//错别字列表
         list: [],//文本板块
         mapPOP: [],//错别字库
         mapSX: [],//连接折线
@@ -231,7 +194,21 @@
         if (this.three.fou && this.three.fiv && this.three.six) {
           this.three.two = this.three.fou + '★' + this.three.fiv + this.three.six;
         }
-      }
+      },
+      'three.one'() {
+        this.oldList = this.oldList.map(item=>{
+          return {
+            ...item,
+            content2:item.type === 'fenhao'?this.three.one:item.content2,
+          }
+        })
+      },
+      'three.two'() {
+
+      },
+      'three.thr'() {
+
+      },
     },
     methods: {
       oneBlur() {
@@ -239,7 +216,11 @@
       },
       createPicture() {
         let dom = document.getElementById('content')
-        let loadingInstance = Loading.service({text: '正在导出，请勿操作', background: 'rgba(0, 0, 0, 0.28)',spinner: 'el-icon-loading',});
+        let loadingInstance = Loading.service({
+          text: '正在导出，请勿操作',
+          background: 'rgba(0, 0, 0, 0.28)',
+          spinner: 'el-icon-loading',
+        });
         html2canvas(dom, {
           allowTaint: true
         }).then(canvas => {
@@ -290,16 +271,9 @@
       },
       getDetail() {
         getByWord({filepath: this.$route.query.path}).then(res => {
-          let han = res.word.shift()
-          this.three = {
-            one: han.han[0],
-            two: han.han[1],
-            thr: han.han[2]
-          }
-          this.oldList = res.word || []
+          this.oldList = res.word.list || [];
+          this.errorList = res.word.wordMap
           this.setList()
-        }).catch(res => {
-          this.$message.error('获取失败')
         })
       },
       sure(index, valvue) {
@@ -307,29 +281,29 @@
         this.setList()
       },
       setList() {
-        let index = 0
         this.list = []
+        let index = 0;
         this.list = this.oldList.map((item) => {
-          if (item.typename == 'zhengwen') {
-            item.style.fontFamily = this.fontFamily || item.style.fontFamily
-          }
-          let content = item.content.replace(/---@([^@#]+)#---/gm, (a, b) => {
-            let replace = this.replace.find(r => r.index == index)
-            if (replace) {
-              index++
-              return replace.valvue
-            }
-            return `<span class="error" style="border: 1px solid ${this.color[index % this.color.length]}; border-top:0px dashed #fff; border-left:0px dashed #fff; border-right:0px dashed #fff">${b}
-<span class="num" data-index="${index}" data-val="${b}" data-coorectnames=${item.coorectnames[b]} style="font-size: 14px;color: ${this.color[index % this.color.length]}">[${++index}]</span></span>`
+          item.items = item.items.map(r => {
+            let content2 = r.content1.replace(/---@([^@#]+)#---/gm, (a, b) => {
+              let replace = this.replace.find(n => n.index == index)
+              if (replace) {
+                index++
+                return replace.valvue
+              }
+              return `<span class="error" data-index="${index}" data-val="${b}" style="background:#efdbdc;border: 1px solid #b4373b; border-top:0px dashed #fff;  border-bottom:0px dashed #fff">${b}
+<span class="num" style="font-size: 14px;vertical-align: text-top;color:black;font-family: '仿宋'">${++index}</span></span>`
+            })
+            return {...r,content2}
           })
-          return {...item, content}
+          return {...item}
         })
         this.$nextTick(() => {
           this.setItemTips()
         })
       },
       setItemTips() {
-        let s = window.document.getElementsByClassName('num')
+        let s = window.document.getElementsByClassName('error');
         this.mapPOP = []
         this.mapSX = []
         if (s.length === 0) {
@@ -340,7 +314,6 @@
             index: item.getAttribute('data-index'),
             val: item.getAttribute('data-val'),
             value: '',
-            coorectnames: item.getAttribute('data-coorectnames').split(','),
             x: item.offsetLeft,
             y: item.offsetTop,
             height: item.offsetHeight,
@@ -364,7 +337,7 @@
             return {
               width: 30,
               left: 10,
-              top: top + 5,
+              top: top,
               height: height,
               is,
               color: this.color[index % this.color.length]
@@ -434,7 +407,7 @@
         .map-box {
           position: absolute;
           overflow: auto;
-          height: 4px;
+          height: 1px;
         }
         .btn-box {
           position: absolute;
@@ -468,11 +441,10 @@
         width: 300px;
         position: relative;
         .cuobiezi {
-          background: #fff;
+          background: #efdbdc;
           width: 250px;
           padding: 3px;
-          border-radius: 4px;
-          color: gainsboro;
+          border-radius: 8px;
           line-height: 1.4;
           font-size: 12px;
         }
