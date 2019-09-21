@@ -279,7 +279,7 @@
             sure() {
                 this.$refs['form'].validate((valid) => {
                     if (valid) {
-                        add({...this.form, Scope: 0}).then(res => {
+                        add({...this.form, Scope: -1}).then(res => {
                             this.$message.success('操作成功')
                             this.dialogVisible = false
                             this.getList()
@@ -290,7 +290,7 @@
             sureWord() {
                 this.$refs['formWord'].validate((valid) => {
                     if (valid) {
-                        wordAdd({...this.formWord, Scope: 0,Status:1, Cateid: this.activeName}).then(res => {
+                        wordAdd({...this.formWord, Scope: -1,Status:1, Cateid: this.activeName}).then(res => {
                             this.$message.success('操作成功')
                             this.dialogVisibleWord = false
                             this.getWords()
@@ -305,7 +305,7 @@
                 })
             },
             getWords() {
-                wordGet({...this.listQuery, ...this.paging, Cateid: this.activeName, Scope: 0, Status: 1}).then(res => {
+                wordGet({...this.listQuery, ...this.paging, Cateid: this.activeName, Scope: -1, Status: 1}).then(res => {
                     this.listWords = res.Data.map(item => ({...item, NameCopy: '', CoorectNameCopy: ''}))
                     this.paging.total = res.Recordsfiltered
                 })

@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+export function userbyStatus(params) {
+    return request({
+        url: '/user/userbyStatus',
+        method: 'get',
+        params
+    })
+}
+
 export function get(params) {
   return request({
     url: '/user',

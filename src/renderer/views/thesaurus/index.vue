@@ -155,7 +155,7 @@
         this.$message.success(data.msg)
       },
       sure() {
-        add({ ...this.form, Scope: 0 }).then(res => {
+        add({ ...this.form, Scope: -1 }).then(res => {
           this.$message.success('操作成功')
           this.dialogVisible = false
           this.getList()
@@ -168,8 +168,8 @@
         })
       },
       getList() {
-        wordGet({ Scope: 0 ,Status:1}).then(res => {
-          get({ ...this.paging, Scope: 0 }).then(resp => {
+        wordGet({ Scope: -1 ,Status:1}).then(res => {
+          get({ ...this.paging, Scope: -1 }).then(resp => {
             this.paging.total = resp.Recordsfiltered
             this.list = resp.Data.map(item => {
               let data = res.Data.filter(r => r.Cateid == item.Id)
