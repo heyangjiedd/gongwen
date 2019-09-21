@@ -109,7 +109,7 @@
           <div class="cuobiezi" :style="{border:`1px dashed ${item.color}`}">
             <div>
               <span :style="{color: `${item.color}`}">批注[{{index+1}}]、</span>
-              <span>{{item.name}}选择以下词修正：</span>
+              <span>【{{item.val}}】选择以下词修正：</span>
               <span v-for="(i,index) in item.coorectnames" class="ciku" @click="item.value = i"
                     :key="index">
                            {{i}}

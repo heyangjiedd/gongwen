@@ -29,9 +29,9 @@
           <!--<el-option v-for="item in categoryDoc" :key="item.id" :value="item.id" :label="item.docTypeName"/>-->
         <!--</el-select>-->
       </div>
-      <div class="list-item" v-if="list.length > 0" @click="handleEdit(list[0])">
-        <span>{{list[0].Name}}</span>
-        <span style="margin-left: 10px">{{list[0].Createtime&&list[0].Createtime.time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+      <div class="list-item" v-if="current.Createtime" @click="handleEdit(current)">
+        <span>{{current.Name}}</span>
+        <span style="margin-left: 10px">{{current.Createtime && current.Createtime.time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
       </div>
     </el-card>
     <el-card shadow="hover" style="margin-top: 20px">
@@ -110,6 +110,7 @@
         listQuery: {},
         fileList: [],
         list: [],
+        current:{},
         paging: {
           total: 0,
           start: 1,
@@ -199,6 +200,7 @@
       },
       getList() {
         get({...this.listQuery, ...this.paging}).then(res => {
+          !this.current.Createtime&&(this.current = res.Data[0]);
           this.list = res.Data
           this.paging.total = res.Recordsfiltered
         })
