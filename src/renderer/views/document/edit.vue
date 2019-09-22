@@ -277,7 +277,7 @@
       save() {
         saveWord({
           ...this.sendObj,
-          type:this.output==1?'函':item.type,
+          type:this.output==1?'函':this.sendObj.type,
           list: this.list.map((item) => ({
             ...item,
             items: item.items.map(r => ({
