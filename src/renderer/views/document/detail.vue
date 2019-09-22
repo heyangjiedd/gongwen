@@ -148,6 +148,7 @@
                 wordformat({filepath:this.$route.query.path,layout:'pdf'}).then(res => {
                   const ele = document.createElement('a')
                   ele.setAttribute('href', `${this.baseUrl}doc/${res.filepaths[0]}`) //设置下载文件的url地址
+                  console.log( `${this.baseUrl}doc/${res.filepaths[0]}`)
                   ele.setAttribute('target', `_blank`) //设置下载文件的url地址
                   ele.click()
                 })
@@ -155,7 +156,8 @@
             downloadCommon(url) {
                 const ele = document.createElement('a')
                 ele.setAttribute('href', `${this.baseUrl}doc/${this.$route.query.path}${url}`) //设置下载文件的url地址
-                ele.click()
+              console.log( `${this.baseUrl}doc/${this.$route.query.path}${url}`)
+              ele.click()
             }
         }
     }

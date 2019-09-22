@@ -1,108 +1,58 @@
 <template>
   <div class="box-man">
-    <div ref="biaoti" >
-      <div style="min-height: 22px"><div v-for="(r,index) in item.preitems" :key="index" v-html="r"></div></div>
+    <div ref="biaoti">
+      <div>
+        <div v-for="(r,index) in item.preitems" :key="index"
+             :style="{...r.wordStyle,fontFamily:`Times New Roman,${r.wordStyle.fontFamily}`,minHeight: '22px'}"
+             v-html="r.content"></div>
+      </div>
 
-      <div v-if="item.inline == 0" v-for="(r,index) in item.items" :key="index"  v-html="r.content2"
+      <div v-if="item.inline == 0" v-for="(r,index) in item.items" :key="index"
            :style="{...r.wordStyle,
+                 lineHeight:r.wordStyle.lineHeight.includes('pt')?r.wordStyle.lineHeight:(r.wordStyle.lineHeight+'pt'),
                  textAlignLast: (item.type == 'biaoti')? 'justify':'',
-                 textAlign: (item.type == 'biaoti'||item.type == 'biaoti1')? 'justify':'',
-                 whiteSpace: (item.type == 'biaoti'||item.type == 'biaoti1')? 'nowrap':''}"
-           ref="items"></div>
-      <span v-else v-for="(r,index) in item.items" :key="index"  v-html="r.content2" :style="{...r.wordStyle}"></span>
+                 textAlign: textAlign(item,r),
+                 fontFamily:`Times New Roman,${r.wordStyle.fontFamily}`,
+                 whiteSpace: (item.type == 'biaoti'||item.type == 'biaoti1')? 'nowrap':'',
+                 minHeight: (item.type == 'fenhao'||item.type == 'mijiqixian'|| item.type == 'jinjichengdu')? r.wordStyle.lineHeight:'',
+                 borderBottom: item.type == 'banji2'? '1px solid':r.wordStyle.borderTop,
+                 borderTop:item.type == 'banji2'? '1px solid':r.wordStyle.borderTop,
+                 }"
+           ref="items">
+        <div v-if="r.type=='pagetag'">
+          <div class="pagetagbefore">
+            <div class="pagetagbefore-left"></div>
+            <div class="pagetagbefore-right"></div>
+          </div>
+          <div class="pagetag"
+               :style="{fontFamily:r.wordStyle.fontFamily,color:r.wordStyle.color,fontSize:r.wordStyle.fontSize,textAlign:Number(r.content)%2?'right':'left'}"
+          >—{{r.content}}—
+          </div>
+          <div v-if="showAfter!=r.content" class="pageafter"></div>
+          <div v-if="showAfter!=r.content" class="pagetagafter">
+            <div class="pagetagbefore-left-bottom"></div>
+            <div class="pagetagbefore-right-bottom"></div>
+          </div>
+        </div>
+        <div v-else-if="item.type=='banji2'" style="padding: 0 22px">
+          <span v-html="r.content2.split(' ')[0]"></span>
+          <span v-html="r.content2.split(' ')[r.content2.split(' ').length-1]" style="float: right;"></span>
+        </div>
+        <div v-else v-html="r.content2"></div>
+      </div>
+      <span v-else v-for="(r,index) in item.items" :key="index" v-html="r.content2"
+            :style="{...r.wordStyle,fontFamily:`Times New Roman,${r.wordStyle.fontFamily}`,}"></span>
 
-      <div  style="min-height: 22px"><div v-for="(r,index) in item.postitems" :key="index"  v-html="r"></div></div>
+      <div>
+        <div v-for="(r,index) in item.postitems" :key="index" v-html="r.content"
+             :style="{...r.wordStyle,
+             minHeight: (r.type == 'redline')? '':'22px',
+             height:(r.type == 'redline')? '5px':'',
+             background:(r.type == 'redline')? 'red':'',
+             fontFamily:`Times New Roman,${r.wordStyle.fontFamily}`,
+             }"></div>
+      </div>
     </div>
-
-
-
-
-    <div v-if="item.typename == 'biaoti'&&typenames.length===1" class="biaoti" ref="biaoti"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',transform:this.scale}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'biaoti'&&typenames.length!==1&&isFirst" class="biaoti-first" ref="biaoti"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',top:((typenames.length)*55+((typenames.length-2)*10))/2+'px'}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'biaoti'&&typenames.length!==1&&!isFirst" class="biaoti-second" ref="biaoti"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:'36pt',transform:this.scale}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'biaoti1'" class="biaoti1"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'biaoti2'" class="biaoti2"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'fawejiguan'" class="fawejiguan"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'zhusongjiguan'" class="zhusongjiguan"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'zhengwen'" class="zhengwen"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'shumin'" class="shumin"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize,paddingRight: showBefore?'44px':'22px',margin: showBefore?'22px 0 0 0':'44px 0 0 0'}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'datatime'" class="datatime"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-
-    <div v-if="item.typename == 'pagetag'" class="pagetagbefore">
-      <div class="pagetagbefore-left"></div>
-      <div class="pagetagbefore-right"></div>
-    </div>
-    <div v-if="item.typename == 'pagetag'" class="pagetag"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize,textAlign:showLeft?'left':'right'}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'pagetag' && showAfter" class="pageafter"></div>
-    <div v-if="item.typename == 'pagetag' && showAfter" class="pagetagafter">
-      <div class="pagetagbefore-left-bottom"></div>
-      <div class="pagetagbefore-right-bottom"></div>
-    </div>
-
-    <div v-if="item.typename == 'level1'" class="level1"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'level2'" class="level2"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'level3'" class="level3"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'level4'" class="level4"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'fujian'" class="fujian"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize,textIndent: showBefore?'5.2rem':'6.5rem'}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'danweimingcheng'" class="danweimingcheng"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'chengwenriqi'" class="chengwenriqi"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'chuxi'" class="chuxi"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'zhengli'" class="zhengli"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'cihan'" class="cihan"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'qingpishi'" class="qingpishi"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'banji'" class="banji"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'banji1'" class="banji1"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
-    <div v-if="item.typename == 'banji2'" class="banji2"
-         :style="{fontFamily:item.style.fontFamily,color:item.style.color,fontSize:item.style.fontSize}"
-         v-html="item.content"></div>
   </div>
 </template>
 
@@ -115,57 +65,57 @@
         default: () => {
         }
       },
-      list:{
+      list: {
         type: Array,
         default: () => []
       }
     },
-    data(){
+    data() {
       return {
-        typenames:[],
-        scale:'',
+        scale: '',
       }
     },
-    computed:{
-      showAfter(){
-        return this.typenames.findIndex(item=>item.content == this.item.content) !== (this.typenames.length-1)
-      },
-      showLeft(){
-        return this.typenames.findIndex(item=>item.content == this.item.content)%2 !== 0
-      },
-      showBefore(){
-        return this.typenames.findIndex(item=>item.content == this.item.content) !== 0
-      },
-      isFirst(){
-        return this.typenames.findIndex(item=>item.content == this.item.content) === 0
-      },
-      isSecond(){
-        return this.typenames.findIndex(item=>item.content == this.item.content) === 1
+    computed: {
+      showAfter() {
+        let index = 0;
+        this.list.forEach((item) => {
+          item.items&&item.items.forEach(r => {
+            if(r.type == 'pagetag') index++;
+          });
+        });
+        return index;
       },
     },
     mounted() {
-      if(this.item.typename == 'pagetag' || this.item.typename == 'shumin'||this.item.typename == 'biaoti'||this.item.typename == 'fujian'){
-          this.typenames = this.list.filter(item=>{
-            return item.typename == this.item.typename;
-          });
-      }
-      this.$nextTick(()=>{
-        if(this.item.type == 'biaoti'||this.item.type == 'biaoti1'){
-          this.$refs.items.forEach(r=>{
-            let scrollWidth = r.scrollWidth,offsetWidth = r.offsetWidth,
-              translateX = (scrollWidth - offsetWidth)/2;
-            if(this.typenames.length > 1){
-              offsetWidth = this.$refs.biaoti.offsetWidth - 100;
-              translateX = (scrollWidth - offsetWidth)/2+50;
-            }
-            if(scrollWidth <= offsetWidth) return
+      this.$nextTick(() => {
+        if (this.item.type == 'biaoti' || this.item.type == 'biaoti1') {
+          this.$refs.items.forEach(r => {
+            let scrollWidth = r.scrollWidth, offsetWidth = r.offsetWidth,
+              translateX = (scrollWidth - offsetWidth) / 2;
+            // if (this.typenames.length > 1) {
+            //   offsetWidth = this.$refs.biaoti.offsetWidth - 100;
+            //   translateX = (scrollWidth - offsetWidth) / 2 + 50;
+            // }
+            if (scrollWidth <= offsetWidth) return
             let b = offsetWidth / scrollWidth;
             r.style.transform = `scaleX(${b}) translateX(-${translateX}px)`
           })
         }
       })
     },
-    methods: {}
+    methods: {
+      textAlign(item, r) {
+        switch (item.type) {
+          case 'zhengwen1':
+          case 'biaoti':
+            return 'justify';
+          case 'fawenjiguan':
+            return 'center';
+          default:
+            return r.wordStyle.textAlign;
+        }
+      }
+    }
   }
 </script>
 <style scoped lang="scss">
@@ -176,13 +126,13 @@
       text-align: center;
       white-space: nowrap;
     }
-    .biaoti-first{
+    .biaoti-first {
       text-align: right;
       margin-top: 81px;
       position: relative;
       white-space: nowrap;
     }
-    .biaoti-second{
+    .biaoti-second {
       text-align: center;
       margin-bottom: 10px;
       white-space: nowrap;
@@ -230,7 +180,7 @@
     .pagetagbefore {
       position: relative;
       margin-top: 40px;
-      top:-30px;
+      top: -30px;
       div {
         position: absolute;
         width: 25px;
@@ -252,8 +202,8 @@
     }
     .pagetagafter {
       position: relative;
-      margin-top: 100px;
-      top:-30px;
+      margin-top: 90px;
+      top: -30px;
       div {
         position: absolute;
         width: 25px;
@@ -261,7 +211,7 @@
         border: 1px solid gainsboro;
       }
 
-      .pagetagbefore-left-bottom{
+      .pagetagbefore-left-bottom {
         left: -25px;
         border-top: none;
         border-left: none;
@@ -279,9 +229,9 @@
       padding: 0 22px;
       text-align: right;
       margin-top: 60px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
-    .pageafter{
+    .pageafter {
       position: absolute;
       right: 0;
       left: 0;
@@ -328,11 +278,11 @@
       text-indent: 2rem;
       line-height: 2rem;
     }
-    .cihan{
+    .cihan {
       text-indent: 2.6rem;
       line-height: 2.6rem;
     }
-    .qingpishi{
+    .qingpishi {
       text-align: right;
       margin: 0 22px;
     }

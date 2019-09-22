@@ -8,6 +8,7 @@
         v-model="fontFamily"
         size="small"
         placeholder="正文字体选择"
+        @change="setFont"
         style="margin-left: 10px;width: 130px"
       >
         <el-option v-for="item in fontFamilys" :key="item" :value="item" :label="item"/>
@@ -54,6 +55,11 @@
       >
         <el-option v-for="item in outputs" :key="item.value" :value="item.value" :label="item.name"/>
       </el-select>
+      <el-button style="margin-bottom: 5px" size="small" type="danger" @click.stop="createPicture">导出批注版
+      </el-button>
+      <el-button style="width: 92px;text-align: center" size="small" type="danger"
+                 @click.stop="save"> {{output === 1 ?'保 存 公 文':'保 存 函'}}
+      </el-button>
     </div>
     <div class="content" id="content">
       <div class="left" v-show="list.length > 0">
@@ -95,32 +101,36 @@
                 position:'relative',
                 marginBottom:'5px',
                 right:0}">
-          <div class="cuobiezi" :style="{border:`1px solid #b4373b`}">
+          <div class="cuobiezi" :style="{border:`1px solid #ff2b3f`}">
             <div>
-              <div style="font-weight: 500;margin-bottom: 5px">批注[{{index+1}}] 【{{item.val}}】</div>
-              <div style="margin-bottom: 5px"><span >选择正确词：</span>
-                <span style="color: #b4373b;margin-right: 5px" v-for="(i,index) in errorList[item.val].coorectname.split(',')" class="ciku"
+              <div style="font-weight: 500;margin-bottom: 5px">批注[{{index+1}}]：{{item.val}}</div>
+              <div style="margin-bottom: 5px"><span>选择正确词：</span>
+                <span style="color: #ff2b3f;margin-right: 5px"
+                      v-for="(i,index) in errorList[item.val].coorectname.split(',')" class="ciku"
                       @click="item.value = i" :key="index">{{i}}</span></div>
-              <div  style="margin-bottom: 5px"><span>输入正确词：</span><input v-model="item.value"
-                                                                         style="border:none;border-bottom:1px solid;background: #efdbdc;width: 170px" type="text"></div>
+              <div style="margin-bottom: 5px"><span>输入正确词：</span><input v-model="item.value"
+                                                                        style="border:none;border-bottom:1px solid;background: #ffdbdd;width: 160px"
+                                                                        type="text"></div>
             </div>
             <div style="text-align: right; margin: 0;font-size: 13px;">
-              <span @click="sure(item.index,item.val)" style="cursor: pointer;margin-right: 8px">[<span style="font-size: 12px">忽略</span>]
+              <span @click="sure(item.index,item.val)" style="cursor: pointer;margin-right: 8px">[<span
+                style="font-size: 12px">忽略</span>]
               </span>
-              <span @click="sure(item.index,item.value)" style="cursor:pointer ">[<span style="font-size: 12px">确定</span>]
+              <span @click="sure(item.index,item.value)" style="cursor:pointer ">[<span
+                style="font-size: 12px">确定</span>]
               </span>
             </div>
           </div>
         </div>
       </div>
-      <div class="right">
-        <el-button style="margin-bottom: 5px" size="small" type="danger" @click.stop="createPicture">导出批注版
-        </el-button>
-        <br/>
-        <el-button style="width: 92px;text-align: center" size="small" type="danger"
-                   @click.stop="save"> {{output === 1 ?'保 存 公 文':'保 存 函'}}
-        </el-button>
-      </div>
+      <!--<div class="right" id="right">-->
+      <!--<el-button style="margin-bottom: 5px" size="small" type="danger" @click.stop="createPicture">导出批注版-->
+      <!--</el-button>-->
+      <!--<br/>-->
+      <!--<el-button style="width: 92px;text-align: center" size="small" type="danger"-->
+      <!--@click.stop="save"> {{output === 1 ?'保 存 公 文':'保 存 函'}}-->
+      <!--</el-button>-->
+      <!--</div>-->
     </div>
   </div>
 </template>
@@ -169,17 +179,14 @@
         threefiv: ['年', '月'],
         fontFamilys: ['仿宋简体', '仿宋GBK', '仿宋_GB2312'],
         fontFamily: '',
-        outputs: [{name: '是', value: 2}, {name: '否', value: 1}],
-        output: 1,
+        outputs: [{name: '是', value: 1}, {name: '否', value: 2}],
+        output: 2,
       }
     },
     mounted() {
       this.getDetail()
     },
     watch: {
-      fontFamily(newVal) {
-        this.setList()
-      },
       'three.fou'() {
         if (this.three.fou && this.three.fiv && this.three.six) {
           this.three.two = this.three.fou + '★' + this.three.fiv + this.three.six;
@@ -196,21 +203,39 @@
         }
       },
       'three.one'() {
-        this.oldList = this.oldList.map(item=>{
-          return {
-            ...item,
-            content2:item.type === 'fenhao'?this.three.one:item.content2,
-          }
-        })
+        this.setOldList('fenhao', this.three.one)
       },
       'three.two'() {
-
+        this.setOldList('mijiqixian', this.three.two)
       },
       'three.thr'() {
-
+        this.setOldList('jinjichengdu', this.three.thr)
       },
     },
     methods: {
+      setFont() {
+        this.oldList = this.oldList.map(item => ({
+          ...item,
+          items: item.items.map(r => ({
+            ...r,
+            wordStyle: {
+              ...r.wordStyle,
+              fontFamily: (item.type == 'zhengwen1' || item.type == 'zhengwen2') && this.fontFamily ? this.fontFamily : r.wordStyle.fontFamily
+            }
+          })),
+        }));
+        this.setList();
+      },
+      setOldList(type, value) {
+        this.oldList = this.oldList.map(item => ({
+          ...item,
+          items: item.items.map(r => ({
+            ...r,
+            content1: item.type == type ? value : r.content1,
+          })),
+        }));
+        this.setList();
+      },
       oneBlur() {
         this.three.one = (Array(6).join('0') + this.three.one).slice(-6);
       },
@@ -222,7 +247,13 @@
           spinner: 'el-icon-loading',
         });
         html2canvas(dom, {
-          allowTaint: true
+          allowTaint: true,
+          // ignoreElements:(element)=>{
+          //   if(element.id == 'right'){
+          //     return true
+          //   }
+          //   return false
+          // }
         }).then(canvas => {
           this.imgmap = canvas.toDataURL('image/', 'png')
           if (window.navigator.msSaveOrOpenBlob) {
@@ -244,33 +275,26 @@
         })
       },
       save() {
-        if (this.mapPOP.length > 0) {
-          this.$message.error('请先处理完毕再保存！')
-          return
-        }
-        let wordcontentList = [...this.list]
-        wordcontentList.reverse()
-        let index = wordcontentList.findIndex(item => item.typename == 'shumin')
-        if (index != -1) {
-          wordcontentList.splice(index, 0, {typename: 'shumin', content: ''})
-        }
-        wordcontentList.reverse()
-        let data = {
-          wordcontent: wordcontentList.map(item => {
-            return {[item.typename]: item.content}
-          }),
-          filepath: this.$route.query.path,
-          han: [this.three.one || '', this.three.two || '', this.three.thr || ''],
-          status: this.output,
-          fontstyle: this.fontFamily
-        }
-        saveWord(data).then(res => {
+        saveWord({
+          ...this.sendObj,
+          type:this.output==1?'函':item.type,
+          list: this.list.map((item) => ({
+            ...item,
+            items: item.items.map(r => ({
+              ...r,
+              content:r.content3,
+              content2:undefined,
+              content3:undefined,
+            }))
+          }))
+        }).then(res => {
           this.$message.success('保存成功')
           this.$router.go(-1)
         })
       },
       getDetail() {
         getByWord({filepath: this.$route.query.path}).then(res => {
+          this.sendObj = res.word;
           this.oldList = res.word.list || [];
           this.errorList = res.word.wordMap
           this.setList()
@@ -283,6 +307,7 @@
       setList() {
         this.list = []
         let index = 0;
+        let indexCopy = 0;
         this.list = this.oldList.map((item) => {
           item.items = item.items.map(r => {
             let content2 = r.content1.replace(/---@([^@#]+)#---/gm, (a, b) => {
@@ -291,10 +316,18 @@
                 index++
                 return replace.valvue
               }
-              return `<span class="error" data-index="${index}" data-val="${b}" style="background:#efdbdc;border: 1px solid #b4373b; border-top:0px dashed #fff;  border-bottom:0px dashed #fff">${b}
-<span class="num" style="font-size: 14px;vertical-align: text-top;color:black;font-family: '仿宋'">${++index}</span></span>`
+              return `<span class="error" data-index="${index}" data-val="${b}" style="background:#ffdbdd;border:1px solid #ff2b3f;border-top:0px dashed #fff;border-bottom:0px dashed #fff">${b}
+<span class="num" style="font-size:14px;line-height:14px;vertical-align:text-top;color:black;font-family:'仿宋'">${++index}</span></span>`
+            });
+            let content3 = r.content1.replace(/---@([^@#]+)#---/gm, (a, b) => {
+              let replace = this.replace.find(n => n.index == indexCopy)
+              if (replace) {
+                indexCopy++
+                return replace.valvue
+              }
+              return `---@${b}#---`
             })
-            return {...r,content2}
+            return {...r, content2, content3}
           })
           return {...item}
         })
@@ -392,7 +425,7 @@
         width: 765px;
         position: relative;
         border: 1px solid gainsboro;
-        padding: 50px 75px 20px 75px;
+        padding: 75px 75px 20px 75px;
         .three {
           position: absolute;
           top: 75px;
@@ -416,11 +449,13 @@
           border: 1px solid gainsboro;
         }
         .top-left {
+          top: 50px;
           left: 45px;
           border-left: none;
           border-top: none;
         }
         .top-right {
+          top: 50px;
           right: 45px;
           border-right: none;
           border-top: none;
@@ -441,9 +476,9 @@
         width: 300px;
         position: relative;
         .cuobiezi {
-          background: #efdbdc;
+          background: #ffdbdd;
           width: 250px;
-          padding: 3px;
+          padding: 7px;
           border-radius: 8px;
           line-height: 1.4;
           font-size: 12px;
