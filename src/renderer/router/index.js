@@ -53,36 +53,6 @@ export const constantRouterMap = [
     }]
   },
   {
-    path: '/gongwen',
-    component: Layout,
-      hidden: true,
-    redirect: '/gongwen/gongwen',
-    name: 'gongwen',
-    children: [
-      {
-        path: 'gongwen',
-        name: 'Table1',
-          hidden: true,
-        component: () => import('@/views/gongwen/index'),
-        meta: { title: '导出公文', icon: 'icon_invite' }
-      },
-      {
-        path: 'detail',
-        name: 'detail',
-        hidden: true,
-        component: () => import('@/views/gongwen/detail'),
-        meta: { title: '模板编辑', icon: 'icon_index_line' }
-      },
-      {
-        path: 'cuobiezi',
-        name: 'cuobiezi',
-        hidden: true,
-        component: () => import('@/views/gongwen/cuobiezi'),
-        meta: { title: '错别字提示', icon: 'icon_invite' }
-      }
-    ]
-  },
-  {
     path: '/thesaurus',
     component: Layout,
     redirect: '/thesaurus/index',
@@ -110,6 +80,22 @@ export const constantRouterMap = [
       }
     ]
   },
+    {
+        path: '/thesaurus',
+        component: Layout,
+        meta: {
+            title: '词库管理',
+            icon: 'tree'
+        },
+        children: [
+            {
+                path: 'recycle',
+                component: () => import('@/views/thesaurus/recycle'),
+                name: 'recycle',
+                meta: { title: '词库回收站', icon: 'tree', affix: true }
+            },
+        ]
+    },
     // {
     //   path: '/history',
     //   component: Layout,
@@ -124,19 +110,33 @@ export const constantRouterMap = [
     //         }
     //     ]
     // },
-  {
-    path: '/user',
-    component: Layout,
-      role:['puser','padmin','cadmin'],
-    children: [
-      {
-        path: 'index',
-        name: 'user',
-        component: () => import('@/views/user/index'),
-        meta: { title: '用户管理', icon: 'people' }
-      }
-    ]
-  },
+  // {
+  //   path: '/user',
+  //   component: Layout,
+  //     role:['puser','padmin','cadmin'],
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'user',
+  //       component: () => import('@/views/user/index'),
+  //       meta: { title: '用户管理', icon: 'people' }
+  //     }
+  //   ]
+  // },
+    {
+        path: '/download',
+        component: Layout,
+        roles:['puser','padmin','cuser','cadmin'],
+        children: [
+            {
+                path: 'index',
+                roles:['puser','padmin','cuser','cadmin'],
+                component: () => import('@/views/download/index'),
+                name: 'download',
+                meta: { title: '字体下载', icon: 'skill', affix: true }
+            }
+        ]
+    },
     {
         path: '/password',
         component: Layout,

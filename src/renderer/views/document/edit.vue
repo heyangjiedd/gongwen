@@ -91,6 +91,8 @@
                     borderLeft: `1px dashed ${'#b4373b'}`,
                     left:item.left+'px',
                     width:item.width+'px',
+                    // transform-origin: x-axis y-axis z-axis;
+                    // transform: rotate(45deg);
                     height:item.height+'px',
                     top:item.top+'px',
                     position:'absolute'}">
@@ -220,7 +222,7 @@
             ...r,
             wordStyle: {
               ...r.wordStyle,
-              fontFamily: (item.type == 'zhengwen1' || item.type == 'zhengwen2') && this.fontFamily ? this.fontFamily : r.wordStyle.fontFamily
+              fontFamily: (item.type == 'zhengwen1' || item.type == 'zhengwen2'|| item.type == 'banji2') && this.fontFamily ? this.fontFamily : r.wordStyle.fontFamily
             }
           })),
         }));
@@ -482,6 +484,9 @@
           border-radius: 8px;
           line-height: 1.4;
           font-size: 12px;
+        }
+        input[type="text"]:focus{
+            outline: none;
         }
         .ciku {
           cursor: pointer;
