@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container" style="margin-bottom: 10px">
       <el-button type="danger" size="small" icon="el-icon-download">
-        <a href="../../assets/gwcjzt.zip">公文字体包下载</a>
+        <a href="/static/公文常用字体.zip">公文字体包下载</a>
       </el-button>
     </div>
     <el-card shadow="hover">

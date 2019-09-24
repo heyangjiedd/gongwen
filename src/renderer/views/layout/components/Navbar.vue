@@ -2,10 +2,6 @@
   <el-menu class="navbar" mode="horizontal">
     <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
     <breadcrumb></breadcrumb>
-    <div style="position: absolute;right: 150px;top: 0px;margin-top:5px;line-height: 50px;cursor: pointer">
-      <span style="font-size: 14px; ">帮助</span>
-      <i class="el-icon-question"></i>
-    </div>
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
         {{name}}
@@ -17,6 +13,10 @@
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
+    <div style="float: right;margin-right:20px;line-height: 50px;cursor: pointer">
+      <span style="font-size: 14px; ">帮助</span>
+      <i class="el-icon-question"></i>
+    </div>
   </el-menu>
 </template>
 
@@ -71,11 +71,13 @@ export default {
   .avatar-container {
     height: 50px;
     display: inline-block;
-    position: absolute;
-    right: 35px;
+    float: right;
+    margin-right: 40px;
+    /*position: absolute;*/
+    /*right: 35px;*/
     .avatar-wrapper {
       cursor: pointer;
-      margin-top: 5px;
+      /*margin-top: 5px;*/
       position: relative;
       .user-avatar {
         width: 40px;

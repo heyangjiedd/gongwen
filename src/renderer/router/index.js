@@ -92,7 +92,7 @@ export const constantRouterMap = [
                 path: 'recycle',
                 component: () => import('@/views/thesaurus/recycle'),
                 name: 'recycle',
-                meta: { title: '词库回收站', icon: 'tree', affix: true }
+                meta: { title: '词库回收站', icon: 'nested', affix: true }
             },
         ]
     },
@@ -133,7 +133,7 @@ export const constantRouterMap = [
                 roles:['puser','padmin','cuser','cadmin'],
                 component: () => import('@/views/download/index'),
                 name: 'download',
-                meta: { title: '字体下载', icon: 'skill', affix: true }
+                meta: { title: '字体下载', icon: 'zip', affix: true }
             }
         ]
     },
