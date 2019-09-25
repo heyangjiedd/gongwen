@@ -17,7 +17,7 @@
                 <el-button size="small" type="danger">一键导入词库</el-button>
             </el-upload>
             <el-button style="float: right;margin-right: 10px;margin-left: 10px" size="small" type="danger"
-                       @click="handleAdd">新建关键词库
+                       @click="handleAdd">新建词库类目
             </el-button>
             <el-input
                     style="float: right;width: 200px"
@@ -51,7 +51,7 @@
                     <el-row>
                         <el-col :span="11">
                             <ul class="index-ul">
-                                <li class="index-li" v-if="item.children&&item.children.length>0" @click="goList(item)"
+                                <li class="index-li" v-if="item.children&&item.children.length>0" @click="goListIndex(r.Name)"
                                     :title="r.Name" v-for="(r,n) in item.children.slice(0,6)">
                                     {{r.Name}}
                                 </li>
@@ -59,7 +59,7 @@
                         </el-col>
                         <el-col :span="11" :offset="1">
                             <ul class="index-ul">
-                                <li class="index-li" v-if="item.children&&item.children.length>0" @click="goList(item)"
+                                <li class="index-li" v-if="item.children&&item.children.length>0" @click="goListIndex(r.Name)"
                                     :title="r.Name" v-for="(r,n) in item.children.slice(6,12)">
                                     {{r.Name}}
                                 </li>
@@ -135,6 +135,9 @@
       },
       goSearch() {
         this.$router.push({ path: '/thesaurus/search', query: { keyWords: this.listQuery.keyWords } })
+      },
+      goListIndex(keyWords){
+        this.$router.push({path: '/thesaurus/search', query: {keyWords: keyWords}})
       },
       goList(item) {
         this.$router.push({ path: '/thesaurus/list', query: { Id: item.Id } })

@@ -31,8 +31,13 @@
       <el-table-column label="标记账号" prop="Uname" min-width="60"/>
       <el-table-column label="所属单位" prop="Cname" min-width="60"/>
       <el-table-column label="所属类目" prop="Catename" min-width="60"/>
-      <el-table-column label="所属词库" prop="Uname" min-width="60"/>
-      <el-table-column label="删除时间" align="Updatetime" min-width="80">
+      <el-table-column label="所属词库" prop="Scope" min-width="60">
+        <template slot-scope="{row}">
+          <el-tag  v-if="row.Scope===1">公共词库</el-tag>
+          <el-tag type="warning" v-else>私有词库</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="删除时间" align="Updatetime" min-width="60">
         <template slot-scope="{row}">
           {{row.Updatetime&&row.Updatetime.time | parseTime}}
         </template>

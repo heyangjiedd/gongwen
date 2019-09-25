@@ -20,7 +20,7 @@
                 <el-button size="small" type="danger">一键导入词库</el-button>
             </el-upload>
             <el-button style="float: right;margin-right: 10px;margin-left: 10px" size="small" type="danger"
-                       @click="handleAdd">新建关键词库
+                       @click="handleAdd">新建词库类目
             </el-button>
             <el-input
                     style="float: right;width: 200px"
@@ -37,7 +37,7 @@
                     size="small"
                     @change="getWords"
                     style="width:200px;float: right;margin-right: 10px"
-                    placeholder="查找词库类别"
+                    placeholder="输入或选择词库类目"
             >
                 <el-option v-for="item in list" :key="item.Id" :value="item.Id" :label="item.Name"/>
             </el-select>
@@ -80,11 +80,11 @@
                                     <div v-for="(item,index) in list" class="list-item-hover" :key="index"
                                          @click="handleMove(row,item)">{{item.Name}}
                                     </div>
-                                    <el-button slot="reference" size="mini" type="danger" @click.stop>转移至其他词库<i
+                                    <el-button slot="reference" size="mini" type="danger" @click.stop>类目变更<i
                                             class="el-icon-arrow-right el-icon--right"/></el-button>
                                 </el-popover>
                             </div>
-                            <el-button type="text" size="mini" slot="reference"
+                            <el-button type="text" size="medium" slot="reference"
                                        @click.stop="row.NameCopy = row.Name;row.CoorectNameCopy = row.CoorectName">
                                 {{row.Name}}
                             </el-button>
@@ -124,11 +124,11 @@
                                          @click="handleMove(row,item)">
                                         {{item.Name}}
                                     </div>
-                                    <el-button slot="reference" size="mini" type="danger" @click.stop>转移至其他词库<i
+                                    <el-button slot="reference" size="mini" type="danger" @click.stop>类目变更<i
                                             class="el-icon-arrow-right el-icon--right"/></el-button>
                                 </el-popover>
                             </div>
-                            <el-button type="text" size="mini" slot="reference"
+                            <el-button type="text" size="medium" slot="reference"
                                        @click.stop="row.NameCopy = row.Name;row.CoorectNameCopy = row.CoorectName">
                                 {{row.CoorectName}}
                             </el-button>

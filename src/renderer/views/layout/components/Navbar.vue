@@ -14,8 +14,8 @@
       </el-dropdown-menu>
     </el-dropdown>
     <div style="float: right;margin-right:20px;line-height: 50px;cursor: pointer">
-      <span style="font-size: 14px; ">帮助</span>
       <i class="el-icon-question"></i>
+      <span style="font-size: 14px; ">常见问题</span>
     </div>
   </el-menu>
 </template>
