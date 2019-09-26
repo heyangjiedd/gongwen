@@ -19,12 +19,14 @@
         @blur="oneBlur"
         :maxlength="6"
         size="small"
+        clearable
         v-model="three.one">
       </el-input>
       <el-select
         v-model="three.fou"
         size="small"
         placeholder="密级"
+        clearable
         style="width: 80px"
       >
         <el-option v-for="item in threefou" :key="item" :value="item" :label="item"/>
@@ -35,6 +37,7 @@
         v-model="three.six"
         size="small"
         placeholder="单位"
+        clearable
         style="width: 80px"
       >
         <el-option v-for="item in threefiv" :key="item" :value="item" :label="item"/>
@@ -43,6 +46,7 @@
         v-model="three.thr"
         size="small"
         placeholder="紧急程度"
+        clearable
         style="width: 100px"
       >
         <el-option v-for="item in threethr" :key="item" :value="item" :label="item"/>
@@ -105,7 +109,7 @@
                 right:0}">
           <div class="cuobiezi" :style="{border:`1px solid #ff2b3f`}">
             <div>
-              <div style="font-weight: 500;margin-bottom: 5px">批注[{{index+1}}]：{{item.val}}</div>
+              <div style="font-weight: 500;margin-bottom: 5px">批注[{{item.index}}]：{{item.val}}</div>
               <div style="margin-bottom: 5px"><span>选择正确词：</span>
                 <span style="color: #ff2b3f;margin-right: 5px"
                       v-for="(i,index) in errorList[item.val].coorectname.split(',')" class="ciku"
@@ -179,7 +183,7 @@
         threethr: ['特急', '加急', '平急'],
         threefou: ['绝密', '机密', '秘密'],
         threefiv: ['年', '月'],
-        fontFamilys: ['仿宋简体', '仿宋GBK', '仿宋_GB2312'],
+        fontFamilys: ['方正仿宋简体', '方正仿宋_GBK', '仿宋_GB2312'],
         fontFamily: '',
         outputs: [{name: '是', value: 1}, {name: '否', value: 2}],
         output: 2,
@@ -192,16 +196,22 @@
       'three.fou'() {
         if (this.three.fou && this.three.fiv && this.three.six) {
           this.three.two = this.three.fou + '★' + this.three.fiv + this.three.six;
+        }else{
+          this.three.two = '';
         }
       },
       'three.fiv'() {
         if (this.three.fou && this.three.fiv && this.three.six) {
           this.three.two = this.three.fou + '★' + this.three.fiv + this.three.six;
+        }else{
+          this.three.two = '';
         }
       },
       'three.six'() {
         if (this.three.fou && this.three.fiv && this.three.six) {
           this.three.two = this.three.fou + '★' + this.three.fiv + this.three.six;
+        }else{
+          this.three.two = '';
         }
       },
       'three.one'() {
@@ -239,7 +249,7 @@
         this.setList();
       },
       oneBlur() {
-        this.three.one = (Array(6).join('0') + this.three.one).slice(-6);
+        this.three.one = this.three.one&&(Array(6).join('0') + this.three.one).slice(-6);
       },
       createPicture() {
         let dom = document.getElementById('content')
@@ -250,14 +260,8 @@
         });
         html2canvas(dom, {
           allowTaint: true,
-          // ignoreElements:(element)=>{
-          //   if(element.id == 'right'){
-          //     return true
-          //   }
-          //   return false
-          // }
         }).then(canvas => {
-          this.imgmap = canvas.toDataURL('image/', 'png')
+          this.imgmap = canvas.toDataURL('image/png', 0.1)
           if (window.navigator.msSaveOrOpenBlob) {
             var bstr = atob(this.imgmap.split(',')[1])
             var n = bstr.length
@@ -313,16 +317,16 @@
         this.list = this.oldList.map((item) => {
           item.items = item.items.map(r => {
             let content2 = r.content1.replace(/---@([^@#]+)#---/gm, (a, b) => {
-              let replace = this.replace.find(n => n.index == index)
+              let replace = this.replace.find(n => n.index-1 == index)
               if (replace) {
                 index++
                 return replace.valvue
               }
-              return `<span class="error" data-index="${index}" data-val="${b}" style="background:#ffdbdd;border:1px solid #ff2b3f;border-top:0px dashed #fff;border-bottom:0px dashed #fff">${b}
-<span class="num" style="font-size:14px;line-height:14px;vertical-align:text-top;color:black;font-family:'仿宋'">${++index}</span></span>`
+              return `<span class="error" data-index="${++index}" data-val="${b}" style="background:#ffdbdd;border:1px solid #ff2b3f;border-top:0px dashed #fff;border-bottom:0px dashed #fff">${b}
+<span class="num" style="font-size:14px;line-height:14px;vertical-align:text-top;color:black;font-family:'仿宋'">${index}</span></span>`
             });
             let content3 = r.content1.replace(/---@([^@#]+)#---/gm, (a, b) => {
-              let replace = this.replace.find(n => n.index == indexCopy)
+              let replace = this.replace.find(n => n.index-1 == indexCopy)
               if (replace) {
                 indexCopy++
                 return replace.valvue

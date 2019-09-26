@@ -34,7 +34,7 @@
             <div class="pagetagbefore-right-bottom"></div>
           </div>
         </div>
-        <div v-else-if="item.type=='banji2'" style="padding: 0 22px">
+        <div v-else-if="item.type=='banji2'" :style="{padding: r.content2.split(' ')[0].length>20? '0' :'0 22px'}">
           <span v-html="r.content2.split(' ')[0]"></span>
           <span v-html="r.content2.split(' ')[r.content2.split(' ').length-1]" style="float: right;"></span>
         </div>
@@ -47,7 +47,7 @@
         <div v-for="(r,index) in item.postitems" :key="index" v-html="r.content"
              :style="{...r.wordStyle,
              minHeight: (r.type == 'redline')? '':'22px',
-             height:(r.type == 'redline')? '5px':'',
+             height:(r.type == 'redline')? '1.4pt':'',
              background:(r.type == 'redline')? 'red':'',
              fontFamily:`Times New Roman,${r.wordStyle.fontFamily}`,
              }"></div>
