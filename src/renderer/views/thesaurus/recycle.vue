@@ -76,7 +76,7 @@
           start:1,
           pagesize:10,
           sort:'Updatetime',
-          order:'desc',//asc倒序 desc升序
+          order:'desc',//asc升序 desc倒序
         },
       }
     },

@@ -154,7 +154,7 @@
                     limit: 10,
                     page: 1,
                     sort:'Createtime',
-                    order:'desc',//asc倒序 desc升序
+                    order:'desc',//asc升序 desc倒序
                 },
                 dict: {
                     company: [],

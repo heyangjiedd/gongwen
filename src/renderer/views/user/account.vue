@@ -55,13 +55,19 @@
       sure() {
         this.$refs['form'].validate((valid) => {
           if (valid) {
-            changepassword({...this.form}).then(res => {
-              this.$message.success('操作成功');
+            changepassword({ ...this.form }).then(res => {
               this.form = {}
+              this.$message.success({
+                message:'操作成功',
+                onClose: async ()=>{
+                  await this.$store.dispatch('user/logout')
+                  this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+                }
+              })
             })
           }
         })
-      },
+      }
     }
   }
 </script>
