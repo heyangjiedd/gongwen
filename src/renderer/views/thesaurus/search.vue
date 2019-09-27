@@ -294,7 +294,7 @@
                 })
             },
             getList() {
-                get({Scope: 0}).then(res => {
+                get({Scope: -1}).then(res => {
                     this.list = res.Data.map(item => {
                         return {...item, Id: '' + item.Id}
                     })

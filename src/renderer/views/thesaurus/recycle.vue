@@ -37,7 +37,7 @@
           <el-tag type="warning" v-else>私有词库</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="删除时间" align="Updatetime" min-width="60">
+      <el-table-column label="删除时间" align="Updatetime" width="150">
         <template slot-scope="{row}">
           {{row.Updatetime&&row.Updatetime.time | parseTime}}
         </template>
@@ -90,7 +90,7 @@
         })
       },
       getList() {
-        get({ ...this.listQuery,...this.paging,Status:-1}).then(res => {
+        get({ ...this.listQuery,...this.paging,Status:-1,Scope:-1}).then(res => {
           this.list = res.Data;
           this.paging.total = res.Recordsfiltered;
         })

@@ -77,7 +77,7 @@
     },
     computed: {
       showAfter() {
-        let index = 0;
+        let index = 1;
         this.list.forEach((item) => {
           item.items&&item.items.forEach(r => {
             if(r.type == 'pagetag') index++;

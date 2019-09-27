@@ -23,7 +23,7 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="确认密码" prop="confirmpassword">
-            <el-input placeholder="请输入确认密码" type="password" v-model="form.confirmpassword" clearable>
+            <el-input placeholder="请输入确认密码" @keyup.enter.native="sure" type="password" v-model="form.confirmpassword" clearable>
             </el-input>
           </el-form-item>
         </el-col>

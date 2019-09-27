@@ -55,14 +55,14 @@
         v-model="output"
         size="small"
         placeholder="转为函格式"
-        style="width: 120px"
+        style="width: 140px"
       >
         <el-option v-for="item in outputs" :key="item.value" :value="item.value" :label="item.name"/>
       </el-select>
       <el-button style="margin-bottom: 5px" size="small" type="danger" @click.stop="createPicture">导出批注版
       </el-button>
-      <el-button style="width: 92px;text-align: center" size="small" type="danger"
-                 @click.stop="save"> {{output === 1 ?'保 存 公 文':'保 存 函'}}
+      <el-button style="width: 92px;text-align: center" size="small" :disabled="isDisabled <= 1" type="danger"
+                 @click.stop="save"> {{'保 存 公 文'}}
       </el-button>
     </div>
     <div class="content" id="content">
@@ -154,6 +154,7 @@
   import Tooltip from './tooltip'
   import Box from './box'
   import html2canvas from 'html2canvas'
+  import jsPDF from 'jspdf'
   import {Loading} from 'element-ui'
 
   export default {
@@ -185,8 +186,9 @@
         threefiv: ['年', '月'],
         fontFamilys: ['方正仿宋简体', '方正仿宋_GBK', '仿宋_GB2312'],
         fontFamily: '',
-        outputs: [{name: '是', value: 1}, {name: '否', value: 2}],
+        outputs: [ {name: '文件式公文格式', value: 2},{name: '信函式公文格式', value: 1}],
         output: 2,
+        isDisabled:0,
       }
     },
     mounted() {
@@ -260,24 +262,43 @@
         });
         html2canvas(dom, {
           allowTaint: true,
+          imageTimeout:1000000,
         }).then(canvas => {
-          this.imgmap = canvas.toDataURL('image/png', 0.1)
-          if (window.navigator.msSaveOrOpenBlob) {
-            var bstr = atob(this.imgmap.split(',')[1])
-            var n = bstr.length
-            var u8arr = new Uint8Array(n)
-            while (n--) {
-              u8arr[n] = bstr.charCodeAt(n)
+          let imgData = canvas.toDataURL('image/jpeg')
+          let img = new Image()
+          img.src = imgData;
+          let name = this.$route.query.path;
+          //根据图片的尺寸设置pdf的规格，要在图片加载成功时执行，之所以要*0.5是因为比例问题
+          img.onload = function () {
+            //此处需要注意，pdf横置和竖置两个属性，需要根据宽高的比例来调整，不然会出现显示不完全的问题
+            let doc = ''
+            if (this.width > this.height) {
+              doc = new jsPDF('l', 'mm', [this.width * 0.5, this.height * 0.5])
+            } else {
+              doc = new jsPDF('p', 'mm', [this.width * 0.5, this.height * 0.5])
             }
-            var blob = new Blob([u8arr])
-            window.navigator.msSaveOrOpenBlob(blob, 'chart-download' + '.' + 'png')
-          } else {
-            const a = document.createElement('a')
-            a.href = this.imgmap
-            a.setAttribute('download', this.$route.query.path + '.png')
+            doc.addImage(imgData, 'jpeg', 0, 0, this.width * 0.175, this.height * 0.175)  //比例可根据需要调节
+            //根据下载保存成不同的文件名
+            doc.save(name + '.pdf');
             loadingInstance.close();
-            a.click()
           }
+          // this.imgmap = canvas.toDataURL('image/png', 0.1)
+          // if (window.navigator.msSaveOrOpenBlob) {
+          //   var bstr = atob(this.imgmap.split(',')[1])
+          //   var n = bstr.length
+          //   var u8arr = new Uint8Array(n)
+          //   while (n--) {
+          //     u8arr[n] = bstr.charCodeAt(n)
+          //   }
+          //   var blob = new Blob([u8arr])
+          //   window.navigator.msSaveOrOpenBlob(blob, 'chart-download' + '.' + 'png')
+          // } else {
+          //   const a = document.createElement('a')
+          //   a.href = this.imgmap
+          //   a.setAttribute('download', this.$route.query.path + '.png')
+          //   loadingInstance.close();
+          //   a.click()
+          // }
         })
       },
       save() {
@@ -311,7 +332,8 @@
         this.setList()
       },
       setList() {
-        this.list = []
+        this.list = [];
+        this.isDisabled  += 1;
         let index = 0;
         let indexCopy = 0;
         this.list = this.oldList.map((item) => {
