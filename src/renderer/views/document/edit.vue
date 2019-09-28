@@ -14,7 +14,7 @@
         <el-option v-for="item in fontFamilys" :key="item" :value="item" :label="item"/>
       </el-select>
       <el-input
-        style="width: 80px"
+        style="width: 100px"
         placeholder="份号"
         @blur="oneBlur"
         :maxlength="6"
@@ -31,7 +31,7 @@
       >
         <el-option v-for="item in threefou" :key="item" :value="item" :label="item"/>
       </el-select>
-      <el-input placeholder="时长" size="small" v-model="three.fiv" style="width: 80px">
+      <el-input placeholder="时长" clearable size="small" v-model="three.fiv" style="width: 80px">
       </el-input>
       <el-select
         v-model="three.six"
@@ -155,11 +155,11 @@
   import Box from './box'
   import html2canvas from 'html2canvas'
   import jsPDF from 'jspdf'
-  import {Loading} from 'element-ui'
+  import { Loading } from 'element-ui'
 
   export default {
     name: 'TinymceDemo',
-    components: {Tooltip, Box},
+    components: { Tooltip, Box },
     data() {
       return {
         color: ['#00FFFF', '#FFD700', '#0000FF', '#A52A2A', '#5F9EA0', '#D2691E', '#DC143C', '#B8860B', '#006400'],
@@ -179,16 +179,16 @@
           thr: '',
           fou: '',
           fiv: '',
-          six: '',
+          six: ''
         },
         threethr: ['特急', '加急', '平急'],
         threefou: ['绝密', '机密', '秘密'],
         threefiv: ['年', '月'],
         fontFamilys: ['方正仿宋简体', '方正仿宋_GBK', '仿宋_GB2312'],
         fontFamily: '',
-        outputs: [ {name: '文件式公文格式', value: 2},{name: '信函式公文格式', value: 1}],
+        outputs: [{ name: '文件式公文格式', value: 2 }, { name: '信函式公文格式', value: 1 }],
         output: 2,
-        isDisabled:0,
+        isDisabled: 0
       }
     },
     mounted() {
@@ -196,25 +196,13 @@
     },
     watch: {
       'three.fou'() {
-        if (this.three.fou && this.three.fiv && this.three.six) {
-          this.three.two = this.three.fou + '★' + this.three.fiv + this.three.six;
-        }else{
-          this.three.two = '';
-        }
+        this.threeAfter();
       },
       'three.fiv'() {
-        if (this.three.fou && this.three.fiv && this.three.six) {
-          this.three.two = this.three.fou + '★' + this.three.fiv + this.three.six;
-        }else{
-          this.three.two = '';
-        }
+        this.threeAfter();
       },
       'three.six'() {
-        if (this.three.fou && this.three.fiv && this.three.six) {
-          this.three.two = this.three.fou + '★' + this.three.fiv + this.three.six;
-        }else{
-          this.three.two = '';
-        }
+        this.threeAfter();
       },
       'three.one'() {
         this.setOldList('fenhao', this.three.one)
@@ -224,9 +212,20 @@
       },
       'three.thr'() {
         this.setOldList('jinjichengdu', this.three.thr)
-      },
+      }
     },
     methods: {
+      threeAfter(){
+        if (this.three.fou) {
+          if (this.three.fiv && this.three.six) {
+            this.three.two = this.three.fou + '★' + this.three.fiv + this.three.six
+          } else {
+            this.three.two = this.three.fou
+          }
+        } else {
+          this.three.two = ''
+        }
+      },
       setFont() {
         this.oldList = this.oldList.map(item => ({
           ...item,
@@ -234,42 +233,102 @@
             ...r,
             wordStyle: {
               ...r.wordStyle,
-              fontFamily: (item.type == 'zhengwen1' || item.type == 'zhengwen2'|| item.type == 'banji2') && this.fontFamily ? this.fontFamily : r.wordStyle.fontFamily
+              fontFamily: (item.type == 'zhengwen1' || item.type == 'zhengwen2' || item.type == 'banji2') && this.fontFamily ? this.fontFamily : r.wordStyle.fontFamily
             }
-          })),
-        }));
-        this.setList();
+          }))
+        }))
+        this.setList()
       },
       setOldList(type, value) {
-        this.oldList = this.oldList.map(item => ({
-          ...item,
-          items: item.items.map(r => ({
-            ...r,
-            content1: item.type == type ? value : r.content1,
-          })),
-        }));
-        this.setList();
+        // 保证是正确的顺序
+        let fenhao = this.oldList.find(item => item.type == 'fenhao')
+        let miji = this.oldList.find(item => item.type == 'mijiqixian')
+        let jinji = this.oldList.find(item => item.type == 'jinjichengdu')
+        this.oldList[0] = fenhao
+        this.oldList[1] = miji
+        this.oldList[2] = jinji
+        if (this.three.one && this.three.two && this.three.thr||!this.three.one && !this.three.two && !this.three.thr) {
+          //份号false  密级期限false  紧急程度false  都没有也不渲染
+          //份号true  密级期限true  紧急程度true   列表顺序恢复
+          this.oldList = this.oldList.map(item => ({
+            ...item,
+            items: item.items.map(r => ({
+              ...r,
+              content1: item.type == 'fenhao' ? this.three.one : (item.type == 'mijiqixian' ? this.three.two : (item.type == 'jinjichengdu' ? this.three.thr : r.content1))
+            }))
+          }))
+        } else if (this.three.one && this.three.two && !this.three.thr) {//份号true  密级期限true  紧急程度false  列表顺序恢复  替换密级期限
+          let val = this.three.two.length === 2 ? this.three.two.replace(/(.{1})/, '$1 ') : this.three.two
+          this.oldList = this.oldList.map(item => ({
+            ...item,
+            items: item.items.map(r => ({
+              ...r,
+              content1: item.type == 'fenhao' ? this.three.one : (item.type == 'mijiqixian' ? val : (item.type == 'jinjichengdu' ? this.three.thr : r.content1))
+            }))
+          }))
+        } else if (this.three.one && !this.three.two && this.three.thr) {//份号true  密级期限false  紧急程度true
+          let val = this.three.thr.length === 2 ? this.three.thr.replace(/(.{1})/, '$1 ') : this.three.thr
+          this.oldList[1] = jinji
+          this.oldList[2] = miji
+          this.oldList = this.oldList.map(item => ({
+            ...item,
+            items: item.items.map(r => ({
+              ...r,
+              content1: item.type == 'fenhao' ? this.three.one : (item.type == 'mijiqixian' ? this.three.two : (item.type == 'jinjichengdu' ? val : r.content1))
+            }))
+          }))
+        } else if (!this.three.one && !this.three.two && this.three.thr) {//份号false  密级期限false  紧急程度true
+          let val = this.three.thr.length === 2 ? this.three.thr.replace(/(.{1})/, '$1 ') : this.three.thr
+          this.oldList[0] = jinji
+          this.oldList[2] = fenhao
+          this.oldList = this.oldList.map(item => ({
+            ...item,
+            items: item.items.map(r => ({
+              ...r,
+              content1: item.type == 'fenhao' ? this.three.one : (item.type == 'mijiqixian' ? this.three.two : (item.type == 'jinjichengdu' ? val : r.content1))
+            }))
+          }))
+        } else if (this.three.one && !this.three.two && !this.three.thr) {//份号true  密级期限false  紧急程度false  列表顺序恢复
+          this.oldList = this.oldList.map(item => ({
+            ...item,
+            items: item.items.map(r => ({
+              ...r,
+              content1: item.type == 'fenhao' ? this.three.one : (item.type == 'mijiqixian' ? this.three.two : (item.type == 'jinjichengdu' ? this.three.thr : r.content1))
+            }))
+          }))
+        } else if (!this.three.one && this.three.two && this.three.thr||!this.three.one && this.three.two && !this.three.thr) {
+          //份号false  密级期限true  紧急程度true  业务上没这种情况
+          //份号false  密级期限true  紧急程度false 业务上没这种情况
+          this.oldList = this.oldList.map(item => ({
+            ...item,
+            items: item.items.map(r => ({
+              ...r,
+              content1: item.type == 'fenhao' ? '' : (item.type == 'mijiqixian' ? '' : (item.type == 'jinjichengdu' ? '' : r.content1))
+            }))
+          }))
+        }
+        this.setList()
       },
       oneBlur() {
-        this.three.one = this.three.one&&(Array(6).join('0') + this.three.one).slice(-6);
+        this.three.one = this.three.one && (Array(6).join('0') + this.three.one).slice(-6)
       },
       createPicture() {
         let dom = document.getElementById('content')
         let loadingInstance = Loading.service({
           text: '正在导出，请勿操作',
           background: 'rgba(0, 0, 0, 0.28)',
-          spinner: 'el-icon-loading',
-        });
+          spinner: 'el-icon-loading'
+        })
         html2canvas(dom, {
           allowTaint: true,
-          imageTimeout:1000000,
+          imageTimeout: 1000000
         }).then(canvas => {
           let imgData = canvas.toDataURL('image/jpeg')
           let img = new Image()
-          img.src = imgData;
-          let name = this.$route.query.path;
+          img.src = imgData
+          let name = this.$route.query.path
           //根据图片的尺寸设置pdf的规格，要在图片加载成功时执行，之所以要*0.5是因为比例问题
-          img.onload = function () {
+          img.onload = function() {
             //此处需要注意，pdf横置和竖置两个属性，需要根据宽高的比例来调整，不然会出现显示不完全的问题
             let doc = ''
             if (this.width > this.height) {
@@ -279,39 +338,29 @@
             }
             doc.addImage(imgData, 'jpeg', 0, 0, this.width * 0.175, this.height * 0.175)  //比例可根据需要调节
             //根据下载保存成不同的文件名
-            doc.save(name + '.pdf');
-            loadingInstance.close();
+            doc.save(name + '.pdf')
+            loadingInstance.close()
           }
-          // this.imgmap = canvas.toDataURL('image/png', 0.1)
-          // if (window.navigator.msSaveOrOpenBlob) {
-          //   var bstr = atob(this.imgmap.split(',')[1])
-          //   var n = bstr.length
-          //   var u8arr = new Uint8Array(n)
-          //   while (n--) {
-          //     u8arr[n] = bstr.charCodeAt(n)
-          //   }
-          //   var blob = new Blob([u8arr])
-          //   window.navigator.msSaveOrOpenBlob(blob, 'chart-download' + '.' + 'png')
-          // } else {
-          //   const a = document.createElement('a')
-          //   a.href = this.imgmap
-          //   a.setAttribute('download', this.$route.query.path + '.png')
-          //   loadingInstance.close();
-          //   a.click()
-          // }
         })
       },
       save() {
+        let list = [...this.list]
+        let fenhao = list.find(item => item.type == 'fenhao')
+        let miji = list.find(item => item.type == 'mijiqixian')
+        let jinji = list.find(item => item.type == 'jinjichengdu')
+        list[0] = fenhao
+        list[1] = miji
+        list[2] = jinji
         saveWord({
           ...this.sendObj,
-          type:this.output==1?'函':this.sendObj.type,
-          list: this.list.map((item) => ({
+          type: this.output == 1 ? '函' : this.sendObj.type,
+          list: listlist.map((item) => ({
             ...item,
             items: item.items.map(r => ({
               ...r,
-              content:r.content3,
-              content2:undefined,
-              content3:undefined,
+              content: r.content3,
+              content2: undefined,
+              content3: undefined
             }))
           }))
         }).then(res => {
@@ -320,51 +369,51 @@
         })
       },
       getDetail() {
-        getByWord({filepath: this.$route.query.path}).then(res => {
-          this.sendObj = res.word;
-          this.oldList = res.word.list || [];
+        getByWord({ filepath: this.$route.query.path }).then(res => {
+          this.sendObj = res.word
+          this.oldList = res.word.list || []
           this.errorList = res.word.wordMap
           this.setList()
         })
       },
       sure(index, valvue) {
-        this.replace.push({index, valvue})
+        this.replace.push({ index, valvue })
         this.setList()
       },
       setList() {
-        this.list = [];
-        this.isDisabled  += 1;
-        let index = 0;
-        let indexCopy = 0;
+        this.list = []
+        this.isDisabled += 1
+        let index = 0
+        let indexCopy = 0
         this.list = this.oldList.map((item) => {
           item.items = item.items.map(r => {
             let content2 = r.content1.replace(/---@([^@#]+)#---/gm, (a, b) => {
-              let replace = this.replace.find(n => n.index-1 == index)
+              let replace = this.replace.find(n => n.index - 1 == index)
               if (replace) {
                 index++
                 return replace.valvue
               }
               return `<span class="error" data-index="${++index}" data-val="${b}" style="background:#ffdbdd;border:1px solid #ff2b3f;border-top:0px dashed #fff;border-bottom:0px dashed #fff">${b}
 <span class="num" style="font-size:14px;line-height:14px;vertical-align:text-top;color:black;font-family:'仿宋'">${index}</span></span>`
-            });
+            })
             let content3 = r.content1.replace(/---@([^@#]+)#---/gm, (a, b) => {
-              let replace = this.replace.find(n => n.index-1 == indexCopy)
+              let replace = this.replace.find(n => n.index - 1 == indexCopy)
               if (replace) {
                 indexCopy++
                 return replace.valvue
               }
               return `---@${b}#---`
             })
-            return {...r, content2, content3}
+            return { ...r, content2, content3 }
           })
-          return {...item}
+          return { ...item }
         })
         this.$nextTick(() => {
           this.setItemTips()
         })
       },
       setItemTips() {
-        let s = window.document.getElementsByClassName('error');
+        let s = window.document.getElementsByClassName('error')
         this.mapPOP = []
         this.mapSX = []
         if (s.length === 0) {
@@ -442,6 +491,7 @@
       width: 100%;
       z-index: 100;
     }
+
     .content {
       /*overflow-y: scroll;*/
       /*overflow-x: hidden;*/
@@ -449,50 +499,59 @@
       margin-top: 53px;
       display: flex;
       position: relative;
+
       .left {
         width: 765px;
         position: relative;
         border: 1px solid gainsboro;
         padding: 75px 75px 20px 75px;
+
         .three {
           position: absolute;
           top: 75px;
           font-size: 22px;
           font-family: '黑体';
+
           input {
             height: 15px;
             font-size: 12px;
             border: none;
           }
         }
+
         .map-box {
           position: absolute;
           overflow: auto;
           height: 1px;
         }
+
         .btn-box {
           position: absolute;
           width: 25px;
           height: 25px;
           border: 1px solid gainsboro;
         }
+
         .top-left {
           top: 50px;
           left: 45px;
           border-left: none;
           border-top: none;
         }
+
         .top-right {
           top: 50px;
           right: 45px;
           border-right: none;
           border-top: none;
         }
+
         .bottom-left {
           top: 700px;
           border-bottom: none;
           border-left: none;
         }
+
         .bottom-right {
           top: 700px;
           right: 20px;
@@ -500,9 +559,11 @@
           border-right: none;
         }
       }
+
       .middle {
         width: 300px;
         position: relative;
+
         .cuobiezi {
           background: #ffdbdd;
           width: 250px;
@@ -511,21 +572,26 @@
           line-height: 1.4;
           font-size: 12px;
         }
-        input[type="text"]:focus{
-            outline: none;
+
+        input[type="text"]:focus {
+          outline: none;
         }
+
         .ciku {
           cursor: pointer;
           color: black;
+
           &:hover {
             color: #66b1ff;
           }
         }
+
         .tips {
           bottom: -6px;
           margin-right: 3px;
           border-top-color: #ebeef5;
           border-bottom-width: 0;
+
           &:after {
             bottom: 1px;
             margin-left: -6px;
@@ -542,6 +608,7 @@
           }
         }
       }
+
       .right {
         min-width: 100px;
         position: fixed;
@@ -550,14 +617,17 @@
         right: 15px;
       }
     }
+
     .main {
       .content {
         width: 1000px;
       }
+
       .pizhu {
         float: right;
         width: 200px;
       }
+
       .btn {
         float: right;
         width: 100px;
