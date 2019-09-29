@@ -171,8 +171,8 @@
         })
       },
       getList() {
-        wordGet({ Scope: -1 ,Status:1}).then(res => {
-          get({ ...this.paging, Scope: -1 }).then(resp => {
+        wordGet({ Scope: -1 ,Status:1,Uid:this.userInfo.id}).then(res => {
+          get({ ...this.paging, Scope: -1 ,Uid:this.userInfo.id}).then(resp => {
             this.paging.total = resp.Recordsfiltered
             this.list = resp.Data.map(item => {
               let data = res.Data.filter(r => r.Cateid == item.Id)

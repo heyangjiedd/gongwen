@@ -293,13 +293,13 @@
                 })
             },
             getWords() {
-                wordGet({...this.listQuery, ...this.paging, Scope: -1, Status: 1}).then(res => {
+                wordGet({...this.listQuery, ...this.paging, Scope: -1, Status: 1,Uid:this.userInfo.id}).then(res => {
                     this.listWords = res.Data.map(item => ({...item, NameCopy: '', CoorectNameCopy: ''}))
                     this.paging.total = res.Recordsfiltered
                 })
             },
             getList() {
-                get({Scope: -1}).then(res => {
+                get({Scope: -1,Uid:this.userInfo.id}).then(res => {
                     this.list = res.Data.map(item => {
                         return {...item, Id: '' + item.Id}
                     })
