@@ -141,6 +141,11 @@
                         <el-tag type="success" v-else>{{row.Catename}}/私有词库</el-tag>
                     </template>
                 </el-table-column>
+                <el-table-column label="保存时间" prop="time" min-width="40">
+                    <template slot-scope="{row}">
+                        {{row.Updatetime&&row.Updatetime.time | parseTime('{y}-{m}-{d} {h}:{i}')}}
+                    </template>
+                </el-table-column>
             </el-table>
             <pagination :background="false" v-show="paging.total>0" :total="paging.total" :page.sync="paging.start"
                         :pageSizes="[5, 10, 20, 50]" :limit.sync="paging.pagesize" @pagination="getWords"/>
