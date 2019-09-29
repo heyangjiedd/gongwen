@@ -90,7 +90,7 @@
         })
       },
       getList() {
-        get({ ...this.listQuery,...this.paging,Status:-1,Scope:-1}).then(res => {
+        get({ ...this.listQuery,...this.paging,Status:-1,Scope:-1,Uid:this.userInfo.id}).then(res => {
           this.list = res.Data;
           this.paging.total = res.Recordsfiltered;
         })

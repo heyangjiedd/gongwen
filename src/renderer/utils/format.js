@@ -6,7 +6,8 @@ export default {
     data() {
         return {
             baseUrl: baseUrl,
-            base: base
+            base: base,
+            userInfo:JSON.parse(localStorage.getItem('user'))
         }
     },
     methods: {
