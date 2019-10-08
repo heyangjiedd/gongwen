@@ -16,20 +16,20 @@
           :http-request="request"
           accept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           action="">
-          <el-button size="small" type="danger" >上传公文</el-button>
+          <el-button size="small" type="danger">上传公文</el-button>
         </el-upload>
         <!--<el-select-->
-          <!--v-model="Cateid"-->
-          <!--filterable-->
-          <!--clearable-->
-          <!--size="small"-->
-          <!--style="width:200px;float: right;"-->
-          <!--placeholder="上传前请先选择公文模板"-->
+        <!--v-model="Cateid"-->
+        <!--filterable-->
+        <!--clearable-->
+        <!--size="small"-->
+        <!--style="width:200px;float: right;"-->
+        <!--placeholder="上传前请先选择公文模板"-->
         <!--&gt;-->
-          <!--<el-option v-for="item in categoryDoc" :key="item.id" :value="item.id" :label="item.docTypeName"/>-->
+        <!--<el-option v-for="item in categoryDoc" :key="item.id" :value="item.id" :label="item.docTypeName"/>-->
         <!--</el-select>-->
       </div>
-      <div class="list-item" v-if="current.Createtime" @click="handleEdit(current)">
+      <div class="list-item" v-if="current.Createtime" @click="handleDetail(current)">
         <span>{{current.Name}}</span>
         <span style="margin-left: 10px">{{current.Createtime && current.Createtime.time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
       </div>
@@ -63,9 +63,9 @@
         row-class-name="table-item"
         cell-class-name="table-cell-item"
         style="width: 100%">
-        <el-table-column label="操作时间" prop="time" width="150">
+        <el-table-column label="操作时间" prop="Updatetime" width="150">
           <template slot-scope="{row}">
-            {{row.Createtime&&row.Createtime.time | parseTime('{y}-{m}-{d} {h}:{i}')}}
+            {{row.Updatetime&&row.Updatetime.time | parseTime('{y}-{m}-{d} {h}:{i}')}}
           </template>
         </el-table-column>
         <el-table-column label="名称" prop="Name" min-width="80"></el-table-column>
@@ -99,7 +99,7 @@
   import {upload} from '@/api/fileupload'
   import {get as getTemplate} from '@/api/doctemplate'
   import Pagination from '@/components/Pagination'
-  import {Loading,MessageBox} from 'element-ui'
+  import {Loading, MessageBox} from 'element-ui'
 
   export default {
     components: {Pagination},
@@ -110,7 +110,7 @@
         listQuery: {},
         fileList: [],
         list: [],
-        current:{},
+        current: {},
         paging: {
           total: 0,
           start: 1,
@@ -126,21 +126,26 @@
 
     },
     methods: {
-      request(data){
+      request(data) {
         var form = new FormData();
         console.log(this.Cateid)
         form.append("Cateid", this.Cateid);
         form.append("files", data.file);
-        upload(form).then(res =>{
+        upload(form).then(res => {
           this.$message.success('操作成功')
-          this.handleEdit({Path:res});
+          this.handleEdit(res);
         })
       },
       handleDetail(scope) {
-        this.$router.push({path: '/home/detail', query: {id: scope.Id, path: scope.Path}})
+        this.$router.push({path: '/home/detail', query: {id: scope.Id, path: scope.Path, ext: scope.Ext}})
       },
       handleEdit(scope) {
-        this.$router.push({path: '/home/edit', query: {id: scope.Id, path: scope.Path}})
+        this.$router.push({
+          path: '/home/edit', query: {
+            id: scope.Id || scope.id,
+            path: (scope.Path || scope.path) + (scope.Ext || scope.ext)
+          }
+        })
       },
       handleRemove(data) {
         remove(data.Id).then(() => {
@@ -200,9 +205,11 @@
       },
       getList() {
         get({...this.listQuery, ...this.paging}).then(res => {
-          !this.current.Createtime&&(this.current = res.Data[0]);
           this.list = res.Data
           this.paging.total = res.Recordsfiltered
+        });
+        get({start: 1, pagesize: 1}).then(res => {
+          this.current = res.Data[0]
         })
       },
       handleFilter() {
@@ -216,6 +223,7 @@
   .el-icon-search {
     cursor: pointer;
   }
+
   /deep/ .table-item {
     cursor: pointer;
     &:hover {

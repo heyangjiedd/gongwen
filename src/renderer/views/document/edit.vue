@@ -54,10 +54,20 @@
       <el-select
         v-model="output"
         size="small"
+        @change="format"
         placeholder="转为函格式"
         style="width: 140px"
       >
         <el-option v-for="item in outputs" :key="item.value" :value="item.value" :label="item.name"/>
+      </el-select>
+      <el-select
+        v-model="type0"
+        size="small"
+        @change="format"
+        placeholder="公文格式"
+        style="width: 100px"
+      >
+        <el-option v-for="item in type0s" :key="item.value" :value="item.value" :label="item.name"/>
       </el-select>
       <el-button style="margin-bottom: 5px" size="small" type="danger" @click.stop="createPicture">导出批注版
       </el-button>
@@ -70,7 +80,7 @@
         <div class="btn-box top-left"></div>
         <div class="btn-box top-right"></div>
         <!--                错别字直线-->
-        <div v-if="visiblePreview" v-for="(item,index) in mapPOP" :key="index" class="map-box"
+        <div v-if="visiblePreview" v-for="(item,index) in mapPOP" :key="_uuid()" class="map-box"
              :style="{
                     borderRight:'0px dashed #fff',
                     borderTop: '0px dashed #fff',
@@ -82,12 +92,12 @@
         </div>
         <!--                文本段落-->
         <div v-for="(item,index) in list" :key="_uuid()">
-          <Box :item="item" :list="list"></Box>
+          <Box :item="item" :list="list" :output="output" :type0="type0"></Box>
         </div>
       </div>
       <div class="middle">
         <!--                连接折线-->
-        <div v-if="visiblePreview" v-for="(item,index) in mapSX" :key="'sx'+ index"
+        <div v-if="visiblePreview" v-for="(item,index) in mapSX" :key="_uuid()"
              :class="item.is ? 'sx1' : 'sx2'" :style="{
                     borderRight:'0px dashed #fff',
                     borderTop: `1px dashed ${item.is?'#b4373b':'#fff'}`,
@@ -102,7 +112,7 @@
                     position:'absolute'}">
         </div>
         <!--                错别字修正框-->
-        <div v-if="visiblePreview" v-for="(item,index) in mapPOP" ref="pop" :key="'tip'+index" :style="{
+        <div v-if="visiblePreview" v-for="(item,index) in mapPOP" ref="pop" :key="_uuid()" :style="{
                 left:'40px',
                 position:'relative',
                 marginBottom:'5px',
@@ -155,11 +165,12 @@
   import Box from './box'
   import html2canvas from 'html2canvas'
   import jsPDF from 'jspdf'
-  import { Loading } from 'element-ui'
+  import {Loading} from 'element-ui'
+  import { parseTime } from '@/utils'
 
   export default {
     name: 'TinymceDemo',
-    components: { Tooltip, Box },
+    components: {Tooltip, Box},
     data() {
       return {
         color: ['#00FFFF', '#FFD700', '#0000FF', '#A52A2A', '#5F9EA0', '#D2691E', '#DC143C', '#B8860B', '#006400'],
@@ -186,8 +197,10 @@
         threefiv: ['年', '月'],
         fontFamilys: ['方正仿宋简体', '方正仿宋_GBK', '仿宋_GB2312'],
         fontFamily: '',
-        outputs: [{ name: '文件式公文格式', value: 2 }, { name: '信函式公文格式', value: 1 }],
+        outputs: [{name: '文件式公文格式', value: 2}, {name: '信函式公文格式', value: 1}],
         output: 2,
+        type0: '',
+        type0s:[{name: '党委', value: 2}, {name: '政府', value: 1}],
         isDisabled: 0
       }
     },
@@ -215,7 +228,7 @@
       }
     },
     methods: {
-      threeAfter(){
+      threeAfter() {
         if (this.three.fou) {
           if (this.three.fiv && this.three.six) {
             this.three.two = this.three.fou + '★' + this.three.fiv + this.three.six
@@ -226,6 +239,9 @@
           this.three.two = ''
         }
       },
+      format(){
+        this.setList();
+      },
       setFont() {
         this.oldList = this.oldList.map(item => ({
           ...item,
@@ -233,7 +249,7 @@
             ...r,
             wordStyle: {
               ...r.wordStyle,
-              fontFamily: (item.type == 'zhengwen1' || item.type == 'zhengwen2' || item.type == 'banji2') && this.fontFamily ? this.fontFamily : r.wordStyle.fontFamily
+              fontFamily: this.sendObj.styleChangeItems.includes(item.type)&& this.fontFamily ? this.fontFamily : r.wordStyle.fontFamily
             }
           }))
         }))
@@ -247,18 +263,24 @@
         this.oldList[0] = fenhao
         this.oldList[1] = miji
         this.oldList[2] = jinji
-        if (this.three.one && this.three.two && this.three.thr||!this.three.one && !this.three.two && !this.three.thr) {
+        if (this.three.one && this.three.two && this.three.thr || !this.three.one && !this.three.two && !this.three.thr) {
           //份号false  密级期限false  紧急程度false  都没有也不渲染
           //份号true  密级期限true  紧急程度true   列表顺序恢复
+          let two = this.three.two;
+          let thr = this.three.thr;
+          if(this.three.two.length === 2&&this.three.thr.length === 2){
+            two = this.three.two.replace(/(.{1})/, '$1&nbsp&nbsp&nbsp&nbsp')
+            thr = this.three.thr.replace(/(.{1})/, '$1&nbsp&nbsp&nbsp&nbsp')
+          }
           this.oldList = this.oldList.map(item => ({
             ...item,
             items: item.items.map(r => ({
               ...r,
-              content1: item.type == 'fenhao' ? this.three.one : (item.type == 'mijiqixian' ? this.three.two : (item.type == 'jinjichengdu' ? this.three.thr : r.content1))
+              content1: item.type == 'fenhao' ? this.three.one : (item.type == 'mijiqixian' ? two : (item.type == 'jinjichengdu' ? thr : r.content1))
             }))
           }))
         } else if (this.three.one && this.three.two && !this.three.thr) {//份号true  密级期限true  紧急程度false  列表顺序恢复  替换密级期限
-          let val = this.three.two.length === 2 ? this.three.two.replace(/(.{1})/, '$1 ') : this.three.two
+          let val = this.three.two.length === 2 ? this.three.two.replace(/(.{1})/, '$1&nbsp&nbsp&nbsp&nbsp') : this.three.two
           this.oldList = this.oldList.map(item => ({
             ...item,
             items: item.items.map(r => ({
@@ -267,7 +289,7 @@
             }))
           }))
         } else if (this.three.one && !this.three.two && this.three.thr) {//份号true  密级期限false  紧急程度true
-          let val = this.three.thr.length === 2 ? this.three.thr.replace(/(.{1})/, '$1 ') : this.three.thr
+          let val = this.three.thr.length === 2 ? this.three.thr.replace(/(.{1})/, '$1&nbsp&nbsp&nbsp&nbsp') : this.three.thr
           this.oldList[1] = jinji
           this.oldList[2] = miji
           this.oldList = this.oldList.map(item => ({
@@ -278,7 +300,7 @@
             }))
           }))
         } else if (!this.three.one && !this.three.two && this.three.thr) {//份号false  密级期限false  紧急程度true
-          let val = this.three.thr.length === 2 ? this.three.thr.replace(/(.{1})/, '$1 ') : this.three.thr
+          let val = this.three.thr.length === 2 ? this.three.thr.replace(/(.{1})/, '$1&nbsp&nbsp&nbsp&nbsp') : this.three.thr
           this.oldList[0] = jinji
           this.oldList[2] = fenhao
           this.oldList = this.oldList.map(item => ({
@@ -296,7 +318,7 @@
               content1: item.type == 'fenhao' ? this.three.one : (item.type == 'mijiqixian' ? this.three.two : (item.type == 'jinjichengdu' ? this.three.thr : r.content1))
             }))
           }))
-        } else if (!this.three.one && this.three.two && this.three.thr||!this.three.one && this.three.two && !this.three.thr) {
+        } else if (!this.three.one && this.three.two && this.three.thr || !this.three.one && this.three.two && !this.three.thr) {
           //份号false  密级期限true  紧急程度true  业务上没这种情况
           //份号false  密级期限true  紧急程度false 业务上没这种情况
           this.oldList = this.oldList.map(item => ({
@@ -328,7 +350,7 @@
           img.src = imgData
           let name = this.$route.query.path
           //根据图片的尺寸设置pdf的规格，要在图片加载成功时执行，之所以要*0.5是因为比例问题
-          img.onload = function() {
+          img.onload = function () {
             //此处需要注意，pdf横置和竖置两个属性，需要根据宽高的比例来调整，不然会出现显示不完全的问题
             let doc = ''
             if (this.width > this.height) {
@@ -338,7 +360,7 @@
             }
             doc.addImage(imgData, 'jpeg', 0, 0, this.width * 0.175, this.height * 0.175)  //比例可根据需要调节
             //根据下载保存成不同的文件名
-            doc.save(name + '.pdf')
+            doc.save('（批注版）_'+parseTime(new Date(),'{y}-{m}-{d}')+'_' +name.split('/').reverse()[0] + '.pdf')
             loadingInstance.close()
           }
         })
@@ -348,17 +370,20 @@
         let fenhao = list.find(item => item.type == 'fenhao')
         let miji = list.find(item => item.type == 'mijiqixian')
         let jinji = list.find(item => item.type == 'jinjichengdu')
-        list[0] = fenhao
-        list[1] = miji
-        list[2] = jinji
+        if(fenhao&&miji&&jinji){
+          list[0] = fenhao;
+          list[1] = miji;
+          list[2] = jinji;
+        }
         saveWord({
           ...this.sendObj,
           type: this.output == 1 ? '函' : this.sendObj.type,
-          list: listlist.map((item) => ({
+          type0:this.type0,
+          list: list.map((item) => ({
             ...item,
-            items: item.items.map(r => ({
+            items: item.items&&item.items.map(r => ({
               ...r,
-              content: r.content3,
+              content0: r.content3,
               content2: undefined,
               content3: undefined
             }))
@@ -369,15 +394,20 @@
         })
       },
       getDetail() {
-        getByWord({ filepath: this.$route.query.path }).then(res => {
+        if (!this.$route.query.path) {
+          this.$router.go(-1)
+          return
+        }
+        getByWord({filepath: this.$route.query.path,id:this.$route.query.id}).then(res => {
           this.sendObj = res.word
+          this.type0 = res.word.type0
           this.oldList = res.word.list || []
           this.errorList = res.word.wordMap
           this.setList()
         })
       },
       sure(index, valvue) {
-        this.replace.push({ index, valvue })
+        this.replace.push({index, valvue})
         this.setList()
       },
       setList() {
@@ -402,11 +432,11 @@
                 indexCopy++
                 return replace.valvue
               }
-              return `---@${b}#---`
+              return `${b}`
             })
-            return { ...r, content2, content3 }
+            return {...r, content2, content3}
           })
-          return { ...item }
+          return {...item}
         })
         this.$nextTick(() => {
           this.setItemTips()
@@ -501,11 +531,10 @@
       position: relative;
 
       .left {
-        width: 765px;
+        width: 772px;
         position: relative;
         border: 1px solid gainsboro;
-        padding: 75px 75px 20px 75px;
-
+        padding: 75px 75px 70px 75px;
         .three {
           position: absolute;
           top: 75px;
