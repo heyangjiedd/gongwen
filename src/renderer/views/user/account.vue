@@ -47,7 +47,7 @@
         }
       };
       let validatePass1 = (rule, value, callback) => {
-        if (this.form.oldpassword !== this.form.newpassword) {
+        if (this.form.confirmpassword !== this.form.newpassword) {
           callback(new Error('两次输入密码不一致'));
         } else {
           callback();

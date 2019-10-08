@@ -28,21 +28,15 @@
       <el-table-column label="序号" type="index" align="center" show-overflow-tooltip width="50px"/>
       <el-table-column label="错词" prop="Name" min-width="60"/>
       <el-table-column label="正确词" prop="CoorectName" min-width="60"/>
-      <el-table-column label="标记账号" prop="Uname" min-width="60"/>
-      <el-table-column label="所属单位" prop="Cname" min-width="60"/>
-      <el-table-column label="所属类目" prop="Catename" min-width="60"/>
-      <el-table-column label="所属词库" prop="Scope" min-width="60">
-        <template slot-scope="{row}">
-          <el-tag  v-if="row.Scope===1">公共词库</el-tag>
-          <el-tag type="warning" v-else>私有词库</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="删除时间" align="Updatetime" width="150">
+      <el-table-column label="所属类目" show-overflow-tooltip prop="Catename" min-width="60"/>
+      <el-table-column label="所属账号" show-overflow-tooltip prop="Uname" min-width="80"/>
+      <el-table-column label="所属单位" show-overflow-tooltip prop="Cname" min-width="80"/>
+      <el-table-column label="删除时间" show-overflow-tooltip align="Updatetime" width="150">
         <template slot-scope="{row}">
           {{row.Updatetime&&row.Updatetime.time | parseTime}}
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="200">
+      <el-table-column label="操作" show-overflow-tooltip  align="center" width="200">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleDetail(row)">
             恢复
