@@ -4,7 +4,8 @@
     <breadcrumb></breadcrumb>
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
-        {{name}}
+        <span>{{ name }}</span><br/>
+        <span>{{userInfo.cname||''}}</span>
         <i class="el-icon-caret-bottom"></i>
       </div>
       <el-dropdown-menu class="user-dropdown" slot="dropdown">
@@ -105,6 +106,9 @@ export default {
     .avatar-wrapper {
       cursor: pointer;
       /*margin-top: 5px;*/
+      >span{
+        font-size: 14px;
+      }
       position: relative;
       .user-avatar {
         width: 40px;
