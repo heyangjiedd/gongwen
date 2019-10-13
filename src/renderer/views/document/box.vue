@@ -14,7 +14,7 @@
           </div>
           <div class="pagetag"
                :style="{fontFamily:r.wordStyle.fontFamily,color:r.wordStyle.color,fontSize:r.wordStyle.fontSize,textAlign:Number(r.content)%2?'right':'left'}"
-          >—{{r.content}}—
+          >—&nbsp{{r.content}}&nbsp—
           </div>
           <div v-if="showAfter!=r.content" class="pageafter"></div>
           <div v-if="showAfter!=r.content" class="pagetagafter">
@@ -34,20 +34,22 @@
                  minHeight: (item.type == 'fenhao'||item.type == 'mijiqixian'|| item.type == 'jinjichengdu')&&output!=1||(item.type=='banji2'&&!r.content2&&output!=1)? r.wordStyle.lineHeight:'',
                  borderBottom: item.type == 'banji2'&&r.content2!=''&&output!=1? '1px solid':r.wordStyle.borderTop,
                  borderTop:item.type == 'banji2'&&r.content2!=''&&output!=1? '1px solid':r.wordStyle.borderTop,
+                 borderLeft:item.type == 'banji2'&&r.content2!=''&&output!=1? '1px solid #fff':r.wordStyle.borderLeft,
+                 borderRight:item.type == 'banji2'&&r.content2!=''&&output!=1? '1px solid #fff':r.wordStyle.borderRight,
                  }"
            ref="items">
         <div v-if="r.type=='pagebreak'">
-          <div v-if="r.content == '1'&&output==1">
-            <div style="height: 0.7pt;background: red;margin-bottom: 3px"></div>
-            <div style="height: 1.4pt;background: red;"></div>
-          </div>
           <div class="pagetagbefore">
             <div class="pagetagbefore-left"></div>
             <div class="pagetagbefore-right"></div>
           </div>
-          <div class="pagetag"
+          <div v-if="r.content == '1'&&output==1" class="pagetag" style="padding-top: 40px">
+            <div style="height: 0.7pt;background: red;margin-bottom: 3px"></div>
+            <div style="height: 1.4pt;background: red;"></div>
+          </div>
+          <div v-else class="pagetag"
                :style="{fontFamily:r.wordStyle.fontFamily,color:r.wordStyle.color,fontSize:r.wordStyle.fontSize,textAlign:Number(r.content)%2?'right':'left'}"
-          >—{{r.content}}—
+          >—&nbsp{{r.content}}&nbsp—
           </div>
           <div v-if="showAfter!=r.content" class="pageafter"></div>
           <div v-if="showAfter!=r.content" class="pagetagafter">
@@ -56,24 +58,35 @@
           </div>
         </div>
         <div v-else-if="item.type=='banji2'">
-          <div v-if="output!=1" :style="{padding: r.content2.split(' ')[0].length>20? '0' :'0 22px'}">
-            <span v-html="r.content2.split(' ').splice(0,r.content2.split(' ').length-1).join(' ')"></span>
+          <div v-if="output!=1" :style="{padding:'0 16pt'}">
+            <span v-html="r.content2.split(' ').splice(0,r.content2.split(' ').length-1).join(' ')" :style="{letterSpacing:-(r.content0.split(' ')[0].length - 16)/2+'px'}">></span>
             <span v-html="r.content2.split(' ')[r.content2.split(' ').length-1]" style="float: right;"></span>
           </div>
         </div>
-        <div v-else-if="item.type=='fawenjiguan'||item.type=='fenhao'||item.type=='mijiqixian'||item.type=='jinjichengdu'">
-          <div v-if="output!=1"  v-html="r.content2"></div>
+        <div v-else-if="item.type=='banji1'">
+          <div v-if="output!=1">
+            <div v-html="r.content2"></div>
+          </div>
         </div>
-        <div v-else-if="item.type=='biaoti'" :style="{marginTop: output==1?'96pt':''}">
+        <div v-else-if="item.type=='fenhao'||item.type=='mijiqixian'||item.type=='jinjichengdu'">
+          <div v-if="output==1" v-html="r.content2" :style="{position: 'relative',top:outputdisabled?'-32pt':'-64pt'}"></div>
+          <div v-else v-html="r.content2"></div>
+        </div>
+        <div v-else-if="item.type=='fawenjiguan'">
+          <div v-if="output==1"  v-html="r.content2" style="text-align: right"></div>
+          <div v-else v-html="r.content2"></div>
+        </div>
+        <div v-else-if="item.type=='biaoti'" :style="{marginTop: output==1&&index<=1?'96pt':''}">
           <div v-if="item.subtype=='multi'">
             <div v-if="index == 0" :style="{
             position: 'relative',
             float:'right',
+            transform: 'scaleX(0.6) translateX(43px)',
             top:((item.items.length-1)/2 - 1/2)*r.wordStyle.ifontSize+'pt',
             }">
               <div v-html="r.content2"></div>
             </div>
-            <div v-else>
+            <div v-else >
               <div v-html="r.content2"></div>
             </div>
           </div>
@@ -103,17 +116,17 @@
           <span :style="{...r.wordStyle,width:'613px',display:'inline-block',background: 'red',height: '1.4pt',top: '-8px',position: 'relative'}"></span>
         </div>
         <div v-if="r.type=='pagebreak'">
-          <div v-if="r.content == '1'&&output==1">
-            <div style="height: 0.7pt;background: red;margin-bottom: 3px"></div>
-            <div style="height: 1.4pt;background: red;"></div>
-          </div>
           <div class="pagetagbefore">
             <div class="pagetagbefore-left"></div>
             <div class="pagetagbefore-right"></div>
           </div>
-          <div class="pagetag"
+          <div v-if="r.content == '1'&&output==1" class="pagetag" style="padding-top: 40px">
+            <div style="height: 0.7pt;background: red;margin-bottom: 3px"></div>
+            <div style="height: 1.4pt;background: red;"></div>
+          </div>
+          <div v-else class="pagetag"
                :style="{fontFamily:r.wordStyle.fontFamily,color:r.wordStyle.color,fontSize:r.wordStyle.fontSize,textAlign:Number(r.content)%2?'right':'left'}"
-          >—{{r.content}}—
+          >—&nbsp{{r.content}}&nbsp—
           </div>
           <div v-if="showAfter!=r.content" class="pageafter"></div>
           <div v-if="showAfter!=r.content" class="pagetagafter">
@@ -141,10 +154,13 @@
         default: () => []
       },
       output: {
-        type: Number,
+        type: [Number,String],
       },
       type0:{
         type: [Number,String],
+      },
+      outputdisabled:{
+        type: Boolean,
       }
     },
     data() {
@@ -172,14 +188,14 @@
     mounted() {
       this.$nextTick(() => {
         if (this.item.type == 'biaoti'||this.item.type == 'biaoti1') {
-          this.$refs.items.forEach(r => {
+          this.$refs.items.forEach((r,index) => {
             let scrollWidth = r.scrollWidth, offsetWidth = r.offsetWidth,
               translateX = (scrollWidth - offsetWidth) / 2;
             if (scrollWidth <= offsetWidth) return
             if (this.item.subtype=='multi') {
               scrollWidth = r.scrollWidth;
-              offsetWidth = r.offsetWidth - 150;
-              translateX = (scrollWidth - offsetWidth) / 2+150;
+              offsetWidth = r.offsetWidth - 100;
+              translateX = (scrollWidth - offsetWidth) / 2 * r.offsetWidth/ offsetWidth;
             }
             let b = offsetWidth / scrollWidth;
             r.style.transform = `scaleX(${b}) translateX(-${translateX}px)`
@@ -274,14 +290,14 @@
 
       .pagetagbefore-left {
         left: -25px;
-        border-bottom: none;
-        border-left: none;
+        border-bottom: 1px solid #fff;
+        border-left: 1px solid #fff;
       }
 
       .pagetagbefore-right {
         right: -25px;
-        border-bottom: none;
-        border-right: none;
+        border-bottom: 1px solid #fff;
+        border-right: 1px solid #fff;
       }
     }
     .pagetagafter {
@@ -297,20 +313,19 @@
 
       .pagetagbefore-left-bottom {
         left: -25px;
-        border-top: none;
-        border-left: none;
+        border-top: 1px solid #fff;
+        border-left: 1px solid #fff;
       }
 
       .pagetagbefore-right-bottom {
         right: -25px;
-        border-top: none;
-        border-right: none;
+        border-top: 1px solid #fff;
+        border-right: 1px solid #fff;
       }
     }
     .pagetag {
-      margin-right: -25px;
-      margin-left: -25px;
-      padding: 0 22px;
+      margin-right: 16pt;
+      margin-left:  16pt;
       text-align: right;
       margin-top: 60px;
       margin-bottom: 10px;
@@ -320,7 +335,7 @@
       right: 0;
       left: 0;
       background: #e6e6e6;
-      height: 20px
+      height: 15px
     }
 
     .level1 {

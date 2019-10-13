@@ -18,6 +18,7 @@
         placeholder="份号"
         @blur="oneBlur"
         :maxlength="6"
+        ref="threeOne"
         size="small"
         clearable
         v-model="three.one">
@@ -54,8 +55,9 @@
       <el-select
         v-model="output"
         size="small"
-        @change="format"
+        @change="formatHan"
         placeholder="转为函格式"
+        :disabled="outputdisabled"
         style="width: 140px"
       >
         <el-option v-for="item in outputs" :key="item.value" :value="item.value" :label="item.name"/>
@@ -71,7 +73,7 @@
       </el-select>
       <el-button style="margin-bottom: 5px" size="small" type="danger" @click.stop="createPicture">导出批注版
       </el-button>
-      <el-button style="width: 92px;text-align: center" size="small" :disabled="isDisabled <= 1" type="danger"
+      <el-button style="width: 92px;text-align: center" size="small" type="danger"
                  @click.stop="save"> {{'保 存 公 文'}}
       </el-button>
     </div>
@@ -92,7 +94,7 @@
         </div>
         <!--                文本段落-->
         <div v-for="(item,index) in list" :key="_uuid()">
-          <Box :item="item" :list="list" :output="output" :type0="type0"></Box>
+          <Box :item="item" :list="list" :output="output" :type0="type0" :outputdisabled="outputdisabled"></Box>
         </div>
       </div>
       <div class="middle">
@@ -112,7 +114,7 @@
                     position:'absolute'}">
         </div>
         <!--                错别字修正框-->
-        <div v-if="visiblePreview" v-for="(item,index) in mapPOP" ref="pop" :key="_uuid()" :style="{
+        <div v-if="visiblePreview" v-for="(item,index) in mapPOP" ref="pop" :key="'mapPOP'+index" :style="{
                 left:'40px',
                 position:'relative',
                 marginBottom:'5px',
@@ -132,21 +134,13 @@
               <span @click="sure(item.index,item.val)" style="cursor: pointer;margin-right: 8px">[<span
                 style="font-size: 12px">忽略</span>]
               </span>
-              <span @click="sure(item.index,item.value)" style="cursor:pointer ">[<span
+              <span @click="()=>item.value&&sure(item.index,item.value)" :style="{cursor:!item.value?'not-allowed':'pointer',color:!item.value?'#9b9b9b':''}">[<span
                 style="font-size: 12px">确定</span>]
               </span>
             </div>
           </div>
         </div>
       </div>
-      <!--<div class="right" id="right">-->
-      <!--<el-button style="margin-bottom: 5px" size="small" type="danger" @click.stop="createPicture">导出批注版-->
-      <!--</el-button>-->
-      <!--<br/>-->
-      <!--<el-button style="width: 92px;text-align: center" size="small" type="danger"-->
-      <!--@click.stop="save"> {{output === 1 ?'保 存 公 文':'保 存 函'}}-->
-      <!--</el-button>-->
-      <!--</div>-->
     </div>
   </div>
 </template>
@@ -198,7 +192,8 @@
         fontFamilys: ['方正仿宋简体', '方正仿宋_GBK', '仿宋_GB2312'],
         fontFamily: '',
         outputs: [{name: '文件式公文格式', value: 2}, {name: '信函式公文格式', value: 1}],
-        output: 2,
+        output: '',
+        outputdisabled: false,
         type0: '',
         type0s:[{name: '党委', value: 2}, {name: '政府', value: 1}],
         isDisabled: 0
@@ -209,6 +204,12 @@
     },
     watch: {
       'three.fou'() {
+        if(!this.three.one){
+          this.$message.error('涉密文件，请选择份号');
+          this.$nextTick(()=>{
+            this.$refs.threeOne.focus();
+          })
+        }
         this.threeAfter();
       },
       'three.fiv'() {
@@ -218,13 +219,13 @@
         this.threeAfter();
       },
       'three.one'() {
-        this.setOldList('fenhao', this.three.one)
+        this.setOldList()
       },
       'three.two'() {
-        this.setOldList('mijiqixian', this.three.two)
+        this.setOldList()
       },
       'three.thr'() {
-        this.setOldList('jinjichengdu', this.three.thr)
+        this.setOldList()
       }
     },
     methods: {
@@ -238,6 +239,31 @@
         } else {
           this.three.two = ''
         }
+      },
+      formatHan(){
+        // 保证是正确的顺序
+        let oldList = [...this.oldList]
+        let fenhao = oldList.find(item => item.type == 'fenhao')
+        let miji = oldList.find(item => item.type == 'mijiqixian')
+        let jinji = oldList.find(item => item.type == 'jinjichengdu')
+        let fawen = oldList.find(item => item.type == 'fawenjiguan')
+        let biaoti = oldList.find(item => item.type == 'biaoti')
+        oldList = oldList.slice(Number(!!fenhao)+Number(!!miji)+Number(!!jinji)+Number(!!fawen)+Number(!!biaoti));
+        if(this.output == 1){//信函，密级这些在标题和发文机关下面
+          jinji&&oldList.unshift(jinji);
+          miji&&oldList.unshift(miji);
+          fenhao&&oldList.unshift(fenhao);
+          fawen&&oldList.unshift(fawen);
+          biaoti&&oldList.unshift(biaoti);
+        }else{
+          fawen&&oldList.unshift(fawen);
+          biaoti&&oldList.unshift(biaoti);
+          jinji&&oldList.unshift(jinji);
+          miji&&oldList.unshift(miji);
+          fenhao&&oldList.unshift(fenhao);
+        }
+        this.oldList = oldList;
+        this.setOldList();
       },
       format(){
         this.setList();
@@ -255,14 +281,16 @@
         }))
         this.setList()
       },
-      setOldList(type, value) {
+      setOldList() {
         // 保证是正确的顺序
         let fenhao = this.oldList.find(item => item.type == 'fenhao')
         let miji = this.oldList.find(item => item.type == 'mijiqixian')
         let jinji = this.oldList.find(item => item.type == 'jinjichengdu')
-        this.oldList[0] = fenhao
-        this.oldList[1] = miji
-        this.oldList[2] = jinji
+        let [findIndex0,findIndex1,findIndex2] = [this.oldList.findIndex(item => item.type == 'fenhao'),this.oldList.findIndex(item => item.type == 'mijiqixian'),
+          this.oldList.findIndex(item => item.type == 'jinjichengdu')].sort();
+        fenhao&&(this.oldList[findIndex0] = fenhao)
+        miji&&(this.oldList[findIndex1] = miji)
+        jinji&&(this.oldList[findIndex2] = jinji)
         if (this.three.one && this.three.two && this.three.thr || !this.three.one && !this.three.two && !this.three.thr) {
           //份号false  密级期限false  紧急程度false  都没有也不渲染
           //份号true  密级期限true  紧急程度true   列表顺序恢复
@@ -290,8 +318,8 @@
           }))
         } else if (this.three.one && !this.three.two && this.three.thr) {//份号true  密级期限false  紧急程度true
           let val = this.three.thr.length === 2 ? this.three.thr.replace(/(.{1})/, '$1&nbsp&nbsp&nbsp&nbsp') : this.three.thr
-          this.oldList[1] = jinji
-          this.oldList[2] = miji
+          this.oldList[findIndex1] = jinji
+          this.oldList[findIndex2] = miji
           this.oldList = this.oldList.map(item => ({
             ...item,
             items: item.items.map(r => ({
@@ -301,8 +329,8 @@
           }))
         } else if (!this.three.one && !this.three.two && this.three.thr) {//份号false  密级期限false  紧急程度true
           let val = this.three.thr.length === 2 ? this.three.thr.replace(/(.{1})/, '$1&nbsp&nbsp&nbsp&nbsp') : this.three.thr
-          this.oldList[0] = jinji
-          this.oldList[2] = fenhao
+          this.oldList[findIndex0] = jinji
+          this.oldList[findIndex2] = fenhao
           this.oldList = this.oldList.map(item => ({
             ...item,
             items: item.items.map(r => ({
@@ -335,20 +363,22 @@
         this.three.one = this.three.one && (Array(6).join('0') + this.three.one).slice(-6)
       },
       createPicture() {
-        let dom = document.getElementById('content')
+        let dom = document.getElementById('content');
         let loadingInstance = Loading.service({
           text: '正在导出，请勿操作',
           background: 'rgba(0, 0, 0, 0.28)',
           spinner: 'el-icon-loading'
         })
         html2canvas(dom, {
-          allowTaint: true,
-          imageTimeout: 1000000
+          imageTimeout: 10000,
+          onclone:(el)=>{
+            el.getElementsByClassName('main-container')[0].style.transition = 'none';
+          },
         }).then(canvas => {
           let imgData = canvas.toDataURL('image/jpeg')
           let img = new Image()
           img.src = imgData
-          let name = this.$route.query.path
+          let name = this.$route.query.name
           //根据图片的尺寸设置pdf的规格，要在图片加载成功时执行，之所以要*0.5是因为比例问题
           img.onload = function () {
             //此处需要注意，pdf横置和竖置两个属性，需要根据宽高的比例来调整，不然会出现显示不完全的问题
@@ -360,7 +390,8 @@
             }
             doc.addImage(imgData, 'jpeg', 0, 0, this.width * 0.175, this.height * 0.175)  //比例可根据需要调节
             //根据下载保存成不同的文件名
-            doc.save('（批注版）_'+parseTime(new Date(),'{y}-{m}-{d}')+'_' +name.split('/').reverse()[0] + '.pdf')
+            // doc.save('（批注版）_'+parseTime(new Date(),'{y}-{m}-{d}')+'_' +name.split('/').reverse()[0] + '.pdf')
+            doc.save('（批注版）_'+name + '.pdf')
             loadingInstance.close()
           }
         })
@@ -370,10 +401,37 @@
         let fenhao = list.find(item => item.type == 'fenhao')
         let miji = list.find(item => item.type == 'mijiqixian')
         let jinji = list.find(item => item.type == 'jinjichengdu')
-        if(fenhao&&miji&&jinji){
-          list[0] = fenhao;
-          list[1] = miji;
-          list[2] = jinji;
+        let fawen = list.find(item => item.type == 'fawenjiguan')
+        let biaoti = list.find(item => item.type == 'biaoti')
+        list = list.slice(Number(!!fenhao)+Number(!!miji)+Number(!!jinji)+Number(!!fawen)+Number(!!biaoti));
+        if(this.output == 1){//信函，密级这些在标题和发文机关下面
+          jinji&&list.unshift(jinji);
+          miji&&list.unshift(miji);
+          fawen&&list.unshift(fawen);
+          fenhao&&list.unshift(fenhao);
+          biaoti&&list.unshift(biaoti);
+        }else{
+          fawen&&list.unshift(fawen);
+          biaoti&&list.unshift(biaoti);
+          jinji&&list.unshift(jinji);
+          miji&&list.unshift(miji);
+          fenhao&&list.unshift(fenhao);
+        }
+        if(miji){
+          let mijiContent = miji.items[0].content1.replace(/\s*/g,"");
+          miji.items[0].content = mijiContent.replace(/&nbsp&nbsp&nbsp&nbsp/,'');
+          miji.items[0].content0 = miji.items[0].content;
+          miji.items[0].content1 = miji.items[0].content;
+          miji.items[0].content2 = miji.items[0].content;
+          miji.items[0].content3 = miji.items[0].content;
+        }
+        if(jinji){
+          let jinjiContent = jinji.items[0].content1.replace(/\s*/g,"");
+          jinji.items[0].content = jinjiContent.replace(/&nbsp&nbsp&nbsp&nbsp/,'');
+          jinji.items[0].content0 = jinji.items[0].content;
+          jinji.items[0].content1 = jinji.items[0].content;
+          jinji.items[0].content2 = jinji.items[0].content;
+          jinji.items[0].content3 = jinji.items[0].content;
         }
         saveWord({
           ...this.sendObj,
@@ -400,9 +458,40 @@
         }
         getByWord({filepath: this.$route.query.path,id:this.$route.query.id}).then(res => {
           this.sendObj = res.word
-          this.type0 = res.word.type0
-          this.oldList = res.word.list || []
-          this.errorList = res.word.wordMap
+          this.errorList = res.word.wordMap;
+          this.type0 = res.word.type0;
+          this.output = res.word.type=='函'?1:2;
+          this.outputdisabled = res.word.type=='函';
+          let list = [...res.word.list]
+          // 保证是正确的顺序
+          let fenhao = list.find(item => item.type == 'fenhao')
+          let miji = list.find(item => item.type == 'mijiqixian')
+          let jinji = list.find(item => item.type == 'jinjichengdu')
+          let fawen = list.find(item => item.type == 'fawenjiguan')
+          let biaoti = list.find(item => item.type == 'biaoti')
+          if(this.output == 1){//信函，密级这些在标题和发文机关下面
+            list = list.slice(Number(!!fenhao)+Number(!!miji)+Number(!!jinji)+Number(!!fawen)+Number(!!biaoti));
+            jinji&&list.unshift(jinji);
+            miji&&list.unshift(miji);
+            fenhao&&list.unshift(fenhao);
+            fawen&&list.unshift(fawen);
+            biaoti&&list.unshift(biaoti);
+          }
+          this.oldList = [...list];
+          if(fenhao&&miji&&jinji){
+            this.three.one = fenhao.items[0].content;
+            this.three.thr = jinji.items[0].content.replace(/\s*/g,"");
+            let content = miji.items[0].content;
+            if(content.length>=5){
+              let index = content.split('★');
+              let after = index[1].split('');
+              this.three.fou = index[0];
+              this.three.six = after.pop();
+              this.three.fiv = after.join('');
+            }else {
+              this.three.fou = miji.items[0].content.replace(/\s*/g,"");
+            }
+          }
           this.setList()
         })
       },
@@ -460,11 +549,11 @@
             width: item.offsetWidth,
             color: this.color[index % this.color.length]
           }
-          if (this.mapPOP.find(r => {
-            return data.y == r.y
-          })) {
-            data.y = data.y + 1
-          }
+          // if (this.mapPOP.find(r => {
+          //   return data.y == r.y
+          // })) {
+          //   data.y = data.y + 1
+          // }
           this.mapPOP.push(data)
         })
         this.$nextTick(() => {
@@ -485,25 +574,6 @@
           })
         })
       },
-      download() {
-        this.visible = false
-        this.downloadCommon('.docx')
-      },
-      downloadWord() {
-        this.visible = false
-        this.visiblePZ = false
-        this.downloadCommon('.docx')
-      },
-      downloadPDF() {
-        this.visible = false
-        this.visiblePZ = false
-        this.downloadCommon('.pdf')
-      },
-      downloadCommon(url) {
-        const ele = document.createElement('a')
-        ele.setAttribute('href', `${this.baseUrl}doc/${this.$route.query.path}${url}`) //设置下载文件的url地址
-        ele.click()
-      }
     }
   }
 </script>
@@ -515,6 +585,9 @@
     padding: 0 20px 20px 20px;
     min-width: 1080px;
     /*height: 100%;*/
+    .content {
+      width: 1100px;
+    }
     .filter-container {
       position: fixed;
       background: #fff;
@@ -564,15 +637,15 @@
         .top-left {
           top: 50px;
           left: 45px;
-          border-left: none;
-          border-top: none;
+          border-left: 1px solid #fff;
+          border-top: 1px solid #fff;
         }
 
         .top-right {
           top: 50px;
           right: 45px;
-          border-right: none;
-          border-top: none;
+          border-right: 1px solid #fff;
+          border-top: 1px solid #fff;
         }
 
         .bottom-left {
@@ -644,22 +717,6 @@
         top: 50px;
         z-index: 100;
         right: 15px;
-      }
-    }
-
-    .main {
-      .content {
-        width: 1000px;
-      }
-
-      .pizhu {
-        float: right;
-        width: 200px;
-      }
-
-      .btn {
-        float: right;
-        width: 100px;
       }
     }
   }

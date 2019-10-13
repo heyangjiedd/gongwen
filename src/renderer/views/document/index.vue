@@ -29,9 +29,9 @@
         <!--<el-option v-for="item in categoryDoc" :key="item.id" :value="item.id" :label="item.docTypeName"/>-->
         <!--</el-select>-->
       </div>
-      <div class="list-item" v-if="current.Createtime" @click="handleDetail(current)">
+      <div class="list-item" v-if="current.Updatetime" @click="handleDetail(current)">
         <span>{{current.Name}}</span>
-        <span style="margin-left: 10px">{{current.Createtime && current.Createtime.time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        <span style="margin-left: 10px">{{current.Updatetime && current.Updatetime.time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
       </div>
     </el-card>
     <el-card shadow="hover" style="margin-top: 20px">
@@ -137,13 +137,15 @@
         })
       },
       handleDetail(scope) {
-        this.$router.push({path: '/home/detail', query: {id: scope.Id, path: scope.Path, ext: scope.Ext}})
+        this.$router.push({path: '/home/detail', query: {id: scope.Id, path: scope.Path,name: scope.Name, ext: scope.Ext}})
       },
       handleEdit(scope) {
         this.$router.push({
           path: '/home/edit', query: {
             id: scope.Id || scope.id,
-            path: (scope.Path || scope.path) + (scope.Ext || scope.ext)
+            path: (scope.Path || scope.path),
+            ext: (scope.Ext || scope.ext),
+            name: (scope.Name || scope.name),
           }
         })
       },
@@ -209,7 +211,7 @@
           this.paging.total = res.Recordsfiltered
         });
         get({start: 1, pagesize: 1}).then(res => {
-          this.current = res.Data[0]
+          this.current = res.Data[0]||{}
         })
       },
       handleFilter() {

@@ -70,7 +70,7 @@
     },
     methods: {
       handleEdit(){
-        this.$router.push({path: '/home/edit', query: {id: this.$route.query.id, path: this.$route.query.path+this.$route.query.ext}})
+        this.$router.push({path: '/home/edit', query: this.$route.query})
       },
       getDetail() {
         if (!this.$route.query.path) {
@@ -78,7 +78,7 @@
           return
         }
         this.list = []
-        getByWord({filepath: this.$route.query.path+this.$route.query.Ext,id:this.$route.query.id}).then(res => {
+        getByWord({filepath: this.$route.query.path+this.$route.query.ext,id:this.$route.query.id}).then(res => {
           this.type0 = res.word.type0;
           this.output = res.word.type=='函'?1:2;
           this.list = res.word.list.map((item) => {
@@ -190,7 +190,7 @@
         width: 765px;
         position: relative;
         border: 1px solid gainsboro;
-        padding: 50px 75px 70px 75px;
+        padding: 75px 75px 70px 75px;
         .three {
           position: absolute;
           top: 75px;
@@ -214,12 +214,14 @@
         }
 
         .top-left {
+          top:50px;
           left: 45px;
           border-left: none;
           border-top: none;
         }
 
         .top-right {
+          top:50px;
           right: 45px;
           border-right: none;
           border-top: none;
