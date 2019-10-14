@@ -205,7 +205,7 @@
     watch: {
       'three.fou'() {
         if(!this.three.one){
-          this.$message.error('涉密文件，请选择份号');
+          this.$message.error('涉密文件，请输入份号');
           this.$nextTick(()=>{
             this.$refs.threeOne.focus();
           })

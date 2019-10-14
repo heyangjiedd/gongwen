@@ -59,7 +59,7 @@
         </div>
         <div v-else-if="item.type=='banji2'">
           <div v-if="output!=1" :style="{padding:'0 16pt'}">
-            <span v-html="r.content2.split(' ').splice(0,r.content2.split(' ').length-1).join(' ')" :style="{letterSpacing:-(r.content0.split(' ')[0].length - 16)/2+'px'}">></span>
+            <span v-html="r.content2.split(' ').splice(0,r.content2.split(' ').length-1).join(' ')" :style="{letterSpacing:-(r.content0.split(' ')[0].length - 16)/2+'px'}"></span>
             <span v-html="r.content2.split(' ')[r.content2.split(' ').length-1]" style="float: right;"></span>
           </div>
         </div>
@@ -74,7 +74,15 @@
         </div>
         <div v-else-if="item.type=='fawenjiguan'">
           <div v-if="output==1"  v-html="r.content2" style="text-align: right"></div>
-          <div v-else v-html="r.content2"></div>
+          <div v-else >
+            <div v-if="r.content2.includes('签发人')">
+              <div v-if="output!=1" :style="{padding:'0 16pt'}">
+                <span v-html="r.content2.split(' ').splice(0,r.content2.split(' ').length-1).join(' ')" style="float: left;"></span>
+                <span v-html="r.content2.split(' ')[r.content2.split(' ').length-1]" style="float: right;"></span>
+              </div>
+            </div>
+            <div v-else v-html="r.content2"></div>
+          </div>
         </div>
         <div v-else-if="item.type=='biaoti'" :style="{marginTop: output==1&&index<=1?'96pt':''}">
           <div v-if="item.subtype=='multi'">
@@ -84,13 +92,16 @@
             transform: 'scaleX(0.6) translateX(43px)',
             top:((item.items.length-1)/2 - 1/2)*r.wordStyle.ifontSize+'pt',
             }">
-              <div v-html="r.content2"></div>
+              <div v-if="output!=1" v-html="r.content2"></div>
             </div>
             <div v-else >
               <div v-html="r.content2"></div>
             </div>
           </div>
-          <div v-else v-html="r.content2"></div>
+          <div v-else>
+            <div v-if="output==1" v-html="r.content2.replace(/文件$/,'')"></div>
+            <div v-else v-html="r.content2"></div>
+          </div>
         </div>
         <div v-else v-html="r.content2"></div>
       </div>
@@ -107,10 +118,10 @@
              // background:(r.type == 'redline'&&output!=1)? 'red':'',
              fontFamily:`Times New Roman,${r.wordStyle.fontFamily}`,
              }">
-        <div v-if="r.type == 'redline'&&type0==2&&output!=1">
-          <span :style="{...r.wordStyle,width:'290px',display:'inline-block',background: 'red',height: '1.4pt',top: '-8px',position: 'relative'}"></span>
-          <span :style="{...r.wordStyle,color:'red'}">★</span>
-          <span :style="{...r.wordStyle,width:'290px',display:'inline-block',background: 'red',height: '1.4pt',top: '-8px',position: 'relative'}"></span>
+        <div v-if="r.type == 'redline'&&type0==2&&output!=1" style="letter-spacing:-2px">
+          <span :style="{...r.wordStyle,width:'296px',display:'inline-block',background: 'red',height: '1.4pt',top: '-8px',position: 'relative'}"></span>
+          <span :style="{...r.wordStyle,color:'red',top: '-3px',position: 'relative'}">★</span>
+          <span :style="{...r.wordStyle,width:'296px',display:'inline-block',background: 'red',height: '1.4pt',top: '-8px',position: 'relative'}"></span>
         </div>
         <div v-if="r.type == 'redline'&&type0!=2&&output!=1">
           <span :style="{...r.wordStyle,width:'613px',display:'inline-block',background: 'red',height: '1.4pt',top: '-8px',position: 'relative'}"></span>
@@ -153,12 +164,15 @@
         type: Array,
         default: () => []
       },
+      // outputs: [{name: '文件式公文格式', value: 2}, {name: '信函式公文格式', value: 1}],
       output: {
         type: [Number,String],
       },
+      // type0s:[{name: '党委', value: 2}, {name: '政府', value: 1}],
       type0:{
         type: [Number,String],
       },
+      //初始状态是否是信函式
       outputdisabled:{
         type: Boolean,
       }
@@ -192,7 +206,7 @@
             let scrollWidth = r.scrollWidth, offsetWidth = r.offsetWidth,
               translateX = (scrollWidth - offsetWidth) / 2;
             if (scrollWidth <= offsetWidth) return
-            if (this.item.subtype=='multi') {
+            if (this.item.subtype=='multi'&&this.output!=1) {
               scrollWidth = r.scrollWidth;
               offsetWidth = r.offsetWidth - 100;
               translateX = (scrollWidth - offsetWidth) / 2 * r.offsetWidth/ offsetWidth;

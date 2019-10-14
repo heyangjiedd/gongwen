@@ -31,7 +31,8 @@
       </div>
       <div class="list-item" v-if="current.Updatetime" @click="handleDetail(current)">
         <span>{{current.Name}}</span>
-        <span style="margin-left: 10px">{{current.Updatetime && current.Updatetime.time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        <span style="margin-left: 20px">{{current.Updatetime && current.Updatetime.time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        <span style="margin-left: 20px">{{current.Type === '函' ? '信函式' : '文件式'}}</span>
       </div>
     </el-card>
     <el-card shadow="hover" style="margin-top: 20px">
@@ -68,7 +69,13 @@
             {{row.Updatetime&&row.Updatetime.time | parseTime('{y}-{m}-{d} {h}:{i}')}}
           </template>
         </el-table-column>
-        <el-table-column label="名称" prop="Name" min-width="80"></el-table-column>
+        <el-table-column label="名称" prop="Name" show-overflow-tooltip min-width="80"></el-table-column>
+        <el-table-column label="公文格式" show-overflow-tooltip prop="Role" width="120">
+          <template slot-scope="{row}">
+            <el-tag type="success" v-if="row.Type==='函'">信函式</el-tag>
+            <el-tag type="warning" v-else>文件式</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="150">
           <template slot-scope="{row}">
             <el-button type="primary" size="mini" @click.stop="handleEdit(row)">
