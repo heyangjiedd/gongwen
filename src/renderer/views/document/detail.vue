@@ -6,7 +6,7 @@
         <div class="btn-box top-right"></div>
         <!--                文本段落-->
         <div v-for="(item,index) in list" :key="'box'+index">
-          <Box :item="item" :list="list"  :output="output" :type0="type0"></Box>
+          <Box :item="item" :list="list"  :output="output" :type0="type0" :outputdisabled="outputdisabled"></Box>
         </div>
       </div>
       <div class="right">
@@ -63,6 +63,7 @@
         three: {},
         type0: '',
         output:2,
+        outputdisabled:'',
       }
     },
     mounted() {
@@ -81,7 +82,23 @@
         getByWord({filepath: this.$route.query.path+this.$route.query.ext,id:this.$route.query.id}).then(res => {
           this.type0 = res.word.type0;
           this.output = res.word.type=='函'?1:2;
-          this.list = res.word.list.map((item) => {
+          this.outputdisabled = res.word.type=='函';
+          let list = [...res.word.list]
+          // 保证是正确的顺序
+          let fenhao = list.find(item => item.type == 'fenhao')
+          let miji = list.find(item => item.type == 'mijiqixian')
+          let jinji = list.find(item => item.type == 'jinjichengdu')
+          let fawen = list.find(item => item.type == 'fawenjiguan')
+          let biaoti = list.find(item => item.type == 'biaoti')
+          if(this.output == 1){//信函，密级这些在标题和发文机关下面
+            list = list.slice(Number(!!fenhao)+Number(!!miji)+Number(!!jinji)+Number(!!fawen)+Number(!!biaoti));
+            jinji&&list.unshift(jinji);
+            miji&&list.unshift(miji);
+            fenhao&&list.unshift(fenhao);
+            fawen&&list.unshift(fawen);
+            biaoti&&list.unshift(biaoti);
+          }
+          this.list = list.map((item) => {
             item.items = item.items.map(r => {
               return {...r, content2: r.content}
             })
@@ -187,7 +204,7 @@
       position: relative;
 
       .left {
-        width: 765px;
+        width: 772px;
         position: relative;
         border: 1px solid gainsboro;
         padding: 75px 75px 70px 75px;

@@ -32,7 +32,7 @@
       <div class="list-item" v-if="current.Updatetime" @click="handleDetail(current)">
         <span>{{current.Name}}</span>
         <span style="margin-left: 20px">{{current.Updatetime && current.Updatetime.time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-        <span style="margin-left: 20px">{{current.Type === '函' ? '信函式' : '文件式'}}</span>
+        <span style="margin-left: 20px">[ {{current.Type === '函' ? '信函式' : '文件式'}} ]</span>
       </div>
     </el-card>
     <el-card shadow="hover" style="margin-top: 20px">
