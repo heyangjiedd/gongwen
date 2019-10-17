@@ -76,13 +76,12 @@
         <div v-else-if="item.type=='fawenjiguan'">
 <!--          信函格式-->
           <div v-if="output==1" style="text-align: right;">
-            <div v-if="item.items.length > 1" :style="{position: 'relative',
-            paddingBottom:(index>1)&&item.items[2].content2.split(' ').length> 2?'32pt':''}">
-              <span v-if="index===0" v-html="r.content2" style="margin-right: 160pt"></span>
-              <span v-else-if="index===1" v-html="r.content2" :style="{float: 'right',position:'relative',marginRight:item.items[2].content2.split(' ').length> 1?'84pt':'42pt',top:'-'+r.wordStyle.lineHeight}"></span>
-              <div v-else :style="{position: 'absolute',right: '0',top:'-'+r.wordStyle.lineHeight,width: r.content2.split(' ').length> 1?'84pt':'42pt',textAlign: 'left'}">
-                    <span v-for="(i,j) in r.content2.split(' ')" :key="i+j"
-                          :style="{display: 'inline-block',width: r.content2.split(' ').length> 1?'45%':'100%',marginRight: j%2==0?'10%':'0',textAlign:'justify',textAlignLast:'justify'}">{{i}}</span>
+            <div v-if="item.items.length > 1" :style="{position: 'relative'}">
+              <span v-if="index===0" v-html="r.content2" :style="{marginRight: item.items[2].content2.split('###').length> 1?'192pt':'128pt'}"></span>
+              <span v-else-if="index===1" v-html="r.content2" :style="{float: 'right',position:'relative',marginRight:item.items[2].content2.split('###').length> 1?'112pt':'48pt',top:'-'+r.wordStyle.lineHeight}"></span>
+              <div v-else :style="{position: 'absolute',right: '0',top:'-'+r.wordStyle.lineHeight,width: r.content2.split('###').length> 1?'112pt':'42pt',textAlign: 'left'}">
+                    <span v-for="(i,j) in r.content2.split('###')" :key="i+j"
+                          :style="{display: 'inline-block',width: '48pt',marginRight: j%2==0?'16pt':'0',textAlign:'justify',textAlignLast:'justify'}">{{i}}</span>
               </div>
             </div>
             <div v-else v-html="r.content2"></div>
@@ -91,13 +90,13 @@
           <div v-else>
             <div v-if="item.items.length > 1">
               <div :style="{padding:'0 16pt',position: 'relative',
-              top:(index===0||index===1)&&item.items[2].content2.split(' ').length> 2?'32pt':'',
-              paddingBottom:(index>1)&&item.items[2].content2.split(' ').length> 2?'64pt':''}">
+              top:(index===0)&&item.items[2].content2.split('###').length> 2?Math.ceil(item.items[2].content2.split('###').length/2-1)*32+'pt':'',
+              paddingBottom:(index>1)&&item.items[2].content2.split('###').length> 2?Math.ceil(item.items[2].content2.split('###').length/2)*32+'pt':''}">
                 <span v-if="index===0" v-html="r.content2" style="float: left"></span>
-                <span v-else-if="index===1" v-html="r.content2" :style="{float: 'right',marginRight:item.items[2].content2.split(' ').length> 1?'84pt':'42pt'}"></span>
-                <div v-else :style="{position: 'absolute',right: '16pt',width: r.content2.split(' ').length> 1?'84pt':'42pt',textAlign: 'left'}">
-                    <span v-for="(i,j) in r.content2.split(' ')" :key="i+j"
-                          :style="{display: 'inline-block',width: r.content2.split(' ').length> 1?'45%':'100%',marginRight: j%2==0?'10%':'0',textAlign:'justify',textAlignLast:'justify'}">{{i}}</span>
+                <span v-else-if="index===1" v-html="r.content2" :style="{float: 'right',marginRight:item.items[2].content2.split('###').length> 1?'112pt':'48pt'}"></span>
+                <div v-else :style="{position: 'absolute',right: '16pt',width: r.content2.split('###').length> 1?'112pt':'48pt',textAlign: 'left'}">
+                    <span v-for="(i,j) in r.content2.split('###')" :key="i+j"
+                          :style="{display: 'inline-block',width: '48pt',marginRight: j%2==0?'16pt':'0',textAlign:'justify',textAlignLast:'justify'}">{{i}}</span>
                 </div>
               </div>
             </div>
