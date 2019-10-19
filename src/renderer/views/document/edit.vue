@@ -515,14 +515,16 @@
               return `<span class="error" data-index="${++index}" data-val="${b}" style="background:#ffdbdd;border:1px solid #ff2b3f;border-top:0px dashed #fff;border-bottom:0px dashed #fff">${b}
 <span class="num" style="font-size:14px;line-height:14px;vertical-align:text-top;color:black;font-family:'仿宋'">${index}</span></span>`
             })
+            console.log('content2',content2)
             let content3 = r.content1.replace(/---@([^@#]+)#---/gm, (a, b) => {
               let replace = this.replace.find(n => n.index - 1 == indexCopy)
+              indexCopy++
               if (replace) {
-                indexCopy++
                 return replace.valvue
               }
               return `${b}`
             })
+            console.log('content3',content3)
             return {...r, content2, content3}
           })
           return {...item}
