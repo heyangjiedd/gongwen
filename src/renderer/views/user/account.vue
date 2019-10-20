@@ -57,10 +57,12 @@
         form: {},
         rules: {
           oldpassword: [{ required: true, message: '请输入旧密码', trigger: 'blur' }],
-          newpassword: [{ required: true, message: '请输入新密码', trigger: 'blur' },{
+          newpassword: [{ required: true, message: '请输入新密码', trigger: 'blur' },
+              { min: 6,message: '至少填写6位密码', trigger: 'blur' },{
             validator: validatePass, trigger: 'blur'
           }],
-          confirmpassword: [{ required: true, message: '请输入确认密码', trigger: 'blur' },{
+          confirmpassword: [{ required: true, message: '请输入确认密码', trigger: 'blur' },
+              { min: 6,message: '至少填写6位密码', trigger: 'blur' },{
             validator: validatePass1, trigger: 'blur'
           }]
         }
