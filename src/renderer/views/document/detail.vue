@@ -179,8 +179,6 @@
         wordformat({filepath: this.$route.query.path, layout,id: this.$route.query.id}).then(res => {
           const ele = document.createElement('a')
           ele.setAttribute('href', `${this.baseUrl}doc/${res.filepaths[0]}`) //设置下载文件的url地址
-          console.log(`${this.baseUrl}doc/${res.filepaths[0]}`)
-          ele.setAttribute('target', `_blank`) //设置下载文件的url地址
           ele.click()
         })
       },

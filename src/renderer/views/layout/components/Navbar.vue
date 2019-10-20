@@ -16,7 +16,7 @@
     </el-dropdown>
     <div style="float: right;margin-right:20px;line-height: 50px;cursor: pointer">
       <i class="el-icon-question"></i>
-      <span style="font-size: 14px; ">常见问题</span>
+      <span style="font-size: 14px; " @click="dialogVisible = true">常见问题</span>
     </div>
     <div style="float: right;margin-right:20px;line-height: 50px;cursor: pointer">
       <i class="el-icon-upload"></i>
