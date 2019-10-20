@@ -4,7 +4,7 @@
     <breadcrumb></breadcrumb>
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
-        <span>{{ name }}</span><br/>
+        <span>{{ userInfo.name }}</span><br/>
         <span>{{userInfo.cname||''}}</span>
         <i class="el-icon-caret-bottom"></i>
       </div>
@@ -17,6 +17,10 @@
     <div style="float: right;margin-right:20px;line-height: 50px;cursor: pointer">
       <i class="el-icon-question"></i>
       <span style="font-size: 14px; ">常见问题</span>
+    </div>
+    <div style="float: right;margin-right:20px;line-height: 50px;cursor: pointer">
+      <i class="el-icon-upload"></i>
+      <span style="font-size: 14px; " @click="upgrade">系统升级</span>
     </div>
     <el-dialog title="常见问题" :visible.sync="dialogVisible">
       <el-collapse v-model="activeName" accordion>
@@ -46,6 +50,7 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import { userstoupgrade} from '@/api/fileupload'
 
 export default {
   components: {
@@ -66,6 +71,11 @@ export default {
     }
   },
   methods: {
+    upgrade(){
+      userstoupgrade().then(res => {
+        this.$message.success('升级成功')
+      })
+    },
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
     },
@@ -97,10 +107,11 @@ export default {
     color: red;
   }
   .avatar-container {
-    height: 50px;
+    line-height: 1.5;
     display: inline-block;
     float: right;
     margin-right: 40px;
+    text-align: right;
     /*position: absolute;*/
     /*right: 35px;*/
     .avatar-wrapper {
