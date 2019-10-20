@@ -74,7 +74,7 @@
           <div v-else v-html="r.content2"></div>
         </div>
         <div v-else-if="item.type=='fawenjiguan'">
-<!--          信函格式-->
+          <!--          信函格式-->
           <div v-if="output==1" style="text-align: right;">
             <div v-if="item.items.length > 1" :style="{position: 'relative'}">
               <span v-if="index===0" v-html="r.content2" :style="{marginRight: item.items[2].content2.split(' ').length> 1?'192pt':'128pt'}"></span>
@@ -86,7 +86,7 @@
             </div>
             <div v-else v-html="r.content2"></div>
           </div>
-<!--          公文格式-->
+          <!--          公文格式-->
           <div v-else>
             <div v-if="item.items.length > 1">
               <div :style="{padding:'0 16pt',position: 'relative',
@@ -136,14 +136,14 @@
              }">
         <div v-if="r.type == 'redline'&&type0==2&&output!=1" style="letter-spacing:-2px">
           <span
-            :style="{...r.wordStyle,width:'296px',display:'inline-block',background: 'red',height: '1.4pt',top: '-26px',position: 'relative'}"></span>
+                  :style="{...r.wordStyle,width:'298px',display:'inline-block',background: 'red',height: '1.4pt',top: '-26px',position: 'relative'}"></span>
           <span :style="{...r.wordStyle,color:'red',top: '-21px',position: 'relative'}">★</span>
           <span
-            :style="{...r.wordStyle,width:'296px',display:'inline-block',background: 'red',height: '1.4pt',top: '-26px',position: 'relative'}"></span>
+                  :style="{...r.wordStyle,width:'298px',display:'inline-block',background: 'red',height: '1.4pt',top: '-26px',position: 'relative'}"></span>
         </div>
         <div v-if="r.type == 'redline'&&type0!=2&&output!=1">
           <span
-            :style="{...r.wordStyle,width:'613px',display:'inline-block',background: 'red',height: '1.4pt',top: '-26px',position: 'relative'}"></span>
+                  :style="{...r.wordStyle,width:'620px',display:'inline-block',background: 'red',height: '1.4pt',top: '-26px',position: 'relative'}"></span>
         </div>
         <div v-if="r.type=='pagebreak'">
           <div class="pagetagbefore">
@@ -223,7 +223,7 @@
         if (this.item.type == 'biaoti' || this.item.type == 'biaoti1') {
           this.$refs.items.forEach((r, index) => {
             let scrollWidth = r.scrollWidth, offsetWidth = r.offsetWidth,
-              translateX = (scrollWidth - offsetWidth) / 2
+                    translateX = (scrollWidth - offsetWidth) / 2
             if (scrollWidth <= offsetWidth) return
             if (this.item.subtype == 'multi' && this.output != 1) {
               scrollWidth = r.scrollWidth
