@@ -18,10 +18,10 @@
       <i class="el-icon-question"></i>
       <span style="font-size: 14px; " @click="dialogVisible = true">常见问题</span>
     </div>
-    <div style="float: right;margin-right:20px;line-height: 50px;cursor: pointer">
-      <i class="el-icon-upload"></i>
-      <span style="font-size: 14px; " @click="upgrade">系统升级</span>
-    </div>
+<!--    <div style="float: right;margin-right:20px;line-height: 50px;cursor: pointer">-->
+<!--      <i class="el-icon-upload"></i>-->
+<!--      <span style="font-size: 14px; " @click="upgrade">系统升级</span>-->
+<!--    </div>-->
     <el-dialog title="常见问题" :visible.sync="dialogVisible">
       <el-collapse v-model="activeName" accordion>
         <el-collapse-item title="一、一致性" name="1">

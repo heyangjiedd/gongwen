@@ -15,7 +15,10 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="新密码" prop="newpassword">
-            <el-input size="small" placeholder="请输入新密码" type="password" v-model="form.newpassword" clearable>
+            <el-input size="small" ref="password" placeholder="请输入新密码" :type="passwordType" v-model="form.newpassword" >
+               <span slot="suffix" @click.stop="showPwd" style="cursor: pointer">
+                  <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>
+                </span>
             </el-input>
           </el-form-item>
         </el-col>
@@ -23,7 +26,7 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="确认密码" prop="confirmpassword">
-            <el-input size="small" @keyup.enter.native="sure" placeholder="请输入确认密码" type="password" v-model="form.confirmpassword" clearable>
+            <el-input size="small" @keyup.enter.native="sure" placeholder="请输入确认密码" :type="passwordType"  v-model="form.confirmpassword" clearable>
             </el-input>
           </el-form-item>
         </el-col>
@@ -54,15 +57,16 @@
         }
       };
       return {
+        passwordType:'password',
         form: {},
         rules: {
           oldpassword: [{ required: true, message: '请输入旧密码', trigger: 'blur' }],
           newpassword: [{ required: true, message: '请输入新密码', trigger: 'blur' },
-              { min: 6,message: '至少填写6位密码', trigger: 'blur' },{
-            validator: validatePass, trigger: 'blur'
+            { min: 6,message: '至少填写6位密码', trigger: 'blur' },{
+            validator: validatePass, trigger: 'blur',
           }],
           confirmpassword: [{ required: true, message: '请输入确认密码', trigger: 'blur' },
-              { min: 6,message: '至少填写6位密码', trigger: 'blur' },{
+            { min: 6,message: '至少填写6位密码', trigger: 'blur' },{
             validator: validatePass1, trigger: 'blur'
           }]
         }
@@ -72,6 +76,16 @@
 
     },
     methods: {
+      showPwd() {
+        if (this.passwordType === 'password') {
+          this.passwordType = 'text'
+        } else {
+          this.passwordType = 'password'
+        }
+        this.$nextTick(() => {
+          this.$refs.password.focus()
+        })
+      },
       sure() {
         this.$refs['form'].validate((valid) => {
           if (valid) {
