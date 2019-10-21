@@ -134,7 +134,7 @@
              minHeight: r.wordStyle.fontSize,
              fontFamily:`Times New Roman,${r.wordStyle.fontFamily}`,
              }">
-        <div v-if="r.type == 'redline'&&type0==2&&output!=1" style="letter-spacing:-2px">
+        <div v-if="r.type == 'redline'&&type0==2&&output!=1" style="letter-spacing:-2px;    text-align: justify;text-align-last: justify;white-space: nowrap;">
           <span
             :style="{...r.wordStyle,width:'298px',display:'inline-block',background: 'red',height: '1.4pt',top: '-26px',position: 'relative'}"></span>
           <span :style="{...r.wordStyle,color:'red',top: '-21px',position: 'relative'}">★</span>
