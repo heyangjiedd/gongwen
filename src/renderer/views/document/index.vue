@@ -135,7 +135,6 @@
     methods: {
       request(data) {
         var form = new FormData();
-        console.log(this.Cateid)
         form.append("Cateid", this.Cateid);
         form.append("files", data.file);
         upload(form).then(res => {

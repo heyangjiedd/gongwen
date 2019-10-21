@@ -4,15 +4,15 @@
       <div v-for="(r,index) in item.preitems" :key="index+'preitems'"
            :style="{...r.wordStyle,fontFamily:`Times New Roman,${r.wordStyle.fontFamily}`,minHeight: r.wordStyle.fontSize,}">
         <div v-if="r.type=='pagebreak'">
-          <div v-if="r.content == '1'&&output==1" class="pagetagredlinedouble">
-            <div style="height: 0.8pt;background: red;margin-bottom: 3px"></div>
-            <div style="height: 1.6pt;background: red;"></div>
-          </div>
           <div class="pagetagbefore">
             <div class="pagetagbefore-left"></div>
             <div class="pagetagbefore-right"></div>
           </div>
-          <div class="pagetag"
+          <div v-if="r.content == '1'&&output==1" class="pagetagredlinedouble">
+            <div style="height: 0.8pt;background: red;margin-bottom: 3px"></div>
+            <div style="height: 1.6pt;background: red;"></div>
+          </div>
+          <div v-else class="pagetag"
                :style="{fontFamily:r.wordStyle.fontFamily,color:r.wordStyle.color,fontSize:r.wordStyle.fontSize,textAlign:Number(r.content)%2?'right':'left'}"
           >—&nbsp{{r.content}}&nbsp—
           </div>
@@ -31,7 +31,7 @@
                  textAlign: textAlign(item,r),
                  fontFamily:`Times New Roman,${r.wordStyle.fontFamily}`,
                  whiteSpace: (item.type == 'biaoti'||(item.type == 'biaoti1'&&r.wordStyle.wordWrap == 0))? 'nowrap':'',
-                 minHeight: (item.type == 'fenhao'||item.type == 'mijiqixian'|| item.type == 'jinjichengdu')&&output!=1||(item.type=='banji2'&&!r.content2&&output!=1)||(item.type=='banji1'&&!r.content2&&output!=1)? r.wordStyle.lineHeight:'',
+                 minHeight: (item.type == 'fenhao'||item.type == 'mijiqixian'|| item.type == 'jinjichengdu')&&output!=1||(item.type=='banji2'&&!r.content2)||(item.type=='banji1'&&!r.content2)? r.wordStyle.lineHeight:'',
                  borderBottom: item.type == 'banji2'&&r.content2!=''&&output!=1? '1px solid':r.wordStyle.borderTop,
                  borderTop:item.type == 'banji2'&&r.content2!=''&&output!=1? '1px solid':r.wordStyle.borderTop,
                  borderLeft:item.type == 'banji2'&&r.content2!=''&&output!=1? '1px solid #fff':r.wordStyle.borderLeft,
@@ -252,73 +252,11 @@
   }
 </script>
 <style scoped lang="scss">
-
   .box-man {
-    .biaoti {
-      margin: 136px 0 20px 0;
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    .biaoti-first {
-      text-align: right;
-      margin-top: 81px;
-      position: relative;
-      white-space: nowrap;
-    }
-
-    .biaoti-second {
-      text-align: center;
-      margin-bottom: 10px;
-      white-space: nowrap;
-    }
-
-    /*.biaoti-not{*/
-    /*  text-align: center;*/
-    /*  margin-bottom: 10px;*/
-    /*  white-space: nowrap;*/
-    /*}*/
-    .fawejiguan {
-      text-align: center;
-      padding-bottom: 5px;
-      border: 0px solid red;
-      border-bottom: 5px solid red;
-      margin-bottom: 46px;
-    }
-
-    .biaoti1 {
-      text-align: center;
-    }
-
-    .biaoti2 {
-      text-align: center;
-    }
-
-    .zhusongjiguan {
-      margin: 22px 0 0 0;
-    }
-
-    .zhengwen {
-      text-indent: 2.6rem;
-      line-height: 2rem;
-      text-align: justify;
-    }
-
-    .shumin {
-      text-align: right;
-      padding-right: 22px;
-      margin: 22px 0 0 0;
-    }
-
-    .datatime {
-      text-align: right;
-      margin: 10px 0;
-    }
-
     .pagetagbefore {
       position: relative;
       margin-top: 40px;
-      top: -30px;
+      top: -45px;
 
       div {
         position: absolute;
@@ -342,7 +280,7 @@
 
     .pagetagafter {
       position: relative;
-      margin-top: 90px;
+      margin-top: 131px;
       top: -30px;
 
       div {
@@ -366,6 +304,8 @@
     }
 
     .pagetagredlinedouble {
+      position: relative;
+      top: -93px;
       padding-top: 40px;
       margin: 60px -28px 10px -28px;
     }
@@ -374,7 +314,7 @@
       margin-right: 16pt;
       margin-left: 16pt;
       text-align: right;
-      margin-top: 60px;
+      margin-top: 45px;
       margin-bottom: 10px;
     }
 
@@ -383,78 +323,7 @@
       right: 0;
       left: 0;
       background: #e6e6e6;
-      height: 15px
-    }
-
-    .level1 {
-      text-indent: 2.6rem;
-      line-height: 2rem;
-    }
-
-    .level2 {
-      text-indent: 2.6rem;
-      line-height: 2rem;
-    }
-
-    .level3 {
-      text-indent: 2.6rem;
-      line-height: 2rem;
-    }
-
-    .level4 {
-    }
-
-    .fujian {
-      margin-top: 22px;
-      text-indent: 2.6rem;
-    }
-
-    .danweimingcheng {
-      margin: 10px 0;
-    }
-
-    .chengwenriqi {
-      text-align: right;
-      margin: 10px 0;
-    }
-
-    .chuxi {
-      text-indent: 2rem;
-      line-height: 2rem;
-    }
-
-    .zhengli {
-      text-indent: 2rem;
-      line-height: 2rem;
-    }
-
-    .cihan {
-      text-indent: 2.6rem;
-      line-height: 2.6rem;
-    }
-
-    .qingpishi {
-      text-align: right;
-      margin: 0 22px;
-    }
-
-    .banji {
-      margin-top: 100px;
-      text-align: center;
-      border-bottom: 2px solid;
-      border-top: 2px solid;
-    }
-
-    .banji1 {
-      margin-top: 22px;
-    }
-
-    .banji2 {
-      margin-top: 100px;
-      text-align: center;
-      padding: 10px 22px;
-      border-bottom: 2px solid;
-      border-top: 2px solid;
+      height: 20px
     }
   }
 

@@ -63,6 +63,10 @@ service.interceptors.response.use(
             }
             return Promise.reject('error')
         } else {
+            //上传公文专门拦截的
+            if (res.doc) {
+                return res.doc
+            }
             if (res.filesurl) {
                 return res.filesurl
             }

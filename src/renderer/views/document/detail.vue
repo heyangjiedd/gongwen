@@ -205,16 +205,7 @@
         width: 772px;
         position: relative;
         border: 1px solid gainsboro;
-        padding: 75px 75px 70px 75px;
-        .three {
-          position: absolute;
-          top: 75px;
-          font-size: 22px;
-          font-family: '黑体';
-          > div {
-            padding: 3px 0;
-          }
-        }
+        padding: 97px 75px 0px 75px;
         .map-box {
           position: absolute;
           overflow: auto;
@@ -229,14 +220,14 @@
         }
 
         .top-left {
-          top:50px;
+          top:72px;
           left: 45px;
           border-left: none;
           border-top: none;
         }
 
         .top-right {
-          top:50px;
+          top:72px;
           right: 45px;
           border-right: none;
           border-top: none;

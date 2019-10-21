@@ -609,20 +609,7 @@
         width: 772px;
         position: relative;
         border: 1px solid gainsboro;
-        padding: 75px 75px 70px 75px;
-        .three {
-          position: absolute;
-          top: 75px;
-          font-size: 22px;
-          font-family: '黑体';
-
-          input {
-            height: 15px;
-            font-size: 12px;
-            border: none;
-          }
-        }
-
+        padding: 97px 75px 0px 75px;
         .map-box {
           position: absolute;
           overflow: auto;
@@ -637,30 +624,17 @@
         }
 
         .top-left {
-          top: 50px;
+          top: 72px;
           left: 45px;
           border-left: 1px solid #fff;
           border-top: 1px solid #fff;
         }
 
         .top-right {
-          top: 50px;
+          top: 72px;
           right: 45px;
           border-right: 1px solid #fff;
           border-top: 1px solid #fff;
-        }
-
-        .bottom-left {
-          top: 700px;
-          border-bottom: none;
-          border-left: none;
-        }
-
-        .bottom-right {
-          top: 700px;
-          right: 20px;
-          border-bottom: none;
-          border-right: none;
         }
       }
 
