@@ -66,7 +66,11 @@
         </div>
         <div v-else-if="item.type=='banji1'">
           <div v-if="output!=1">
-            <div v-html="r.content2"></div>
+            <div v-if="r.content2">
+              <span v-html="r.content2.split('：')[0]+'：'" style="font-family: '黑体'"></span>
+              <span v-html="r.content2.split('：')[1]" style="font-family: '方正小标宋'"></span>
+            </div>
+            <div v-else v-html="r.content2"></div>
           </div>
         </div>
         <div v-else-if="item.type=='fenhao'||item.type=='mijiqixian'||item.type=='jinjichengdu'">
