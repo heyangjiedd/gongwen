@@ -115,7 +115,7 @@
             transform: 'scaleX(0.6) translateX(43px)',
             top:((item.items.length-1)/2 - 1/2)*r.wordStyle.ifontSize+'pt',
             }">
-              <div v-if="output!=1" v-html="r.content2"></div>
+              <div v-if="output!=1">文&nbsp件</div>
             </div>
             <div v-else>
               <div v-html="r.content2"></div>
@@ -231,7 +231,7 @@
             if (scrollWidth <= offsetWidth) return
             if (this.item.subtype == 'multi' && this.output != 1) {
               scrollWidth = r.scrollWidth
-              offsetWidth = r.offsetWidth - 100
+              offsetWidth = r.offsetWidth - 150
               translateX = (scrollWidth - offsetWidth) / 2 * r.offsetWidth / offsetWidth
             }
             let b = offsetWidth / scrollWidth
